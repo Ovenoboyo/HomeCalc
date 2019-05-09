@@ -10,12 +10,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.sahil.gupte.HomeCalc.Fragments.Utils.ShowDetailUtils;
-import com.sahil.gupte.HomeCalc.MainActivity;
+import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 import com.sahil.gupte.HomeCalc.R;
 
-import static com.sahil.gupte.HomeCalc.Fragments.Utils.ShowDetailUtils.RemoveItemDB;
-import static com.sahil.gupte.HomeCalc.Fragments.Utils.ShowDetailUtils.UpdateDB;
+import static com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils.RemoveItemDB;
+import static com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils.UpdateDB;
 
 
 public class EditDialogFragment extends DialogFragment

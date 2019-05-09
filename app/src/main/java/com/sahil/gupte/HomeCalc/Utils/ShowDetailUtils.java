@@ -1,10 +1,7 @@
-package com.sahil.gupte.HomeCalc.Fragments.Utils;
+package com.sahil.gupte.HomeCalc.Utils;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -19,22 +16,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.EditDialogFragment;
-import com.sahil.gupte.HomeCalc.Fragments.Dialogs.ProgressDialogFragment;
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class ShowDetailUtils {
 
