@@ -13,9 +13,6 @@ import com.sahil.gupte.HomeCalc.R;
 public class CustomListViewInput extends ArrayAdapter<String> {
     private final Activity context;
     private int count = 1;
-    private Spinner spinner;
-    private EditText Price;
-    private EditText notes;
 
     public CustomListViewInput(Activity context) {
         super(context, R.layout.custom_list);
@@ -37,9 +34,9 @@ public class CustomListViewInput extends ArrayAdapter<String> {
         LayoutInflater inflater=context.getLayoutInflater();
         if (view == null) {
             view = inflater.inflate(R.layout.custom_list, null, true);
-            spinner = view.findViewById(R.id.spinner);
-            Price = view.findViewById(R.id.editText);
-            notes = view.findViewById(R.id.editText2);
+            Spinner spinner = view.findViewById(R.id.spinner);
+            EditText price = view.findViewById(R.id.editText);
+            EditText notes = view.findViewById(R.id.editText2);
         }
 
         return view;

@@ -27,7 +27,6 @@
                 android:id="@+id/submit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/custom_list"
                 android:layout_weight="1"
                 android:text="Submit" />
 
@@ -37,7 +36,6 @@
             android:id="@+id/custom_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/button"
             android:layout_marginTop="10dp"
             android:entries="@android:array/imProtocols" />
 

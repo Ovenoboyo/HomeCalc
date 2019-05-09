@@ -3,18 +3,16 @@ package com.sahil.gupte.HomeCalc;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,7 +22,6 @@ import com.sahil.gupte.HomeCalc.Auth.LoginActivity;
 import com.sahil.gupte.HomeCalc.Fragments.EditDetails;
 import com.sahil.gupte.HomeCalc.Fragments.Home;
 import com.sahil.gupte.HomeCalc.Fragments.ShowDetails;
-import com.sahil.gupte.HomeCalc.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -147,13 +144,8 @@ public class MainActivity extends AppCompatActivity
             ft.commit();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override

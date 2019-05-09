@@ -19,10 +19,9 @@ import static com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils.UpdateDB;
 
 public class EditDialogFragment extends DialogFragment
 {
-    Context mContext;
+    private Context mContext;
     private int pos;
-    ShowDetailUtils showDetailUtils;
-    EditText date,price,notes;
+    private EditText date,price,notes;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -45,9 +44,9 @@ public class EditDialogFragment extends DialogFragment
         price = view.findViewById(R.id.edit_price);
         notes = view.findViewById(R.id.edit_notes);
 
-        date.setText(showDetailUtils.TimeList.get(pos));
-        price.setText(showDetailUtils.PriceList.get(pos));
-        notes.setText(showDetailUtils.NotesList.get(pos));
+        date.setText(ShowDetailUtils.TimeList.get(pos));
+        price.setText(ShowDetailUtils.PriceList.get(pos));
+        notes.setText(ShowDetailUtils.NotesList.get(pos));
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -71,7 +70,6 @@ public class EditDialogFragment extends DialogFragment
                 builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        return;
                     }
                 });
                 AlertDialog alertDialog = builder1.create();
@@ -89,9 +87,9 @@ public class EditDialogFragment extends DialogFragment
     }
 
     private void saveText() {
-        showDetailUtils.setTime(pos, date.getText().toString());
-        showDetailUtils.setPrice(pos, price.getText().toString());
-        showDetailUtils.setNotes(pos, notes.getText().toString());
+        ShowDetailUtils.setTime(pos, date.getText().toString());
+        ShowDetailUtils.setPrice(pos, price.getText().toString());
+        ShowDetailUtils.setNotes(pos, notes.getText().toString());
         UpdateDB(pos);
     }
 }

@@ -13,7 +13,7 @@ import com.sahil.gupte.HomeCalc.R;
 
 public class SwitchDialogFragment extends DialogFragment
 {
-    Context mContext;
+    private Context mContext;
     @Override
     public void onCreate(Bundle savedInstanceState)
     {

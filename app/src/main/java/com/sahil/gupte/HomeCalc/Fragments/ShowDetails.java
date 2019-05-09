@@ -27,9 +27,6 @@ import com.sahil.gupte.HomeCalc.R;
  */
 public class ShowDetails extends Fragment {
 
-    String TAG = "ShowDetails";
-
-
     public ShowDetails() {
         // Required empty public constructor
     }
@@ -73,10 +70,10 @@ public class ShowDetails extends Fragment {
                 if (getActivity() != null) {
                     Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
                     if (f instanceof ShowDetails) {
-                        showDetailUtils.addTextViews(ft, false);
+                        showDetailUtils.addTextViews(false);
                     }
                 }
-                hideProgressDialog(ft, pdf);
+                hideProgressDialog(pdf);
 
             }
 
@@ -94,7 +91,7 @@ public class ShowDetails extends Fragment {
         pdf.show(ft, "dialog");
     }
 
-    private void hideProgressDialog(FragmentTransaction ft, ProgressDialogFragment pdf) {
+    private void hideProgressDialog(ProgressDialogFragment pdf) {
         pdf.dismiss();
     }
 

@@ -30,28 +30,23 @@ public class ShowDetailUtils {
 
     private static final String TAG = "ShowDetsilUtils";
     Context mContext;
-    public static ArrayList<String> SpinnerList = new ArrayList<>();
-    public static ArrayList<String> NotesList = new ArrayList<>();
-    public static ArrayList<String> PriceList = new ArrayList<>();
-    public static ArrayList<String> TimeList = new ArrayList<>();
+    public static final ArrayList<String> SpinnerList = new ArrayList<>();
+    public static final ArrayList<String> NotesList = new ArrayList<>();
+    public static final ArrayList<String> PriceList = new ArrayList<>();
+    public static final ArrayList<String> TimeList = new ArrayList<>();
 
-    public static ArrayList<String> SpinnerKeyList = new ArrayList<>();
-    public static ArrayList<String> NotesKeyList = new ArrayList<>();
-    public static ArrayList<String> PriceKeyList = new ArrayList<>();
-    public static ArrayList<String> TimeKeyList = new ArrayList<>();
-
-    public static boolean UpdateDB = false;
+    private static final ArrayList<String> SpinnerKeyList = new ArrayList<>();
+    private static final ArrayList<String> NotesKeyList = new ArrayList<>();
+    private static final ArrayList<String> PriceKeyList = new ArrayList<>();
+    private static final ArrayList<String> TimeKeyList = new ArrayList<>();
 
     LinearLayout linear0, linear1, linear2, linear3;
     FragmentManager fm;
 
-    private static FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private static FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private static DatabaseReference userNode = database.getReference(user.getUid());
+    private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private static final DatabaseReference userNode = database.getReference(user.getUid());
     private static MainActivity mainActivity;
-
-    public ShowDetailUtils() {
-    }
 
     public ShowDetailUtils(Context context, LinearLayout linear0, LinearLayout linear1, LinearLayout linear2, LinearLayout linear3){
         mContext = context;
@@ -139,7 +134,7 @@ public class ShowDetailUtils {
         }
     }
 
-    public void addTextViews(FragmentTransaction ft, boolean edit) {
+    public void addTextViews(boolean edit) {
         linear0.setVisibility(View.GONE);
         linear1.setVisibility(View.GONE);
         linear2.setVisibility(View.GONE);

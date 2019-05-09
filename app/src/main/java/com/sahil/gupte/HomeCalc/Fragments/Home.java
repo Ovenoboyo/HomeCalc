@@ -27,18 +27,18 @@ import java.util.Date;
 
 public class Home extends Fragment {
 
-    String TAG = "HomeFragment";
+    private final String TAG = "HomeFragment";
 
-    View view;
-    ListView list;
-    CustomListViewInput listAdapter;
-    Button AddNew, Submit;
-    DatabaseReference rootRef, firstNode, priceNode, notesNode, spinnerNode, userNode, timeNode;
-    EditText price, notes;
-    Spinner spinner;
-    ArrayList<Integer> pricelist = new ArrayList<Integer>();
-    ArrayList<String> noteslist = new ArrayList<String>();
-    ArrayList<Integer> spinnerlist = new ArrayList<Integer>();
+    private View view;
+    private ListView list;
+    private CustomListViewInput listAdapter;
+    private Button AddNew, Submit;
+    private DatabaseReference rootRef, priceNode, notesNode, spinnerNode, userNode, timeNode;
+    private EditText price, notes;
+    private Spinner spinner;
+    private final ArrayList<Integer> pricelist = new ArrayList<>();
+    private final ArrayList<String> noteslist = new ArrayList<>();
+    private final ArrayList<Integer> spinnerlist = new ArrayList<>();
 
     public Home() {
         // Required empty public constructor
@@ -117,27 +117,6 @@ public class Home extends Fragment {
             }
         });
         return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
     }
 
     private void showProgressDialog(FragmentTransaction ft, SwitchDialogFragment pdf) {
