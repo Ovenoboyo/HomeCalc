@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -70,6 +71,11 @@ public class ShowDetailUtils {
         NotesList.clear();
         PriceList.clear();
         SpinnerList.clear();
+        TimeList.clear();
+        NotesKeyList.clear();
+        PriceKeyList.clear();
+        SpinnerKeyList.clear();
+        TimeKeyList.clear();
         Map<String, Object> mapTime = (Map<String, Object>) dataSnapshot.child("timestamp").getValue();
         Map<String, Object> mapSpinner = (Map<String, Object>) dataSnapshot.child("spinner").getValue();
         Map<String, Object> mapPrice = (Map<String, Object>) dataSnapshot.child("price").getValue();
@@ -109,6 +115,8 @@ public class ShowDetailUtils {
         putKeyInList(ListOfEntryTime, TimeKeyList);
         putKeyInList(ListOfEntryPrice, PriceKeyList);
         putKeyInList(ListOfEntrySpinner, SpinnerKeyList);
+
+        Log.d(TAG, "sortMap: "+NotesKeyList.get(0)+", "+SpinnerKeyList.get(0));
 
     }
 
@@ -194,14 +202,18 @@ public class ShowDetailUtils {
         time.setBackgroundResource(R.drawable.text_border);
         time.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         time.setLayoutParams(lpt);
+        time.setPadding(0,50,0, 50);
+        time.setGravity(Gravity.CENTER);
         linearLayout.addView(time);
 
         linear.setVisibility(View.VISIBLE);
         price = new TextView((mContext));
         price.setText("" + PriceList.get(i)+"₹");
         price.setTextSize(16);
+        price.setPadding(0,50,0, 50);
         price.setBackgroundResource(R.drawable.text_border);
         price.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        price.setGravity(Gravity.CENTER);
         price.setLayoutParams(lpt);
         linearLayout.addView(price);
 
@@ -210,6 +222,8 @@ public class ShowDetailUtils {
         notes.setTextSize(16);
         notes.setBackgroundResource(R.drawable.text_border);
         notes.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        notes.setGravity(Gravity.CENTER);
+        notes.setPadding(0,50,0, 50);
         notes.setLayoutParams(lpt);
         linearLayout.addView(notes);
 
@@ -231,6 +245,8 @@ public class ShowDetailUtils {
         time.setTextSize(16);
         time.setBackgroundResource(R.drawable.text_border);
         time.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        time.setGravity(Gravity.CENTER);
+        time.setPadding(0,50,0, 50);
         time.setLayoutParams(lpt);
         linearLayout.addView(time);
 
@@ -240,6 +256,8 @@ public class ShowDetailUtils {
         price.setTextSize(16);
         price.setBackgroundResource(R.drawable.text_border);
         price.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        price.setGravity(Gravity.CENTER);
+        price.setPadding(0,50,0, 50);
         price.setLayoutParams(lpt);
         linearLayout.addView(price);
 
@@ -248,6 +266,8 @@ public class ShowDetailUtils {
         notes.setTextSize(16);
         notes.setBackgroundResource(R.drawable.text_border);
         notes.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        notes.setGravity(Gravity.CENTER);
+        notes.setPadding(0,50,0, 50);
         notes.setLayoutParams(lpt);
         linearLayout.addView(notes);
 
@@ -266,11 +286,14 @@ public class ShowDetailUtils {
         String priceKey = PriceKeyList.get(pos);
         String timeKey = TimeKeyList.get(pos);
 
+
+
         Log.d(TAG, "UpdateDB: pos: "+pos+", "+NotesKeyList.get(0)+", "+NotesKeyList.get(1));
 
         userNode.child("notes").child(notesKey).setValue(NotesList.get(pos));
         userNode.child("price").child(priceKey).setValue(PriceList.get(pos));
         userNode.child("timestamp").child(timeKey).setValue(TimeList.get(pos));
+
 
         mainActivity.displaySelectedScreen(R.id.nav_edit);
 
@@ -281,6 +304,8 @@ public class ShowDetailUtils {
         String priceKey = PriceKeyList.get(pos);
         String timeKey = TimeKeyList.get(pos);
         String spinnerKey = SpinnerKeyList.get(pos);
+
+        Log.d(TAG, "RemoveItemDB: ");
 
         userNode.child("notes").child(notesKey).removeValue();
         userNode.child("price").child(priceKey).removeValue();
