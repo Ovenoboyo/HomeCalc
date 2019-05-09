@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="date"
+            android:text="Date" />
+
+        <EditText
+            android:id="@+id/edit_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="number"
+            android:text="Price" />
+
+        <EditText
+            android:id="@+id/edit_notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Notes" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_alignParentRight="true">
+
+        <TextView
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:textSize="16dp"
+            android:textAppearance="@style/Widget.AppCompat.ButtonBar.AlertDialog"
+            android:textColor="@color/colorAccent"
+            android:text="Delete" />
+
+        <TextView
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/Widget.AppCompat.ButtonBar.AlertDialog"
+            android:textColor="@color/colorAccent"
+            android:textSize="16dp"
+            android:text="Save" />
+    </LinearLayout>
+
+</RelativeLayout>
