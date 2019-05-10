@@ -306,7 +306,7 @@ public class ShowDetailUtils {
                 break;
 
             case "price":
-                data.setText("" + PriceList.get(j) + "₹");
+                data.setText("₹" + PriceList.get(j));
                 break;
 
             case "notes":
