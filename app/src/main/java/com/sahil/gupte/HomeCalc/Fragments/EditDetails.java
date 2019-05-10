@@ -1,6 +1,7 @@
 package com.sahil.gupte.HomeCalc.Fragments;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -59,9 +60,12 @@ public class EditDetails extends Fragment {
         final RelativeLayout progress = view.findViewById(R.id.progressLayout);
         progress.setVisibility(View.VISIBLE);
 
+        SharedPreferences prefF = getContext().getSharedPreferences("Family", 0);
+        String family = prefF.getString("familyID", "LostData");
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference userNode = database.getReference(user.getUid());
+        final DatabaseReference userNode = database.getReference(family).child(user.getDisplayName());
 
         Query query = userNode.orderByChild("spinner");
         query.addValueEventListener(new ValueEventListener() {

@@ -1,6 +1,7 @@
 package com.sahil.gupte.HomeCalc.Auth;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, PostSignupActivity.class));
             finish();
         }
 
@@ -102,8 +103,20 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                                     }
                                 } else {
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
+
+                                    SharedPreferences pref = getSharedPreferences("Family", 0);
+                                    String family = pref.getString("familyID", "null");
+
+                                    Intent intent;
+                                    if (family != "null") {
+                                        intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    } else {
+                                        intent = new Intent(LoginActivity.this, PostSignupActivity.class);
+                                    }
+
+                                    if (intent != null) {
+                                        startActivity(intent);
+                                    }
                                     finish();
                                 }
                             }

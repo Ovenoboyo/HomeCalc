@@ -1,6 +1,7 @@
 package com.sahil.gupte.HomeCalc.Fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -33,12 +34,13 @@ public class Home extends Fragment {
     private ListView list;
     private CustomListViewInput listAdapter;
     private Button AddNew, Submit;
-    private DatabaseReference rootRef, priceNode, notesNode, spinnerNode, userNode, timeNode;
+    private DatabaseReference rootRef, firstNode, priceNode, notesNode, spinnerNode, userNode, timeNode;
     private EditText price, notes;
     private Spinner spinner;
     private final ArrayList<Integer> pricelist = new ArrayList<>();
     private final ArrayList<String> noteslist = new ArrayList<>();
     private final ArrayList<Integer> spinnerlist = new ArrayList<>();
+    private String family;
 
     public Home() {
         // Required empty public constructor
@@ -74,9 +76,12 @@ public class Home extends Fragment {
             ((ViewGroup)view.getParent()).removeView(view);
         }
 
+        SharedPreferences pref = getContext().getSharedPreferences("Family", 0);
+        family = pref.getString("familyID", "LostData");
+
         rootRef = FirebaseDatabase.getInstance().getReference();
-        userNode = rootRef.child(user.getUid());
-        Log.d(TAG, "onCreateView: "+ user.getUid());
+        firstNode = rootRef.child(family);
+        userNode = firstNode.child(user.getDisplayName());
 
         AddNew.setOnClickListener(new View.OnClickListener() {
             @Override

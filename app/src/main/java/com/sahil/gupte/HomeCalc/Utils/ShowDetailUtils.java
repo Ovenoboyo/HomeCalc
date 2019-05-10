@@ -36,12 +36,13 @@ import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 public class ShowDetailUtils {
 
     private static final String TAG = "ShowDetsilUtils";
-    Context mContext;
+    private Context mContext;
     public static final ArrayList<String> SpinnerList = new ArrayList<>();
     public static final ArrayList<String> NotesList = new ArrayList<>();
     public static final ArrayList<String> PriceList = new ArrayList<>();
     public static final ArrayList<String> TimeList = new ArrayList<>();
     public static final ArrayList<String> DateList = new ArrayList<>();
+    public static final ArrayList<String> UserList = new ArrayList<>();
 
     public static String[] SpinnerNameList;
 
@@ -49,14 +50,10 @@ public class ShowDetailUtils {
     private static final ArrayList<String> NotesKeyList = new ArrayList<>();
     private static final ArrayList<String> PriceKeyList = new ArrayList<>();
     private static final ArrayList<String> TimeKeyList = new ArrayList<>();
+    private static final ArrayList<String> UserKeyList = new ArrayList<>();
 
     FragmentManager fm;
 
-    LinearLayout linearLayout;
-
-    private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private static final DatabaseReference userNode = database.getReference(user.getUid());
     private static MainActivity mainActivity;
 
     private int row1, column1, column2, column3;
@@ -71,6 +68,17 @@ public class ShowDetailUtils {
         mContext = context;
         fm = fragmentManager;
         mainActivity = activity;
+    }
+
+    public void getUserList(DataSnapshot dataSnapshot) {
+        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+            Map<String, Object> map = (Map<String, Object>) postSnapshot.getValue();
+            Set<Map.Entry<String, Object>> Entry = map.entrySet();
+            ArrayList<Map.Entry<String, Object>> ListOfEntry = new ArrayList<Map.Entry<String,Object>>(Entry);
+            putDataInList(ListOfEntry, UserList);
+            putKeyInList(ListOfEntry, UserKeyList);
+
+        }
     }
 
     public void getData(DataSnapshot dataSnapshot) {
@@ -334,31 +342,38 @@ public class ShowDetailUtils {
         }
     }
 
-    public static void UpdateDB(int pos) {
+    public static void UpdateDB(int pos, Context mContext) {
         String notesKey = NotesKeyList.get(pos);
         String priceKey = PriceKeyList.get(pos);
         String timeKey = TimeKeyList.get(pos);
 
+        SharedPreferences prefF = mContext.getSharedPreferences("Family", 0);
+        String family = prefF.getString("familyID", "LostData");
 
-
-        Log.d(TAG, "UpdateDB: pos: "+pos+", "+NotesKeyList.get(0)+", "+NotesKeyList.get(1));
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference userNode = database.getReference(family).child(user.getDisplayName());
 
         userNode.child("notes").child(notesKey).setValue(NotesList.get(pos));
         userNode.child("price").child(priceKey).setValue(PriceList.get(pos));
         userNode.child("timestamp").child(timeKey).setValue(TimeList.get(pos));
 
-
         mainActivity.displaySelectedScreen(R.id.nav_edit);
 
     }
 
-    public static void RemoveItemDB(int pos) {
+    public static void RemoveItemDB(int pos, Context mContext) {
         String notesKey = NotesKeyList.get(pos);
         String priceKey = PriceKeyList.get(pos);
         String timeKey = TimeKeyList.get(pos);
         String spinnerKey = SpinnerKeyList.get(pos);
 
-        Log.d(TAG, "RemoveItemDB: ");
+        SharedPreferences prefF = mContext.getSharedPreferences("Family", 0);
+        String family = prefF.getString("familyID", "LostData");
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference userNode = database.getReference(family).child(user.getDisplayName());
 
         userNode.child("notes").child(notesKey).removeValue();
         userNode.child("price").child(priceKey).removeValue();

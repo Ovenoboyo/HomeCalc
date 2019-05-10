@@ -80,7 +80,7 @@ public class EditDialogFragment extends DialogFragment
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RemoveItemDB(pos);
+                RemoveItemDB(pos, getContext());
             }
         });
         return dialog;
@@ -90,6 +90,6 @@ public class EditDialogFragment extends DialogFragment
         ShowDetailUtils.setTime(pos, date.getText().toString());
         ShowDetailUtils.setPrice(pos, price.getText().toString());
         ShowDetailUtils.setNotes(pos, notes.getText().toString());
-        UpdateDB(pos);
+        UpdateDB(pos, getContext());
     }
 }

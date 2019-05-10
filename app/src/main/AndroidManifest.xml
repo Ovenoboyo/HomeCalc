@@ -3,6 +3,7 @@
     package="com.sahil.gupte.HomeCalc">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -37,6 +38,11 @@
         <activity
             android:name=".Auth.ResetPasswordActivity"
             android:label="ResetPassActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".Auth.PostSignupActivity"
+            android:label="PostSignupActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

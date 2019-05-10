@@ -102,7 +102,7 @@ public class SignupActivity extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
                                 } else {
                                     addUserNameToUser(username);
-                                    startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                    startActivity(new Intent(SignupActivity.this, PostSignupActivity.class));
                                     finish();
                                 }
                             }

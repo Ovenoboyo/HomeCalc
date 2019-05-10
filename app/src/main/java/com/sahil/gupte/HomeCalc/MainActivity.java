@@ -2,6 +2,7 @@ package com.sahil.gupte.HomeCalc;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,10 +21,13 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.sahil.gupte.HomeCalc.Auth.LoginActivity;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.EditDialogFragment;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SortDialogFragment;
 import com.sahil.gupte.HomeCalc.Fragments.EditDetails;
+import com.sahil.gupte.HomeCalc.Fragments.FamilyFragment;
 import com.sahil.gupte.HomeCalc.Fragments.Home;
 import com.sahil.gupte.HomeCalc.Fragments.ShowDetails;
 
@@ -31,6 +36,7 @@ public class MainActivity extends AppCompatActivity
 
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +68,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         TextView Username = headerView.findViewById(R.id.username_text);
         TextView Email = headerView.findViewById(R.id.email_text);
@@ -99,21 +105,29 @@ public class MainActivity extends AppCompatActivity
         //initializing the fragment object which is selected
         switch (itemId) {
             case R.id.nav_home:
+                navigationView.setCheckedItem(R.id.nav_home);
                 fragment = new Home();
                 break;
 
             case R.id.nav_details:
+                navigationView.setCheckedItem(R.id.nav_details);
                 fragment = new ShowDetails();
                 break;
 
             case R.id.nav_edit:
+                navigationView.setCheckedItem(R.id.nav_edit);
                 fragment = new EditDetails();
                 break;
 
             case R.id.nav_logout:
+                navigationView.setCheckedItem(R.id.nav_logout);
                 signOut();
                 break;
 
+            case R.id.nav_family:
+                navigationView.setCheckedItem(R.id.nav_family);
+                fragment = new FamilyFragment();
+                break;
         }
 
         //replacing the fragment

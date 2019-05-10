@@ -8,14 +8,17 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -59,20 +62,22 @@ public class ShowDetails extends Fragment {
         final RelativeLayout progress = view.findViewById(R.id.progressLayout);
         progress.setVisibility(View.VISIBLE);
 
+        SharedPreferences prefF = getContext().getSharedPreferences("Family", 0);
+        String family = prefF.getString("familyID", "LostData");
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference userNode = database.getReference(user.getUid());
+        final DatabaseReference userNode = database.getReference(family).child(user.getDisplayName());
 
         SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
         final int row1 = pref.getInt("row1", 0);
         int column1 = pref.getInt("column1", 0);
 
+
         Query query = userNode.orderByChild("spinner");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Thread thread = new Thread();
-                thread.start();
                 showDetailUtils.getData(dataSnapshot);
                 if (getActivity() != null) {
                     Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
@@ -101,6 +106,18 @@ public class ShowDetails extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.main, menu);
+
+        //MenuItem item = menu.findItem(R.id.spinner);
+        //Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+
+
+
+        //ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                //getActivity(), android.R.layout.simple_spinner_item, ShowDetailUtils.UserList);
+
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //spinner.setAdapter(adapter);
     }
 
     @Override
