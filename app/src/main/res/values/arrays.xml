@@ -6,4 +6,15 @@
         <item>@string/category_2</item>
         <item>@string/category_3</item>
     </string-array>
+
+    <string-array name="row_spinner">
+        <item>@string/category</item>
+        <item>@string/time</item>
+    </string-array>
+
+    <string-array name="column_spinner">
+        <item>@string/price</item>
+        <item>@string/notes</item>
+    </string-array>
+
 </resources>

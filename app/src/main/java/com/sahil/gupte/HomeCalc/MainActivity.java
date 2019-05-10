@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +20,8 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sahil.gupte.HomeCalc.Auth.LoginActivity;
+import com.sahil.gupte.HomeCalc.Fragments.Dialogs.EditDialogFragment;
+import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SortDialogFragment;
 import com.sahil.gupte.HomeCalc.Fragments.EditDetails;
 import com.sahil.gupte.HomeCalc.Fragments.Home;
 import com.sahil.gupte.HomeCalc.Fragments.ShowDetails;
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        displaySelectedScreen(R.id.nav_home);
 
     }
 
@@ -107,6 +111,10 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
 
+        if (id == R.id.sort) {
+            ShowSortDialogFragment();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -135,6 +143,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_edit:
                 fragment = new EditDetails();
                 break;
+
+            case R.id.nav_logout:
+                signOut();
+                break;
+
         }
 
         //replacing the fragment
@@ -160,5 +173,12 @@ public class MainActivity extends AppCompatActivity
         if (authListener != null) {
             auth.removeAuthStateListener(authListener);
         }
+    }
+
+    private void ShowSortDialogFragment() {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        SortDialogFragment sortDialogFragment = new SortDialogFragment();
+        sortDialogFragment.show(ft, "dialog");
     }
 }

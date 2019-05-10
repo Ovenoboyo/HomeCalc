@@ -32,12 +32,12 @@
         <activity
             android:name=".Auth.SignupActivity"
             android:label="SignUpActivity"
-            android:theme="@style/Theme.AppCompat" />
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".Auth.ResetPasswordActivity"
             android:label="ResetPassActivity"
-            android:theme="@style/Theme.AppCompat" />
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

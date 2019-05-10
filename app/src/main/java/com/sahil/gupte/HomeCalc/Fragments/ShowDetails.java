@@ -1,6 +1,8 @@
 package com.sahil.gupte.HomeCalc.Fragments;
 
 
+import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,7 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.sahil.gupte.HomeCalc.Fragments.Dialogs.ProgressDialogFragment;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 import com.sahil.gupte.HomeCalc.R;
 
@@ -26,6 +28,8 @@ import com.sahil.gupte.HomeCalc.R;
  * A simple {@link Fragment} subclass.
  */
 public class ShowDetails extends Fragment {
+
+    private ProgressDialog pd;
 
     public ShowDetails() {
         // Required empty public constructor
@@ -42,39 +46,39 @@ public class ShowDetails extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_show_details, container, false);
-        LinearLayout linear0 = view.findViewById(R.id.linear0);
-        LinearLayout linear1 = view.findViewById(R.id.linear1);
-        LinearLayout linear2 = view.findViewById(R.id.linear2);
-        LinearLayout linear3 = view.findViewById(R.id.linear3);
+        final LinearLayout linear = view.findViewById(R.id.linear);
 
-        final ShowDetailUtils showDetailUtils = new ShowDetailUtils(getContext(), linear0, linear1, linear2, linear3);
+        final ShowDetailUtils showDetailUtils = new ShowDetailUtils(getContext());
 
-        final FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        final ProgressDialogFragment pdf = new ProgressDialogFragment();
-
-        showProgressDialog(ft, pdf);
+        final RelativeLayout progress = view.findViewById(R.id.progressLayout);
+        progress.setVisibility(View.VISIBLE);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference userNode = database.getReference(user.getUid());
 
+        SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
+        final int row1 = pref.getInt("row1", 0);
+        int column1 = pref.getInt("column1", 0);
+
         Query query = userNode.orderByChild("spinner");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Thread thread = new Thread();
+                thread.start();
                 showDetailUtils.getData(dataSnapshot);
                 if (getActivity() != null) {
                     Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
                     if (f instanceof ShowDetails) {
-                        showDetailUtils.addTextViews(false);
+                        if (row1 == 0) {
+                            showDetailUtils.addTextViews(false, linear, showDetailUtils.SpinnerList);
+                        } else if (row1 == 1) {
+                            showDetailUtils.addTextViews(false, linear, showDetailUtils.DateList);
+                        }
                     }
                 }
-                hideProgressDialog(pdf);
-
+                progress.setVisibility(View.GONE);
             }
 
             @Override
@@ -87,13 +91,6 @@ public class ShowDetails extends Fragment {
     }
 
 
-    private void showProgressDialog(FragmentTransaction ft, ProgressDialogFragment pdf) {
-        pdf.show(ft, "dialog");
-    }
-
-    private void hideProgressDialog(ProgressDialogFragment pdf) {
-        pdf.dismiss();
-    }
 
 
 }
