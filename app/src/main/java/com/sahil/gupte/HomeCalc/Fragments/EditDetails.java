@@ -35,6 +35,7 @@ public class EditDetails extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(false);
         super.onCreate(savedInstanceState);
     }
 
