@@ -2,6 +2,7 @@ package com.sahil.gupte.HomeCalc.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -43,6 +44,7 @@ public class ShowDetailUtils {
     public static final ArrayList<String> TimeList = new ArrayList<>();
     public static final ArrayList<String> DateList = new ArrayList<>();
     public static final ArrayList<String> UserList = new ArrayList<>();
+    public static final ArrayList<String> PriceTotal = new ArrayList<>();
 
     public static String[] SpinnerNameList;
 
@@ -174,6 +176,8 @@ public class ShowDetailUtils {
 
     public void addTextViews(boolean edit, LinearLayout linearLayout, ArrayList<String> List) {
 
+        int totalamt = 0;
+
         //new list will contain unique elements
         ArrayList<String> newList = new ArrayList<>();
         for (String element : List) {
@@ -197,6 +201,7 @@ public class ShowDetailUtils {
                 textViewOuter.setText(SpinnerNameList[Integer.valueOf(newList.get(i))]);
             }
             textViewOuter.setTextSize(28);
+            textViewOuter.setTypeface(null, Typeface.BOLD);
             textViewOuter.setBackgroundResource(R.drawable.text_border);
             textViewOuter.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
@@ -231,6 +236,9 @@ public class ShowDetailUtils {
 
                 if (row1 == 1 && !edit) {
                     if (List.get(j).equals(newList.get(i))) {
+
+                        totalamt = totalamt + Integer.valueOf(PriceList.get(j));
+
                         LinearLayout linearLayout1 = new LinearLayout(mContext);
                         linearLayout1.setLayoutParams(lp);
                         linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
@@ -257,6 +265,8 @@ public class ShowDetailUtils {
                 } else {
                     if (Integer.valueOf(List.get(j)) == Integer.valueOf(newList.get(i))) {
 
+                        totalamt = totalamt + Integer.valueOf(PriceList.get(j));
+
                         LinearLayout linearLayout1 = new LinearLayout(mContext);
                         linearLayout1.setLayoutParams(lp);
                         linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
@@ -280,10 +290,52 @@ public class ShowDetailUtils {
                             addDataFields(j, linearLayout1, "notes", edit);
                         }
                     }
-
                 }
             }
+            LinearLayout totalLinearLayout = new LinearLayout(mContext);
+            totalLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+            totalLinearLayout.setLayoutParams(lp);
+
+            if (column2 == 0 && column3 == 1) {
+                addTotal(totalamt, totalLinearLayout, "totalText");
+                addTotal(totalamt, totalLinearLayout, "totalAmt");
+                addTotal(totalamt, totalLinearLayout, "view");
+            } else {
+                addTotal(totalamt, totalLinearLayout, "totalText");
+                addTotal(totalamt, totalLinearLayout, "view");
+                addTotal(totalamt, totalLinearLayout, "totalAmt");
+            }
+            totalamt = 0;
+            linearLayoutOuter.addView(totalLinearLayout);
         }
+    }
+
+    private void addTotal (int totalamt, LinearLayout totalLinearLayout, String type) {
+        LinearLayout.LayoutParams lpt = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
+
+        TextView data = new TextView(mContext);
+
+        switch (type) {
+            case "totalText":
+                data.setText("Total:");
+                break;
+
+            case "view":
+                break;
+
+            case "totalAmt":
+                data.setText("₹"+totalamt);
+                break;
+        }
+
+        data.setTextSize(20);
+        data.setBackgroundResource(R.drawable.text_border);
+        data.setLayoutParams(lpt);
+        data.setPadding(0, 50, 0, 50);
+        data.setGravity(Gravity.CENTER);
+        data.setTypeface(null, Typeface.BOLD);
+        totalLinearLayout.addView(data);
+
     }
 
     private void addTitles (LinearLayout linearLayoutTitles, String title) {
@@ -295,6 +347,7 @@ public class ShowDetailUtils {
         column.setTextSize(24);
         column.setBackgroundResource(R.drawable.text_border);
         column.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        column.setTypeface(null, Typeface.BOLD);
         column.setLayoutParams(lpt);
         column.setPadding(0,50,0, 50);
         column.setGravity(Gravity.CENTER);
