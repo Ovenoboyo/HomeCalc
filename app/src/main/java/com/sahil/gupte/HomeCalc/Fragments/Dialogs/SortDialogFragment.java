@@ -83,6 +83,7 @@ public class SortDialogFragment extends DialogFragment
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 

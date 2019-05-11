@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +57,8 @@ public class ShowDetailUtils {
     private static final ArrayList<String> PriceKeyList = new ArrayList<>();
     private static final ArrayList<String> TimeKeyList = new ArrayList<>();
     private static final ArrayList<String> UserKeyList = new ArrayList<>();
+
+    public static int familyTotal = 0;
 
     FragmentManager fm;
 
@@ -170,15 +174,74 @@ public class ShowDetailUtils {
     }
 
     private void setDateList() {
+        DateList.clear();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         for (int i = 0; i < TimeList.size(); i++) {
             DateList.add(i, formatter.format(new Date(Long.parseLong(TimeList.get(i)))));
         }
     }
 
+    public void familyView (LinearLayout linearLayout, ArrayList<String> List, DataSnapshot dataSnapshot){
+        LinearLayout linearLayoutUser1 = new LinearLayout(mContext);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayoutUser1.setLayoutParams(lp);
+        linearLayoutUser1.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(linearLayoutUser1);
+
+
+        LinearLayout linearLayoutWButton = new LinearLayout(mContext);
+        linearLayoutWButton.setLayoutParams(lp);
+        linearLayoutWButton.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayoutWButton.setPadding(0, 25, 0, 25);
+        linearLayoutWButton.setBackgroundResource(R.drawable.text_border);
+
+        ViewGroup.LayoutParams lp11 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.15f);
+        ViewGroup.LayoutParams lp21 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0.85f);
+
+        TextView textViewUser = new TextView(mContext);
+        textViewUser.setText(dataSnapshot.getKey());
+        textViewUser.setTextSize(32);
+        textViewUser.setTypeface(null, Typeface.BOLD);
+        textViewUser.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        textViewUser.setLayoutParams(lp11);
+        linearLayoutWButton.addView(textViewUser);
+
+        final ImageView expand = new ImageView(mContext);
+        expand.setImageResource(R.drawable.ic_arrow_drop_down);
+        expand.setLayoutParams(lp21);
+        linearLayoutWButton.addView(expand);
+
+        linearLayoutUser1.addView(linearLayoutWButton);
+
+
+        final LinearLayout linearLayoutUser = new LinearLayout(mContext);
+        linearLayoutUser.setLayoutParams(lp);
+        linearLayoutUser.setOrientation(LinearLayout.VERTICAL);
+        linearLayoutUser1.addView(linearLayoutUser);
+
+        final boolean[] expandLayout = {true};
+        expand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!expandLayout[0]) {
+                    linearLayoutUser.setVisibility(View.GONE);
+                    expand.setImageResource(R.drawable.ic_arrow_drop_down);
+                } else {
+                    linearLayoutUser.setVisibility(View.VISIBLE);
+                    expand.setImageResource(R.drawable.ic_arrow_drop_up);
+                }
+                expandLayout[0] = !expandLayout[0];
+            }
+        });
+
+        addTextViews(false, linearLayoutUser, List);
+
+        linearLayoutUser.setVisibility(View.GONE);
+    }
+
     public void addTextViews(boolean edit, LinearLayout linearLayout, ArrayList<String> List) {
 
-        int totalamt = 0;
+        int totalamt = 0, grandTotal = 0;
 
         //new list will contain unique elements
         ArrayList<String> newList = new ArrayList<>();
@@ -190,11 +253,19 @@ public class ShowDetailUtils {
 
         for(int i = 0; i<newList.size(); i++) {
 
-            LinearLayout linearLayoutOuter = new LinearLayout(mContext);
+            final LinearLayout linearLayoutOuter1 = new LinearLayout(mContext);
             ViewGroup.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            linearLayoutOuter.setLayoutParams(lp);
-            linearLayoutOuter.setOrientation(LinearLayout.VERTICAL);
-            linearLayout.addView(linearLayoutOuter);
+            linearLayoutOuter1.setLayoutParams(lp);
+            linearLayoutOuter1.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.addView(linearLayoutOuter1);
+
+            LinearLayout linearLayoutWButton = new LinearLayout(mContext);
+            linearLayoutWButton.setLayoutParams(lp);
+            linearLayoutWButton.setOrientation(LinearLayout.HORIZONTAL);
+            linearLayoutWButton.setBackgroundResource(R.drawable.text_border);
+
+            ViewGroup.LayoutParams lp1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.15f);
+            ViewGroup.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0.85f);
 
             TextView textViewOuter = new TextView(mContext);
             if (row1 == 1 && !edit) {
@@ -202,12 +273,42 @@ public class ShowDetailUtils {
             } else {
                 textViewOuter.setText(SpinnerNameList[Integer.valueOf(newList.get(i))]);
             }
-            textViewOuter.setTextSize(28);
-            textViewOuter.setTypeface(null, Typeface.BOLD);
-            textViewOuter.setBackgroundResource(R.drawable.text_border);
-            textViewOuter.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-            linearLayoutOuter.addView(textViewOuter);
+            textViewOuter.setTextSize(28);
+            textViewOuter.setTypeface(null, Typeface.BOLD_ITALIC);
+            textViewOuter.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            textViewOuter.setPadding(0, 25, 0, 25);
+            textViewOuter.setLayoutParams(lp1);
+
+            linearLayoutWButton.addView(textViewOuter);
+
+            final ImageView expand = new ImageView(mContext);
+            expand.setImageResource(R.drawable.ic_arrow_drop_up);
+            expand.setLayoutParams(lp2);
+
+            linearLayoutWButton.addView(expand);
+
+            linearLayoutOuter1.addView(linearLayoutWButton);
+
+            final LinearLayout linearLayoutOuter = new LinearLayout(mContext);
+            linearLayoutOuter.setLayoutParams(lp);
+            linearLayoutOuter.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.addView(linearLayoutOuter);
+
+            final boolean[] expandLayout = {false};
+            expand.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!expandLayout[0]) {
+                        linearLayoutOuter.setVisibility(View.GONE);
+                        expand.setImageResource(R.drawable.ic_arrow_drop_down);
+                    } else {
+                        linearLayoutOuter.setVisibility(View.VISIBLE);
+                        expand.setImageResource(R.drawable.ic_arrow_drop_up);
+                    }
+                    expandLayout[0] = !expandLayout[0];
+                }
+            });
 
             //Layout for titles
             LinearLayout linearLayoutTitles = new LinearLayout(mContext);
@@ -299,27 +400,52 @@ public class ShowDetailUtils {
             totalLinearLayout.setLayoutParams(lp);
 
             if (column2 == 0 && column3 == 1) {
-                addTotal(totalamt, totalLinearLayout, "totalText");
-                addTotal(totalamt, totalLinearLayout, "totalAmt");
-                addTotal(totalamt, totalLinearLayout, "view");
+                addTotal(totalamt, totalLinearLayout, "totalText", true);
+                addTotal(totalamt, totalLinearLayout, "totalAmt", true);
+                addTotal(totalamt, totalLinearLayout, "view", true);
             } else {
-                addTotal(totalamt, totalLinearLayout, "totalText");
-                addTotal(totalamt, totalLinearLayout, "view");
-                addTotal(totalamt, totalLinearLayout, "totalAmt");
+                addTotal(totalamt, totalLinearLayout, "totalText", true);
+                addTotal(totalamt, totalLinearLayout, "view", true);
+                addTotal(totalamt, totalLinearLayout, "totalAmt", true);
             }
+            grandTotal = grandTotal +totalamt;
+            familyTotal = familyTotal + grandTotal;
             totalamt = 0;
             linearLayoutOuter.addView(totalLinearLayout);
         }
+
+        LinearLayout grandtotalLinear = new LinearLayout(mContext);
+        grandtotalLinear.setBackgroundResource(R.drawable.text_border);
+
+
+        if (column2 == 0 && column3 == 1) {
+            addTotal(grandTotal, grandtotalLinear, "grandTotal", false);
+            addTotal(grandTotal, grandtotalLinear, "totalAmt", false);
+            addTotal(grandTotal, grandtotalLinear, "view", false);
+        } else {
+            addTotal(grandTotal, grandtotalLinear, "grandTotal", false);
+            addTotal(grandTotal, grandtotalLinear, "view", false);
+            addTotal(grandTotal, grandtotalLinear, "totalAmt", false);
+        }
+
+        linearLayout.addView(grandtotalLinear);
     }
 
-    private void addTotal (int totalamt, LinearLayout totalLinearLayout, String type) {
+    public void addTotal (int totalamt, LinearLayout totalLinearLayout, String type, boolean bg) {
         LinearLayout.LayoutParams lpt = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
 
         TextView data = new TextView(mContext);
 
         switch (type) {
+
+            case "grandTotal":
+                data.setText("Grand Total:");
+                data.setTextSize(24);
+                break;
+
             case "totalText":
                 data.setText("Total:");
+                data.setTextSize(20);
                 break;
 
             case "view":
@@ -327,11 +453,18 @@ public class ShowDetailUtils {
 
             case "totalAmt":
                 data.setText("₹"+totalamt);
+                data.setTextSize(20);
+                break;
+
+            case "familyTotal":
+                data.setText("Family Total:");
+                data.setTextSize(24);
                 break;
         }
 
-        data.setTextSize(20);
-        data.setBackgroundResource(R.drawable.text_border);
+        if (bg) {
+            data.setBackgroundResource(R.drawable.text_border);
+        }
         data.setLayoutParams(lpt);
         data.setPadding(0, 50, 0, 50);
         data.setGravity(Gravity.CENTER);
@@ -349,7 +482,7 @@ public class ShowDetailUtils {
         column.setTextSize(24);
         column.setBackgroundResource(R.drawable.text_border);
         column.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        column.setTypeface(null, Typeface.BOLD);
+        column.setTypeface(null, Typeface.ITALIC);
         column.setLayoutParams(lpt);
         column.setPadding(0,50,0, 50);
         column.setGravity(Gravity.CENTER);

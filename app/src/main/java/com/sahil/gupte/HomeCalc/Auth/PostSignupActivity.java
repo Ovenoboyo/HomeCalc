@@ -47,7 +47,7 @@ public class PostSignupActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        if (auth.getCurrentUser() != null) {
+        if (auth.getCurrentUser() != null && pref.getString("familyID", "null") != "null") {
             startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
             finish();
         }

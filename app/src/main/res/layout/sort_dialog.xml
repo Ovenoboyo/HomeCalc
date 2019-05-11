@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
     android:orientation="vertical">
 
     <Spinner
@@ -9,9 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
         android:spinnerMode="dropdown"
         android:textAlignment="center"
+        android:background="@drawable/text_border"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:entries="@array/row_spinner"/>
 
     <LinearLayout
@@ -26,6 +30,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/text_border"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:entries="@array/row_spinner"/>
 
         <Spinner
@@ -33,6 +40,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/text_border"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:entries="@array/column_spinner"/>
 
         <Spinner
@@ -40,6 +50,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/text_border"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:entries="@array/column_spinner" />
     </LinearLayout>
 

@@ -8,6 +8,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_sort">Sort</string>
 
+    <string name="menu_family_view">Family Report</string>
     <string name="menu_home">Add Data</string>
     <string name="menu_details">Show Report</string>
     <string name="menu_edit">Edit Report</string>

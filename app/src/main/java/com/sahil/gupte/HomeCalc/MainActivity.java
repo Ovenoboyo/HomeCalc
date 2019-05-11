@@ -27,6 +27,7 @@ import com.sahil.gupte.HomeCalc.Auth.LoginActivity;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.EditDialogFragment;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SortDialogFragment;
 import com.sahil.gupte.HomeCalc.Fragments.EditDetails;
+import com.sahil.gupte.HomeCalc.Fragments.FamilyDetails;
 import com.sahil.gupte.HomeCalc.Fragments.FamilyFragment;
 import com.sahil.gupte.HomeCalc.Fragments.Home;
 import com.sahil.gupte.HomeCalc.Fragments.ShowDetails;
@@ -127,6 +128,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_family:
                 navigationView.setCheckedItem(R.id.nav_family);
                 fragment = new FamilyFragment();
+                break;
+
+            case R.id.nav_family_view:
+                navigationView.setCheckedItem(R.id.nav_family_view);
+                fragment = new FamilyDetails();
                 break;
         }
 
