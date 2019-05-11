@@ -576,6 +576,7 @@ public class ShowDetailUtils {
         getData(dataSnapshot);
         Calendar cal = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
+        today.set(Calendar.MONTH, -2);
         today.set(Calendar.DAY_OF_MONTH, 0);
         today.set(Calendar.HOUR_OF_DAY, 0);
         today.set(Calendar.MINUTE, 0);
@@ -584,14 +585,13 @@ public class ShowDetailUtils {
 
         for (int i = 0; i<NotesList.size(); i++) {
             cal.setTimeInMillis(Long.parseLong(TimeList.get(i)));
-            cal.set(Calendar.MONTH, -2);
             cal.set(Calendar.DAY_OF_MONTH, 0);
             cal.set(Calendar.HOUR_OF_DAY, 0);
             cal.set(Calendar.MINUTE, 0);
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
 
-            if (cal.getTimeInMillis() - today.getTimeInMillis() <= 0) {
+            if (cal.getTimeInMillis() <= today.getTimeInMillis()) {
                 RemoveItemDB(i, mContext);
             }
         }
