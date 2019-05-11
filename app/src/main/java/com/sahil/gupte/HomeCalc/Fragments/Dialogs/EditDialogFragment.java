@@ -44,7 +44,7 @@ public class EditDialogFragment extends DialogFragment
         price = view.findViewById(R.id.edit_price);
         notes = view.findViewById(R.id.edit_notes);
 
-        date.setText(ShowDetailUtils.TimeList.get(pos));
+        date.setText(ShowDetailUtils.DateList.get(pos));
         price.setText(ShowDetailUtils.PriceList.get(pos));
         notes.setText(ShowDetailUtils.NotesList.get(pos));
 
@@ -87,7 +87,7 @@ public class EditDialogFragment extends DialogFragment
     }
 
     private void saveText() {
-        ShowDetailUtils.setTime(pos, date.getText().toString());
+        ShowDetailUtils.setTime(pos, date.getText().toString(), getContext());
         ShowDetailUtils.setPrice(pos, price.getText().toString());
         ShowDetailUtils.setNotes(pos, notes.getText().toString());
         UpdateDB(pos, getContext());

@@ -23,6 +23,8 @@ import com.sahil.gupte.HomeCalc.Fragments.Dialogs.EditDialogFragment;
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -460,7 +462,15 @@ public class ShowDetailUtils {
         NotesList.set(i, value);
     }
 
-    public static void setTime(int i, String value) {
-        TimeList.set(i, value);
+    public static void setTime(int i, String value, Context mContext) {
+        DateList.set(i, value);
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        try {
+        Date date = formatter.parse(value);
+        TimeList.set(i, String.valueOf(date.getTime()));
+        } catch (ParseException e) {
+            Log.d(TAG, "setTime: Parse Exception");
+            Toast.makeText(mContext, "Invalid Date format. Try DD/MM/YYYY", Toast.LENGTH_LONG).show();
+        }
     }
 }

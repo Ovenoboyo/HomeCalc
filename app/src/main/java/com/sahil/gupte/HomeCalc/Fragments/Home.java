@@ -24,6 +24,7 @@ import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SwitchDialogFragment;
 import com.sahil.gupte.HomeCalc.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Home extends Fragment {
@@ -93,7 +94,6 @@ public class Home extends Fragment {
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date date = new Date();
                 for (int i = 0; i < listAdapter.getCount(); i++) {
                     price = list.getChildAt(i).findViewById(R.id.editText);
                     notes = list.getChildAt(i).findViewById(R.id.editText2);
@@ -116,7 +116,7 @@ public class Home extends Fragment {
                     spinnerNode.push().setValue(spinnerlist.get(i));
                     priceNode.push().setValue(pricelist.get(i));
                     notesNode.push().setValue(noteslist.get(i));
-                    timeNode.push().setValue(String.valueOf((date.getTime())+i));
+                    timeNode.push().setValue(String.valueOf(getTimeStartOfDay()));
 
                 }
                 showProgressDialog(ft, sdf);
@@ -127,5 +127,16 @@ public class Home extends Fragment {
 
     private void showProgressDialog(FragmentTransaction ft, SwitchDialogFragment pdf) {
         pdf.show(ft, "dialog");
+    }
+
+    private long getTimeStartOfDay() {
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(date.getTime());
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTimeInMillis();
     }
 }
