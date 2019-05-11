@@ -576,7 +576,7 @@ public class ShowDetailUtils {
         getData(dataSnapshot);
         Calendar cal = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
-        today.set(Calendar.MONTH, -2);
+        today.add(Calendar.MONTH, -2);
         today.set(Calendar.DAY_OF_MONTH, 0);
         today.set(Calendar.HOUR_OF_DAY, 0);
         today.set(Calendar.MINUTE, 0);

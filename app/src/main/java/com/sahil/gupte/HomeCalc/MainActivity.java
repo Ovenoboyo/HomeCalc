@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity
                     showDetailUtils.ClearDB(dataSnapshot);
                     if (alertDialog != null) {
                         alertDialog.dismiss();
+
+                        userNode.removeEventListener(this);
                     }
                 }
 
