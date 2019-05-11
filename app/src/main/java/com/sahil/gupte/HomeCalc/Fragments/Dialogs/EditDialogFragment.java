@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 import com.sahil.gupte.HomeCalc.R;
 
@@ -81,6 +82,7 @@ public class EditDialogFragment extends DialogFragment
             @Override
             public void onClick(View v) {
                 RemoveItemDB(pos, getContext());
+                ((MainActivity)getActivity()).displaySelectedScreen(R.id.nav_edit);
             }
         });
         return dialog;

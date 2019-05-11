@@ -3,36 +3,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_family"
-            android:icon="@drawable/ic_copy"
-            android:title="@string/display_family" />
 
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_add"
-            android:title="@string/menu_home" />
+    <item android:title="General">
+        <menu>
+            <group android:checkableBehavior="single">
 
-        <item
-            android:id="@+id/nav_details"
-            android:icon="@drawable/ic_report"
-            android:title="@string/menu_details" />
+                <item
+                    android:id="@+id/nav_home"
+                    android:icon="@drawable/ic_add"
+                    android:title="@string/menu_home" />
 
-        <item
-            android:id="@+id/nav_edit"
-            android:icon="@drawable/ic_new"
-            android:title="@string/menu_edit" />
+                <item
+                    android:id="@+id/nav_details"
+                    android:icon="@drawable/ic_report"
+                    android:title="@string/menu_details" />
 
-        <item
-            android:id="@+id/nav_family_view"
-            android:icon="@drawable/ic_new"
-            android:title="@string/menu_family_view" />
+                <item
+                    android:id="@+id/nav_edit"
+                    android:icon="@drawable/ic_new"
+                    android:title="@string/menu_edit" />
 
-        <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_logout"
-            android:title="@string/menu_logout" />
-    </group>
+                <item
+                    android:id="@+id/nav_family_view"
+                    android:icon="@drawable/ic_family"
+                    android:title="@string/menu_family_view" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Account">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/nav_account"
+                    android:icon="@drawable/ic_account"
+                    android:title="@string/menu_account" />
+                <item
+                    android:id="@+id/nav_family"
+                    android:icon="@drawable/ic_copy"
+                    android:title="@string/display_family" />
+
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@drawable/ic_logout"
+                    android:title="@string/menu_logout" />
+            </group>
+        </menu>
+    </item>
 
 </menu>

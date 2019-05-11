@@ -1,36 +1,39 @@
 package com.sahil.gupte.HomeCalc;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sahil.gupte.HomeCalc.Auth.LoginActivity;
-import com.sahil.gupte.HomeCalc.Fragments.Dialogs.EditDialogFragment;
-import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SortDialogFragment;
 import com.sahil.gupte.HomeCalc.Fragments.EditDetails;
 import com.sahil.gupte.HomeCalc.Fragments.FamilyDetails;
-import com.sahil.gupte.HomeCalc.Fragments.FamilyFragment;
+import com.sahil.gupte.HomeCalc.Fragments.FamilyUID;
 import com.sahil.gupte.HomeCalc.Fragments.Home;
 import com.sahil.gupte.HomeCalc.Fragments.ShowDetails;
+import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -64,6 +67,38 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         };
+
+        Calendar calendar = Calendar.getInstance();
+        SharedPreferences prefF = getSharedPreferences("Family", 0);
+        String family = prefF.getString("familyID", "LostData");
+        final ShowDetailUtils showDetailUtils = new ShowDetailUtils(getApplicationContext());
+
+        if (isFirstDayofMonth(calendar)) {
+
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            final AlertDialog alertDialog = dialogBuilder.create();
+            LayoutInflater inflater = this.getLayoutInflater();
+            alertDialog.setContentView(inflater.inflate(R.layout.progress_dialog, null));
+            alertDialog.show();
+
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference userNode = database.getReference(family).child(user.getDisplayName());
+
+            userNode.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    showDetailUtils.ClearDB(dataSnapshot);
+                    if (alertDialog != null) {
+                        alertDialog.dismiss();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -127,7 +162,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.nav_family:
                 navigationView.setCheckedItem(R.id.nav_family);
-                fragment = new FamilyFragment();
+                fragment = new FamilyUID();
                 break;
 
             case R.id.nav_family_view:
@@ -145,6 +180,15 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+    }
+
+    public boolean isFirstDayofMonth(Calendar calendar){
+        if (calendar == null) {
+            throw new IllegalArgumentException("Calendar cannot be null.");
+        }
+
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        return dayOfMonth == 1;
     }
 
     @Override

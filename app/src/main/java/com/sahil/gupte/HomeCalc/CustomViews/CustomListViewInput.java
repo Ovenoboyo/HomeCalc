@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.sahil.gupte.HomeCalc.R;
 
@@ -44,7 +45,11 @@ public class CustomListViewInput extends ArrayAdapter<String> {
 
 
     public void addItem(){
-        count++;
-        notifyDataSetChanged();
+        if (count <=4) {
+            count++;
+            notifyDataSetChanged();
+        } else {
+            Toast.makeText(getContext(), "Can not make more items", Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -28,11 +28,11 @@ import androidmads.library.qrgenearator.QRGEncoder;
 import static android.content.Context.WINDOW_SERVICE;
 
 
-public class FamilyFragment extends Fragment {
+public class FamilyUID extends Fragment {
 
-    private static final String TAG = "FamilyFragment";
+    private static final String TAG = "FamilyUID";
 
-    public FamilyFragment() {
+    public FamilyUID() {
         // Required empty public constructor
     }
 
@@ -45,7 +45,7 @@ public class FamilyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("FamilyFragment", "onCreateView: here");
+        Log.d("FamilyUID", "onCreateView: here");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_family, container, false);
         TextView Familyid = view.findViewById(R.id.familyText);

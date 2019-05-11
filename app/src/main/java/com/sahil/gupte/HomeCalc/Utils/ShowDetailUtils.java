@@ -29,6 +29,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -568,8 +569,32 @@ public class ShowDetailUtils {
         userNode.child("timestamp").child(timeKey).removeValue();
         userNode.child("spinner").child(spinnerKey).removeValue();
 
-        mainActivity.displaySelectedScreen(R.id.nav_edit);
 
+    }
+
+    public void ClearDB(DataSnapshot dataSnapshot) {
+        getData(dataSnapshot);
+        Calendar cal = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.DAY_OF_MONTH, 0);
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+
+        for (int i = 0; i<NotesList.size(); i++) {
+            cal.setTimeInMillis(Long.parseLong(TimeList.get(i)));
+            cal.set(Calendar.MONTH, -2);
+            cal.set(Calendar.DAY_OF_MONTH, 0);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+
+            if (cal.getTimeInMillis() - today.getTimeInMillis() <= 0) {
+                RemoveItemDB(i, mContext);
+            }
+        }
     }
 
     private void ShowDialogFragment(int i) {
