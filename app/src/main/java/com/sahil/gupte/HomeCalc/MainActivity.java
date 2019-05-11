@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        return dayOfMonth == 1;
+        return dayOfMonth <= 15;
     }
 
     @Override
