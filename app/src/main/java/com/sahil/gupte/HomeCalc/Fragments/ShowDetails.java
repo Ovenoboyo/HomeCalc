@@ -37,8 +37,6 @@ import com.sahil.gupte.HomeCalc.R;
  */
 public class ShowDetails extends Fragment {
 
-    private ProgressDialog pd;
-
     public ShowDetails() {
         // Required empty public constructor
     }
@@ -83,9 +81,9 @@ public class ShowDetails extends Fragment {
                     Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
                     if (f instanceof ShowDetails) {
                         if (row1 == 0) {
-                            showDetailUtils.addTextViews(false, linear, showDetailUtils.SpinnerList);
+                            showDetailUtils.addTextViews(false, linear, ShowDetailUtils.SpinnerList);
                         } else if (row1 == 1) {
-                            showDetailUtils.addTextViews(false, linear, showDetailUtils.DateList);
+                            showDetailUtils.addTextViews(false, linear, ShowDetailUtils.DateList);
                         }
                     }
                 }
@@ -104,20 +102,8 @@ public class ShowDetails extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         inflater.inflate(R.menu.main, menu);
-
-        //MenuItem item = menu.findItem(R.id.spinner);
-        //Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
-
-
-
-        //ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                //getActivity(), android.R.layout.simple_spinner_item, ShowDetailUtils.UserList);
-
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        //spinner.setAdapter(adapter);
     }
 
     @Override
@@ -140,5 +126,4 @@ public class ShowDetails extends Fragment {
         SortDialogFragment sortDialogFragment = new SortDialogFragment();
         sortDialogFragment.show(ft, "dialog");
     }
-
 }

@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/qrCode"
         android:layout_centerHorizontal="true"
+        android:textAlignment="center"
         android:textSize="22sp"
         android:textStyle="bold"
         android:text="@string/hello_blank_fragment" />

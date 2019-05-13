@@ -1,10 +1,8 @@
 package com.sahil.gupte.HomeCalc.Fragments;
 
 
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,7 +22,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SortDialogFragment;
 import com.sahil.gupte.HomeCalc.R;
@@ -81,29 +78,36 @@ public class FamilyDetails extends Fragment {
                     if (getActivity() != null) {
                         Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
                         if (f instanceof FamilyDetails) {
+                            familyTotal = 0;
                             if (row1 == 0) {
-                                showDetailUtils.familyView(linear, showDetailUtils.SpinnerList, childDataSnapshot);
+                                showDetailUtils.familyView(linear, ShowDetailUtils.SpinnerList, childDataSnapshot);
                             } else if (row1 == 1) {
-                                showDetailUtils.familyView(linear, showDetailUtils.DateList,childDataSnapshot );
+                                showDetailUtils.familyView(linear, ShowDetailUtils.DateList, childDataSnapshot);
                             }
                         }
                     }
                 }
 
-                LinearLayout familytotalLinear = new LinearLayout(getContext());
-                familytotalLinear.setBackgroundResource(R.drawable.text_border);
 
-                if (column2 == 0 && column3 == 1) {
-                    showDetailUtils.addTotal(familyTotal, familytotalLinear, "familyTotal", false);
-                    showDetailUtils.addTotal(familyTotal, familytotalLinear, "totalAmt", false);
-                    showDetailUtils.addTotal(familyTotal, familytotalLinear, "view", false);
-                } else {
-                    showDetailUtils.addTotal(familyTotal, familytotalLinear, "familyTotal", false);
-                    showDetailUtils.addTotal(familyTotal, familytotalLinear, "view", false);
-                    showDetailUtils.addTotal(familyTotal, familytotalLinear, "totalAmt", false);
+                if (getActivity() != null) {
+                    Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
+                    if (f instanceof FamilyDetails) {
+                        LinearLayout familytotalLinear = new LinearLayout(getContext());
+                        familytotalLinear.setBackgroundResource(R.drawable.text_border);
+
+                        if (column2 == 0 && column3 == 1) {
+                            showDetailUtils.addTotal(familyTotal, familytotalLinear, "familyTotal", false);
+                            showDetailUtils.addTotal(familyTotal, familytotalLinear, "totalAmt", false);
+                            showDetailUtils.addTotal(familyTotal, familytotalLinear, "view", false);
+                        } else {
+                            showDetailUtils.addTotal(familyTotal, familytotalLinear, "familyTotal", false);
+                            showDetailUtils.addTotal(familyTotal, familytotalLinear, "view", false);
+                            showDetailUtils.addTotal(familyTotal, familytotalLinear, "totalAmt", false);
+                        }
+                        linear.addView(familytotalLinear);
+                        progress.setVisibility(View.GONE);
+                    }
                 }
-                linear.addView(familytotalLinear);
-                progress.setVisibility(View.GONE);
             }
 
             @Override

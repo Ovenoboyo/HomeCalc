@@ -1,12 +1,10 @@
 package com.sahil.gupte.HomeCalc.Fragments;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +39,6 @@ public class Home extends Fragment {
     private final ArrayList<Integer> pricelist = new ArrayList<>();
     private final ArrayList<String> noteslist = new ArrayList<>();
     private final ArrayList<Integer> spinnerlist = new ArrayList<>();
-    private String family;
 
     public Home() {
         // Required empty public constructor
@@ -78,7 +75,7 @@ public class Home extends Fragment {
         }
 
         SharedPreferences pref = getContext().getSharedPreferences("Family", 0);
-        family = pref.getString("familyID", "LostData");
+        String family = pref.getString("familyID", "LostData");
 
         rootRef = FirebaseDatabase.getInstance().getReference();
         firstNode = rootRef.child(family);

@@ -26,12 +26,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sahil.gupte.HomeCalc.Auth.LoginActivity;
+import com.sahil.gupte.HomeCalc.Fragments.AccountDetails;
 import com.sahil.gupte.HomeCalc.Fragments.EditDetails;
 import com.sahil.gupte.HomeCalc.Fragments.FamilyDetails;
 import com.sahil.gupte.HomeCalc.Fragments.FamilyUID;
 import com.sahil.gupte.HomeCalc.Fragments.Home;
 import com.sahil.gupte.HomeCalc.Fragments.ShowDetails;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
+import com.sahil.gupte.HomeCalc.Utils.UpdateUtils;
 
 import java.util.Calendar;
 
@@ -118,6 +120,9 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         displaySelectedScreen(R.id.nav_home);
+        UpdateUtils updateUtils = new UpdateUtils();
+
+        updateUtils.runUpdater(getApplicationContext(), getSupportFragmentManager());
 
     }
 
@@ -171,6 +176,11 @@ public class MainActivity extends AppCompatActivity
                 navigationView.setCheckedItem(R.id.nav_family_view);
                 fragment = new FamilyDetails();
                 break;
+
+            case R.id.nav_account:
+                navigationView.setCheckedItem(R.id.nav_account);
+                fragment = new AccountDetails();
+                break;
         }
 
         //replacing the fragment
@@ -213,4 +223,12 @@ public class MainActivity extends AppCompatActivity
         displaySelectedScreen(item.getItemId());
         return true;
     }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle b)
+    {
+        super.onSaveInstanceState(b);
+    }
+
 }

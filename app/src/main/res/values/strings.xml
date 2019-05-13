@@ -17,7 +17,7 @@
 
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
-    <string name="username">Username</string>
+    <string name="username">Display Name</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
     <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
     <string name="change_email">Change Email</string>
@@ -32,8 +32,8 @@
     <string name="hint_password">Password</string>
     <string name="hint_name">Fullname</string>
     <string name="btn_login">LOGIN</string>
-    <string name="btn_link_to_register">Not a member? Get registered in Firebase now!</string>
-    <string name="btn_link_to_login">Already registered. Login Me!</string>
+    <string name="btn_link_to_register">Not a member? Register now!</string>
+    <string name="btn_link_to_login">Already registered. Log me in!</string>
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
     <string name="btn_forgot_password">Forgot your password?</string>
     <string name="btn_reset_password">Reset Password</string>
@@ -48,6 +48,8 @@
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
     <string name="family_details">Family UID is Unique.\nYou can get one from the Family Administrator.\nIf not available, you can create a new one.</string>
     <string name="display_family">Family UID</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="show_uid">Show Family UID</string>
 
 
     <string name="pleasewait">Please Wait</string>
@@ -59,10 +61,10 @@
     <string name="confirm">Confirm Changes?</string>
     <string name="areyousure">Are you sure you want to apply the selected values?\n(Can not be reverted)</string>
 
-    <string name="category_0">Category 0</string>
-    <string name="category_1">Category 1</string>
-    <string name="category_2">Category 2</string>
-    <string name="category_3">Category 3</string>
+    <string name="category_0">Household</string>
+    <string name="category_1">Groceries</string>
+    <string name="category_2">Transportation</string>
+    <string name="category_3">Misc</string>
 
     <string name="category">Categories</string>
     <string name="time">Date</string>

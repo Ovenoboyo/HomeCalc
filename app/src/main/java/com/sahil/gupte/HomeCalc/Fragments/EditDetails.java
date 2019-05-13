@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +76,7 @@ public class EditDetails extends Fragment {
                 if (getActivity() != null) {
                     Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
                     if (f instanceof EditDetails) {
-                        showDetailUtils.addTextViews(true, linear, showDetailUtils.SpinnerList);
+                        showDetailUtils.addTextViews(true, linear, ShowDetailUtils.SpinnerList);
                     }
                 }
                 progress.setVisibility(View.GONE);
@@ -90,7 +91,6 @@ public class EditDetails extends Fragment {
 
         return view;
     }
-
 
 
 }
