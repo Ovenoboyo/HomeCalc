@@ -35,9 +35,6 @@ public class CustomListViewInput extends ArrayAdapter<String> {
         LayoutInflater inflater=context.getLayoutInflater();
         if (view == null) {
             view = inflater.inflate(R.layout.custom_list, null, true);
-            Spinner spinner = view.findViewById(R.id.spinner);
-            EditText price = view.findViewById(R.id.editText);
-            EditText notes = view.findViewById(R.id.editText2);
         }
 
         return view;
@@ -45,7 +42,7 @@ public class CustomListViewInput extends ArrayAdapter<String> {
 
 
     public void addItem(){
-        if (count <=4) {
+        if (count <3) {
             count++;
             notifyDataSetChanged();
         } else {

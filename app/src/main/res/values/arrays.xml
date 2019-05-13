@@ -6,6 +6,12 @@
         <item>@string/category_2</item>
         <item>@string/category_3</item>
         <item>@string/category_4</item>
+        <item>@string/category_5</item>
+        <item>@string/category_6</item>
+        <item>@string/category_7</item>
+        <item>@string/category_8</item>
+        <item>@string/category_9</item>
+        <item>@string/category_10</item>
     </string-array>
 
     <string-array name="row_spinner">

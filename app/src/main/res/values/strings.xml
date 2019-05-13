@@ -61,11 +61,17 @@
     <string name="confirm">Confirm Changes?</string>
     <string name="areyousure">Are you sure you want to apply the selected values?\n(Can not be reverted)</string>
 
-    <string name="category_0">Household</string>
+    <string name="category_0">Shopping</string>
     <string name="category_1">Groceries</string>
-    <string name="category_2">Transportation</string>
-    <string name="category_3">Entertainment</string>
-    <string name="category_4">Misc</string>
+    <string name="category_2">Meat and Fish</string>
+    <string name="category_3">Fruits and Vegetables</string>
+    <string name="category_4">Entertainment</string>
+    <string name="category_5">Electronics and Furniture</string>
+    <string name="category_6">Transportation</string>
+    <string name="category_7">Child Expenses</string>
+    <string name="category_8">Pet Expenses</string>
+    <string name="category_9">Bills/Recurring Expenses</string>
+    <string name="category_10">Misc</string>
 
     <string name="category">Categories</string>
     <string name="time">Date</string>
