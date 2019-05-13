@@ -1,12 +1,16 @@
 package com.sahil.gupte.HomeCalc;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,6 +45,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 886 ;
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
     private NavigationView navigationView;
@@ -48,79 +54,101 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        auth = FirebaseAuth.getInstance();
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            // user auth state is changed - user is null
-            // launch login activity
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            finish();
-        }
-
-        authListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user == null) {
-                    // user auth state is changed - user is null
-                    // launch login activity
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-                }
-            }
-        };
-
-        Calendar calendar = Calendar.getInstance();
-        SharedPreferences prefF = getSharedPreferences("Family", 0);
-        String family = prefF.getString("familyID", "LostData");
-        final ShowDetailUtils showDetailUtils = new ShowDetailUtils(getApplicationContext());
-
-        if (isFirstDayofMonth(calendar)) {
-
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-            final AlertDialog alertDialog = dialogBuilder.create();
-            LayoutInflater inflater = this.getLayoutInflater();
-            alertDialog.setContentView(inflater.inflate(R.layout.progress_dialog, null));
-            alertDialog.show();
-
-            final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            final DatabaseReference userNode = database.getReference(family).child(user.getDisplayName());
-
-            userNode.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    showDetailUtils.ClearDB(dataSnapshot);
-                    alertDialog.dismiss();
-
-                    userNode.removeEventListener(this);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
-
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        View headerView = navigationView.getHeaderView(0);
-        TextView Username = headerView.findViewById(R.id.username_text);
-        TextView Email = headerView.findViewById(R.id.email_text);
-        Username.setText(user.getDisplayName());
-        Email.setText(user.getEmail());
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
-        displaySelectedScreen(R.id.nav_home);
-        UpdateUtils updateUtils = new UpdateUtils();
 
-        updateUtils.runUpdater(getApplicationContext(), getSupportFragmentManager());
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(this, "Storage Permission is required to install updates", Toast.LENGTH_LONG).show();
+            } else {
+                // No explanation needed; request the permission
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+
+
+            auth = FirebaseAuth.getInstance();
+            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user == null) {
+                // user auth state is changed - user is null
+                // launch login activity
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+            }
+
+            authListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    if (user == null) {
+                        // user auth state is changed - user is null
+                        // launch login activity
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
+                    }
+                }
+            };
+
+            Calendar calendar = Calendar.getInstance();
+            SharedPreferences prefF = getSharedPreferences("Family", 0);
+            String family = prefF.getString("familyID", "LostData");
+            final ShowDetailUtils showDetailUtils = new ShowDetailUtils(getApplicationContext());
+
+            if (isFirstDayofMonth(calendar)) {
+
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+                final AlertDialog alertDialog = dialogBuilder.create();
+                LayoutInflater inflater = this.getLayoutInflater();
+                alertDialog.setContentView(inflater.inflate(R.layout.progress_dialog, null));
+                alertDialog.show();
+
+                final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                final DatabaseReference userNode = database.getReference(family).child(user.getDisplayName());
+
+                userNode.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        showDetailUtils.ClearDB(dataSnapshot);
+                        alertDialog.dismiss();
+
+                        userNode.removeEventListener(this);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            navigationView = findViewById(R.id.nav_view);
+            View headerView = navigationView.getHeaderView(0);
+            TextView Username = headerView.findViewById(R.id.username_text);
+            TextView Email = headerView.findViewById(R.id.email_text);
+            Username.setText(user.getDisplayName());
+            Email.setText(user.getEmail());
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+            navigationView.setNavigationItemSelectedListener(this);
+            displaySelectedScreen(R.id.nav_home);
+            UpdateUtils updateUtils = new UpdateUtils();
+
+            updateUtils.runUpdater(getApplicationContext(), getSupportFragmentManager());
+        }
 
     }
 
