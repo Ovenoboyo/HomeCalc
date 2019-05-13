@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
 
+import java.util.Objects;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword;
@@ -108,15 +110,13 @@ public class LoginActivity extends AppCompatActivity {
                                     String family = pref.getString("familyID", "null");
 
                                     Intent intent;
-                                    if (family != "null") {
+                                    if (!Objects.equals(family, "null")) {
                                         intent = new Intent(LoginActivity.this, MainActivity.class);
                                     } else {
                                         intent = new Intent(LoginActivity.this, PostSignupActivity.class);
                                     }
 
-                                    if (intent != null) {
-                                        startActivity(intent);
-                                    }
+                                    startActivity(intent);
                                     finish();
                                 }
                             }

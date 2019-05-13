@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,7 +62,7 @@ public class EditDetails extends Fragment {
         final RelativeLayout progress = view.findViewById(R.id.progressLayout);
         progress.setVisibility(View.VISIBLE);
 
-        SharedPreferences prefF = getContext().getSharedPreferences("Family", 0);
+        SharedPreferences prefF = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
         String family = prefF.getString("familyID", "LostData");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

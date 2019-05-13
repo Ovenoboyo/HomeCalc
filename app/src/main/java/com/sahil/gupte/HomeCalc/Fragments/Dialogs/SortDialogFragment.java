@@ -3,23 +3,19 @@ package com.sahil.gupte.HomeCalc.Fragments.Dialogs;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
-import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 
-import static com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils.RemoveItemDB;
-import static com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils.UpdateDB;
+import java.util.Objects;
 
 
 public class SortDialogFragment extends DialogFragment
@@ -27,7 +23,6 @@ public class SortDialogFragment extends DialogFragment
     private static final String TAG = "SortDialogFragment";
     private Context mContext;
     private Spinner row1, column1, column2, column3;
-    private int row1p, column1p, column2p, column3p;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -39,7 +34,7 @@ public class SortDialogFragment extends DialogFragment
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = getActivity().getLayoutInflater().inflate(R.layout.sort_dialog, null);
+        View view = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.sort_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setView(view);
         builder.setTitle(getString(R.string.edit));
@@ -50,10 +45,10 @@ public class SortDialogFragment extends DialogFragment
         column3 = view.findViewById(R.id.column3);
 
         SharedPreferences pref = mContext.getSharedPreferences("SpinnerSort", 0);
-        row1p = pref.getInt("row1", 0);
-        column1p = pref.getInt("column1", 0);
-        column2p = pref.getInt("column2", 0);
-        column3p = pref.getInt("column3", 0);
+        int row1p = pref.getInt("row1", 0);
+        int column1p = pref.getInt("column1", 1);
+        int column2p = pref.getInt("column2", 0);
+        int column3p = pref.getInt("column3", 1);
 
         row1.setSelection(row1p);
         column1.setSelection(column1p);
@@ -73,7 +68,7 @@ public class SortDialogFragment extends DialogFragment
                 if (row1.getSelectedItemPosition() != column1.getSelectedItemPosition() && column2.getSelectedItemPosition() != column3.getSelectedItemPosition()) {
                     saveSort();
                     dialog.dismiss();
-                    ((MainActivity)getActivity()).displaySelectedScreen(R.id.nav_details);
+                    ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_details);
                 } else {
                     Toast.makeText(mContext, "All items must be different", Toast.LENGTH_LONG).show();
                 }

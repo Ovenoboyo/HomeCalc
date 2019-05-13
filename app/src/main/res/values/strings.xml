@@ -64,7 +64,8 @@
     <string name="category_0">Household</string>
     <string name="category_1">Groceries</string>
     <string name="category_2">Transportation</string>
-    <string name="category_3">Misc</string>
+    <string name="category_3">Entertainment</string>
+    <string name="category_4">Misc</string>
 
     <string name="category">Categories</string>
     <string name="time">Date</string>

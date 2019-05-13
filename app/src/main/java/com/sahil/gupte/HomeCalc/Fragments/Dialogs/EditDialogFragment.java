@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import static com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils.RemoveItemDB;
 import static com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils.UpdateDB;
@@ -45,7 +45,7 @@ public class EditDialogFragment extends DialogFragment
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
-        View view = getActivity().getLayoutInflater().inflate(R.layout.edit_dialog, null);
+        View view = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.edit_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setView(view);
         builder.setTitle(getString(R.string.edit));
@@ -90,8 +90,8 @@ public class EditDialogFragment extends DialogFragment
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RemoveItemDB(pos, getContext());
-                ((MainActivity)getActivity()).displaySelectedScreen(R.id.nav_edit);
+                RemoveItemDB(pos, Objects.requireNonNull(getContext()));
+                ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_edit);
             }
         });
         return dialog;
@@ -130,7 +130,7 @@ public class EditDialogFragment extends DialogFragment
                 ShowDetailUtils.setTime(pos, date.getText().toString(), getContext());
                 ShowDetailUtils.setPrice(pos, price.getText().toString());
                 ShowDetailUtils.setNotes(pos, notes.getText().toString());
-                UpdateDB(pos, getContext());
+                UpdateDB(pos, Objects.requireNonNull(getContext()));
             }
         }
     }

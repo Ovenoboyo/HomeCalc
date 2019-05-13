@@ -5,6 +5,7 @@
         <item>@string/category_1</item>
         <item>@string/category_2</item>
         <item>@string/category_3</item>
+        <item>@string/category_4</item>
     </string-array>
 
     <string-array name="row_spinner">

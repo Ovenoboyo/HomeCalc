@@ -1,24 +1,20 @@
 package com.sahil.gupte.HomeCalc.Fragments;
 
 
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,6 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SortDialogFragment;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 import com.sahil.gupte.HomeCalc.R;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,7 +58,7 @@ public class ShowDetails extends Fragment {
         final RelativeLayout progress = view.findViewById(R.id.progressLayout);
         progress.setVisibility(View.VISIBLE);
 
-        SharedPreferences prefF = getContext().getSharedPreferences("Family", 0);
+        SharedPreferences prefF = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
         String family = prefF.getString("familyID", "LostData");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -69,8 +67,6 @@ public class ShowDetails extends Fragment {
 
         SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
         final int row1 = pref.getInt("row1", 0);
-        int column1 = pref.getInt("column1", 0);
-
 
         Query query = userNode.orderByChild("spinner");
         query.addValueEventListener(new ValueEventListener() {

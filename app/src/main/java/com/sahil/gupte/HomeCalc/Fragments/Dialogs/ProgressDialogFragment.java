@@ -10,11 +10,8 @@ import com.sahil.gupte.HomeCalc.Utils.UpdateUtils;
 
 public class ProgressDialogFragment extends Dialog {
 
-    Context mContext;
-
     public ProgressDialogFragment(Context context) {
         super(context);
-        mContext = context;
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {

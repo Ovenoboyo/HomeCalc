@@ -10,6 +10,8 @@ import android.support.v4.app.DialogFragment;
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
 
+import java.util.Objects;
+
 
 public class SwitchDialogFragment extends DialogFragment
 {
@@ -30,13 +32,13 @@ public class SwitchDialogFragment extends DialogFragment
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((MainActivity)getActivity()).displaySelectedScreen(R.id.nav_home);
+                        ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_home);
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((MainActivity)getActivity()).displaySelectedScreen(R.id.nav_details);
+                        ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_details);
                     }
                 });
 

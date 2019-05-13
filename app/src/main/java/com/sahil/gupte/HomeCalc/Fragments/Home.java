@@ -24,16 +24,19 @@ import com.sahil.gupte.HomeCalc.R;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class Home extends Fragment {
-
-    private final String TAG = "HomeFragment";
 
     private View view;
     private ListView list;
     private CustomListViewInput listAdapter;
     private Button AddNew, Submit;
-    private DatabaseReference rootRef, firstNode, priceNode, notesNode, spinnerNode, userNode, timeNode;
+    private DatabaseReference priceNode;
+    private DatabaseReference notesNode;
+    private DatabaseReference spinnerNode;
+    private DatabaseReference userNode;
+    private DatabaseReference timeNode;
     private EditText price, notes;
     private Spinner spinner;
     private final ArrayList<Integer> pricelist = new ArrayList<>();
@@ -74,11 +77,11 @@ public class Home extends Fragment {
             ((ViewGroup)view.getParent()).removeView(view);
         }
 
-        SharedPreferences pref = getContext().getSharedPreferences("Family", 0);
+        SharedPreferences pref = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
         String family = pref.getString("familyID", "LostData");
 
-        rootRef = FirebaseDatabase.getInstance().getReference();
-        firstNode = rootRef.child(family);
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference firstNode = rootRef.child(family);
         userNode = firstNode.child(user.getDisplayName());
 
         AddNew.setOnClickListener(new View.OnClickListener() {

@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,35 +36,33 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
+@SuppressWarnings("ALL")
 public class ShowDetailUtils {
 
     private static final String TAG = "ShowDetsilUtils";
-    private Context mContext;
+    private final Context mContext;
     public static final ArrayList<String> SpinnerList = new ArrayList<>();
     public static final ArrayList<String> NotesList = new ArrayList<>();
     public static final ArrayList<String> PriceList = new ArrayList<>();
-    public static final ArrayList<String> TimeList = new ArrayList<>();
+    private static final ArrayList<String> TimeList = new ArrayList<>();
     public static final ArrayList<String> DateList = new ArrayList<>();
-    public static final ArrayList<String> UserList = new ArrayList<>();
-    public static final ArrayList<String> PriceTotal = new ArrayList<>();
 
-    public static String[] SpinnerNameList;
+    private static String[] SpinnerNameList;
 
     private static final ArrayList<String> SpinnerKeyList = new ArrayList<>();
     private static final ArrayList<String> NotesKeyList = new ArrayList<>();
     private static final ArrayList<String> PriceKeyList = new ArrayList<>();
     private static final ArrayList<String> TimeKeyList = new ArrayList<>();
-    private static final ArrayList<String> UserKeyList = new ArrayList<>();
 
     public static int familyTotal = 0;
 
-    FragmentManager fm;
+    private FragmentManager fm;
 
     private static MainActivity mainActivity;
 
-    private int row1, column1, column2, column3;
+    private int row1;
+    private int column2;
+    private int column3;
 
     //Passed by ShowDetails Fragment
     public ShowDetailUtils(Context context){
@@ -79,17 +76,6 @@ public class ShowDetailUtils {
         mainActivity = activity;
     }
 
-    public void getUserList(DataSnapshot dataSnapshot) {
-        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-            Map<String, Object> map = (Map<String, Object>) postSnapshot.getValue();
-            Set<Map.Entry<String, Object>> Entry = map.entrySet();
-            ArrayList<Map.Entry<String, Object>> ListOfEntry = new ArrayList<Map.Entry<String,Object>>(Entry);
-            putDataInList(ListOfEntry, UserList);
-            putKeyInList(ListOfEntry, UserKeyList);
-
-        }
-    }
-
     public void getData(DataSnapshot dataSnapshot) {
         NotesList.clear();
         PriceList.clear();
@@ -99,6 +85,7 @@ public class ShowDetailUtils {
         PriceKeyList.clear();
         SpinnerKeyList.clear();
         TimeKeyList.clear();
+        //noinspection unchecked
         Map<String, Object> mapTime = (Map<String, Object>) dataSnapshot.child("timestamp").getValue();
         Map<String, Object> mapSpinner = (Map<String, Object>) dataSnapshot.child("spinner").getValue();
         Map<String, Object> mapPrice = (Map<String, Object>) dataSnapshot.child("price").getValue();
@@ -108,9 +95,9 @@ public class ShowDetailUtils {
 
         SharedPreferences pref = mContext.getSharedPreferences("SpinnerSort", 0);
         row1 = pref.getInt("row1", 0);
-        column1 = pref.getInt("column1", 0);
+        int column1 = pref.getInt("column1", 1);
         column2 = pref.getInt("column2", 0);
-        column3 = pref.getInt("column3", 0);
+        column3 = pref.getInt("column3", 1);
 
         if (mapTime != null && mapSpinner != null && mapPrice != null && mapNotes != null) {
             sortMap(mapTime, mapSpinner, mapPrice, mapNotes);
@@ -122,16 +109,16 @@ public class ShowDetailUtils {
     private void sortMap(Map<String, Object> mapTime, Map<String, Object> mapSpinner, Map<String, Object> mapPrice, Map<String, Object> mapNotes) {
 
         Set<Map.Entry<String, Object>> EntryTime = mapTime.entrySet();
-        ArrayList<Map.Entry<String, Object>> ListOfEntryTime = new ArrayList<Map.Entry<String,Object>>(EntryTime);
+        ArrayList<Map.Entry<String, Object>> ListOfEntryTime = new ArrayList<>(EntryTime);
 
         Set<Map.Entry<String, Object>> EntrySpinner = mapSpinner.entrySet();
-        ArrayList<Map.Entry<String, Object>> ListOfEntrySpinner = new ArrayList<Map.Entry<String,Object>>(EntrySpinner);
+        ArrayList<Map.Entry<String, Object>> ListOfEntrySpinner = new ArrayList<>(EntrySpinner);
 
         Set<Map.Entry<String, Object>> EntryPrice = mapPrice.entrySet();
-        ArrayList<Map.Entry<String, Object>> ListOfEntryPrice = new ArrayList<Map.Entry<String,Object>>(EntryPrice);
+        ArrayList<Map.Entry<String, Object>> ListOfEntryPrice = new ArrayList<>(EntryPrice);
 
         Set<Map.Entry<String, Object>> EntryNotes = mapNotes.entrySet();
-        ArrayList<Map.Entry<String, Object>> ListOfEntryNotes = new ArrayList<Map.Entry<String,Object>>(EntryNotes);
+        ArrayList<Map.Entry<String, Object>> ListOfEntryNotes = new ArrayList<>(EntryNotes);
 
         sortList(ListOfEntryNotes);
         sortList(ListOfEntryPrice);
@@ -348,26 +335,26 @@ public class ShowDetailUtils {
                         linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
                         linearLayoutOuter.addView(linearLayout1);
 
-                        if (column3 == 0 && column2 == 1 && !edit) {
+                        if (column3 == 0 && column2 == 1) {
                             if (row1 == 0) {
-                                addDataFields(j, linearLayout1, "date", edit);
+                                addDataFields(j, linearLayout1, "date", false);
                             } else {
-                                addDataFields(j, linearLayout1, "spinner", edit);
+                                addDataFields(j, linearLayout1, "spinner", false);
                             }
-                            addDataFields(j, linearLayout1, "notes", edit);
-                            addDataFields(j, linearLayout1, "price", edit);
+                            addDataFields(j, linearLayout1, "notes", false);
+                            addDataFields(j, linearLayout1, "price", false);
                         } else {
                             if (row1 == 0) {
-                                addDataFields(j, linearLayout1, "date", edit);
+                                addDataFields(j, linearLayout1, "date", false);
                             } else {
-                                addDataFields(j, linearLayout1, "spinner", edit);
+                                addDataFields(j, linearLayout1, "spinner", false);
                             }
-                            addDataFields(j, linearLayout1, "price", edit);
-                            addDataFields(j, linearLayout1, "notes", edit);
+                            addDataFields(j, linearLayout1, "price", false);
+                            addDataFields(j, linearLayout1, "notes", false);
                         }
                     }
                 } else {
-                    if (Integer.valueOf(List.get(j)) == Integer.valueOf(newList.get(i))) {
+                    if (Integer.valueOf(List.get(j)).equals(Integer.valueOf(newList.get(i)))) {
 
                         totalamt = totalamt + Integer.valueOf(PriceList.get(j));
 
@@ -378,15 +365,15 @@ public class ShowDetailUtils {
 
                         if (column3 == 0 && column2 == 1 && !edit) {
                             if (row1 == 0) {
-                                addDataFields(j, linearLayout1, "date", edit);
+                                addDataFields(j, linearLayout1, "date", false);
                             } else {
-                                addDataFields(j, linearLayout1, "spinner", edit);
+                                addDataFields(j, linearLayout1, "spinner", false);
                             }
-                            addDataFields(j, linearLayout1, "notes", edit);
-                            addDataFields(j, linearLayout1, "price", edit);
+                            addDataFields(j, linearLayout1, "notes", false);
+                            addDataFields(j, linearLayout1, "price", false);
                         } else {
                             if (row1 == 1 && !edit) {
-                                addDataFields(j, linearLayout1, "spinner", edit);
+                                addDataFields(j, linearLayout1, "spinner", false);
                             } else {
                                 addDataFields(j, linearLayout1, "date", edit);
                             }
@@ -604,11 +591,6 @@ public class ShowDetailUtils {
         EditDialogFragment editDialogFragment = new EditDialogFragment();
         editDialogFragment.setArguments(args);
         editDialogFragment.show(ft, "dialog");
-    }
-
-
-    public static void setSpinner(int i, String value) {
-        SpinnerList.set(i, value);
     }
 
 

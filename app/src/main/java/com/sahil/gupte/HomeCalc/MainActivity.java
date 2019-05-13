@@ -90,11 +90,9 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     showDetailUtils.ClearDB(dataSnapshot);
-                    if (alertDialog != null) {
-                        alertDialog.dismiss();
+                    alertDialog.dismiss();
 
-                        userNode.removeEventListener(this);
-                    }
+                    userNode.removeEventListener(this);
                 }
 
                 @Override
@@ -127,7 +125,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     //sign out method
-    public void signOut() {
+    private void signOut() {
         auth.signOut();
     }
 
@@ -194,7 +192,7 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
     }
 
-    public boolean isFirstDayofMonth(Calendar calendar){
+    private boolean isFirstDayofMonth(Calendar calendar){
         if (calendar == null) {
             throw new IllegalArgumentException("Calendar cannot be null.");
         }
@@ -217,7 +215,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         displaySelectedScreen(item.getItemId());

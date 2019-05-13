@@ -27,6 +27,8 @@ import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SortDialogFragment;
 import com.sahil.gupte.HomeCalc.R;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 
+import java.util.Objects;
+
 import static com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils.familyTotal;
 
 /**
@@ -57,7 +59,7 @@ public class FamilyDetails extends Fragment {
         final RelativeLayout progress = view.findViewById(R.id.progressLayout);
         progress.setVisibility(View.VISIBLE);
 
-        SharedPreferences prefF = getContext().getSharedPreferences("Family", 0);
+        SharedPreferences prefF = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
         String family = prefF.getString("familyID", "LostData");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

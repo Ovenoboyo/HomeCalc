@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\sahil\\HomeCalc-Keystore.jks')
+            storePassword 'kekboi69'
+            keyAlias = 'key0'
+            keyPassword 'kekboi69'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.sahil.gupte.HomeCalc"
@@ -15,6 +23,7 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexEnabled = true
+            signingConfig signingConfigs.release
         }
     }
 }

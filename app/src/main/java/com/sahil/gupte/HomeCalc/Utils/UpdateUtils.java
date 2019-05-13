@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Objects;
 
 public class UpdateUtils {
 
@@ -46,7 +47,7 @@ public class UpdateUtils {
                             fileName = "HomeCalc-" + update.getLatestVersion() + ".apk";
                             URL = update.getUrlToDownload().toString() + "/download/" + update.getLatestVersion() + "/HomeCalc-" + update.getLatestVersion() + ".apk";
                             Log.d(TAG, "onSuccess: " + URL);
-                            Log.d("Is update available?", Boolean.toString(isUpdateAvailable));
+                            Log.d("Is update available?", Boolean.toString(true));
                             UpdateDialogFragment updateDialogFragment = new UpdateDialogFragment();
                             updateDialogFragment.show(fm, "dialog");
                         }
@@ -75,23 +76,18 @@ public class UpdateUtils {
 
         final ThreadLocal<ProgressBar> mProgressBar = new ThreadLocal<>();
 
-        ProgressDialogFragment progressDialogFragment;
+        final ProgressDialogFragment progressDialogFragment;
 
-        public DownloadingTask(Context context, ProgressBar progressBar, ProgressDialogFragment mProgressDialogFragment) {
+        DownloadingTask(Context context, ProgressBar progressBar, ProgressDialogFragment mProgressDialogFragment) {
             mProgressBar.set(progressBar);
             mContext.set(context);
             progressDialogFragment = mProgressDialogFragment;
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
-            mProgressBar.get().setProgress(progress[0]);
+            Objects.requireNonNull(mProgressBar.get()).setProgress(progress[0]);
         }
 
         @Override
@@ -132,7 +128,7 @@ public class UpdateUtils {
             super.onPostExecute(result);
         }
 
-        protected void OpenFile(Context mContext) {
+        void OpenFile(Context mContext) {
 
             apkStorage = new File(
                     Environment.getExternalStorageDirectory() + "/"

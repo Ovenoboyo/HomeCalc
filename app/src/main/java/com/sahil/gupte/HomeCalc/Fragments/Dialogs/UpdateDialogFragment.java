@@ -2,22 +2,17 @@ package com.sahil.gupte.HomeCalc.Fragments.Dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.widget.ProgressBar;
 
-import com.sahil.gupte.HomeCalc.MainActivity;
-import com.sahil.gupte.HomeCalc.R;
 import com.sahil.gupte.HomeCalc.Utils.UpdateUtils;
 
 
 public class UpdateDialogFragment extends DialogFragment
 {
     private Context mContext;
-    private UpdateUtils updateUtils;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -25,7 +20,7 @@ public class UpdateDialogFragment extends DialogFragment
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         setCancelable(true);
-        updateUtils = new UpdateUtils();
+        UpdateUtils updateUtils = new UpdateUtils();
     }
 
     @Override

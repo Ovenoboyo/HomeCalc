@@ -21,6 +21,8 @@ import android.widget.Toast;
 import com.google.zxing.WriterException;
 import com.sahil.gupte.HomeCalc.R;
 
+import java.util.Objects;
+
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
@@ -51,7 +53,7 @@ public class FamilyUID extends Fragment {
         ImageView clipboard = view.findViewById(R.id.clipboard);
         ImageView qrCode = view.findViewById(R.id.qrCode);
 
-        WindowManager manager = (WindowManager) getContext().getSystemService(WINDOW_SERVICE);
+        WindowManager manager = (WindowManager) Objects.requireNonNull(getContext()).getSystemService(WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
         Point point = new Point();
         display.getSize(point);
@@ -77,7 +79,7 @@ public class FamilyUID extends Fragment {
         clipboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClipboardManager clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipboardManager clipboardManager = (ClipboardManager) Objects.requireNonNull(getContext()).getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("FamilyUID", family);
                 clipboardManager.setPrimaryClip(clip);
                 Toast.makeText(getContext(), "Copied ID to clipboard", Toast.LENGTH_SHORT).show();
