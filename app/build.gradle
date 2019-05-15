@@ -1,27 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        debug {
-            storeFile file('C:\\Users\\sahil\\HomeCalc-Keystore.jks')
-            storePassword 'kekboi69'
-            keyAlias = 'key0'
-            keyPassword 'kekboi69'
-        }
-        release {
-            storeFile file('C:\\Users\\sahil\\HomeCalc-Keystore.jks')
-            storePassword 'kekboi69'
-            keyAlias = 'key0'
-            keyPassword 'kekboi69'
-        }
-    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.sahil.gupte.HomeCalc"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

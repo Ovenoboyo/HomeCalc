@@ -1,8 +1,5 @@
 {
-  "latestVersion": "1.0.2",
-  "latestVersionCode": "3",
+  "latestVersion": "1.0.3",
+  "latestVersionCode": "4",
   "url": "https://github.com/Ovenoboyo/HomeCalc/releases",
-  "releaseNotes": [
-    "- Initial Build"
-  ]
 }
