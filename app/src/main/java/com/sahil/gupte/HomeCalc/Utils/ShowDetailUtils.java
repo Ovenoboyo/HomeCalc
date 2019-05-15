@@ -396,15 +396,13 @@ public class ShowDetailUtils {
                 addTotal(totalamt, totalLinearLayout, "view", true);
                 addTotal(totalamt, totalLinearLayout, "totalAmt", true);
             }
-            grandTotal = grandTotal +totalamt;
-            familyTotal = familyTotal + grandTotal;
+            grandTotal = grandTotal + totalamt;
             totalamt = 0;
             linearLayoutOuter.addView(totalLinearLayout);
         }
-
         LinearLayout grandtotalLinear = new LinearLayout(mContext);
         grandtotalLinear.setBackgroundResource(R.drawable.text_border);
-
+        familyTotal = familyTotal + grandTotal;
 
         if (column2 == 0 && column3 == 1) {
             addTotal(grandTotal, grandtotalLinear, "grandTotal", false);
@@ -415,7 +413,6 @@ public class ShowDetailUtils {
             addTotal(grandTotal, grandtotalLinear, "view", false);
             addTotal(grandTotal, grandtotalLinear, "totalAmt", false);
         }
-
         linearLayout.addView(grandtotalLinear);
     }
 

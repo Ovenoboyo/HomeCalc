@@ -71,7 +71,8 @@
     <string name="category_7">Child Expenses</string>
     <string name="category_8">Pet Expenses</string>
     <string name="category_9">Bills/Recurring Expenses</string>
-    <string name="category_10">Misc</string>
+    <string name="category_10">Medicine</string>
+    <string name="category_11">Misc</string>
 
     <string name="category">Categories</string>
     <string name="time">Date</string>

@@ -69,7 +69,9 @@
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="25dp"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="5dp"
             android:textSize="16sp"
             android:textAppearance="@style/Widget.AppCompat.ButtonBar.AlertDialog"
             android:textColor="@color/colorAccent"
@@ -81,6 +83,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/Widget.AppCompat.ButtonBar.AlertDialog"
             android:textColor="@color/colorAccent"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="5dp"
             android:textSize="16sp"
             android:text="Save" />
     </LinearLayout>

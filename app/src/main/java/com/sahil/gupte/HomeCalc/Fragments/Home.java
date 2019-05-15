@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.sahil.gupte.HomeCalc.CustomViews.CustomListViewInput;
+import com.sahil.gupte.HomeCalc.CustomViews.CustomRecyclerViewInput;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SwitchDialogFragment;
 import com.sahil.gupte.HomeCalc.R;
 
@@ -29,9 +31,9 @@ import java.util.Objects;
 public class Home extends Fragment {
 
     private View view;
-    private ListView list;
-    private CustomListViewInput listAdapter;
-    private Button AddNew, Submit;
+    private RecyclerView list;
+    private CustomRecyclerViewInput listAdapter;
+    private Button AddNew, RemoveNew, Submit;
     private DatabaseReference priceNode;
     private DatabaseReference notesNode;
     private DatabaseReference spinnerNode;
@@ -67,11 +69,16 @@ public class Home extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_home, container, false);
-            listAdapter = new CustomListViewInput(getActivity());
+            listAdapter = new CustomRecyclerViewInput(getActivity());
             list = view.findViewById(R.id.custom_list);
             list.setAdapter(listAdapter);
             AddNew = view.findViewById(R.id.button);
+            RemoveNew = view.findViewById(R.id.button2);
             Submit = view.findViewById(R.id.submit);
+
+            LinearLayoutManager llm = new LinearLayoutManager(getContext());
+            llm.setOrientation(LinearLayoutManager.VERTICAL);
+            list.setLayoutManager(llm);
 
         } else {
             ((ViewGroup)view.getParent()).removeView(view);
@@ -87,37 +94,46 @@ public class Home extends Fragment {
         AddNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listAdapter.notifyItemInserted(listAdapter.getItemCount()+1);
                 listAdapter.addItem();
+            }
+        });
+
+        RemoveNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listAdapter.notifyItemRemoved(listAdapter.getItemCount()+1);
+                listAdapter.removeItem();
             }
         });
 
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0; i < listAdapter.getCount(); i++) {
+                for (int i = 0; i < listAdapter.getItemCount(); i++) {
                     price = list.getChildAt(i).findViewById(R.id.editText);
                     notes = list.getChildAt(i).findViewById(R.id.editText2);
                     spinner = list.getChildAt(i).findViewById(R.id.spinner);
-                    String ed_text = notes.getText().toString().trim();
-                    String ed_textp = price.getText().toString().trim();
-                    if (TextUtils.isEmpty(ed_text)|| (TextUtils.isEmpty(ed_textp))) {
-                        return;
+                    if ((!TextUtils.isEmpty(price.getText().toString()))) {
+                        pricelist.add(Integer.parseInt(price.getText().toString()));
+                        noteslist.add(notes.getText().toString());
+                        spinnerlist.add(spinner.getSelectedItemPosition());
                     }
-                    pricelist.add(Integer.parseInt(price.getText().toString()));
-                    noteslist.add(notes.getText().toString());
-                    spinnerlist.add(spinner.getSelectedItemPosition());
                 }
 
-                for (int i = 0; i < listAdapter.getCount(); i++) {
-                    spinnerNode = userNode.child("spinner");
-                    priceNode = userNode.child("price");
-                    notesNode = userNode.child("notes");
-                    timeNode = userNode.child(("timestamp"));
-                    spinnerNode.push().setValue(spinnerlist.get(i));
-                    priceNode.push().setValue(pricelist.get(i));
-                    notesNode.push().setValue(noteslist.get(i));
-                    timeNode.push().setValue(String.valueOf(getTimeStartOfDay()));
+                if (!pricelist.isEmpty()) {
 
+                    for (int i = 0; i < listAdapter.getItemCount(); i++) {
+                        spinnerNode = userNode.child("spinner");
+                        priceNode = userNode.child("price");
+                        notesNode = userNode.child("notes");
+                        timeNode = userNode.child(("timestamp"));
+                        spinnerNode.push().setValue(spinnerlist.get(i));
+                        priceNode.push().setValue(pricelist.get(i));
+                        notesNode.push().setValue(noteslist.get(i));
+                        timeNode.push().setValue(String.valueOf(getTimeStartOfDay()));
+
+                    }
                 }
                 showProgressDialog(ft, sdf);
             }

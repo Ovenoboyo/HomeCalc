@@ -75,25 +75,18 @@ public class FamilyDetails extends Fragment {
         familyNode.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                    showDetailUtils.getData(childDataSnapshot);
-                    if (getActivity() != null) {
-                        Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
-                        if (f instanceof FamilyDetails) {
-                            familyTotal = 0;
+                if (getActivity() != null) {
+                    Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
+                    if (f instanceof FamilyDetails) {
+                        familyTotal = 0;
+                        for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                            showDetailUtils.getData(childDataSnapshot);
                             if (row1 == 0) {
                                 showDetailUtils.familyView(linear, ShowDetailUtils.SpinnerList, childDataSnapshot);
                             } else if (row1 == 1) {
                                 showDetailUtils.familyView(linear, ShowDetailUtils.DateList, childDataSnapshot);
                             }
                         }
-                    }
-                }
-
-
-                if (getActivity() != null) {
-                    Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
-                    if (f instanceof FamilyDetails) {
                         LinearLayout familytotalLinear = new LinearLayout(getContext());
                         familytotalLinear.setBackgroundResource(R.drawable.text_border);
 
