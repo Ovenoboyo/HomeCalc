@@ -2,6 +2,7 @@ package com.sahil.gupte.HomeCalc.Fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,8 +18,12 @@ import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.sahil.gupte.HomeCalc.CustomViews.CustomRecyclerViewInput;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SwitchDialogFragment;
 import com.sahil.gupte.HomeCalc.R;
@@ -26,6 +31,8 @@ import com.sahil.gupte.HomeCalc.R;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Home extends Fragment {
@@ -39,6 +46,7 @@ public class Home extends Fragment {
     private DatabaseReference spinnerNode;
     private DatabaseReference userNode;
     private DatabaseReference timeNode;
+    private DatabaseReference rootRef;
     private EditText price, notes;
     private Spinner spinner;
     private final ArrayList<Integer> pricelist = new ArrayList<>();
@@ -66,7 +74,7 @@ public class Home extends Fragment {
             ft.remove(prev);
         }
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_home, container, false);
             listAdapter = new CustomRecyclerViewInput(getActivity());
@@ -84,11 +92,13 @@ public class Home extends Fragment {
             ((ViewGroup)view.getParent()).removeView(view);
         }
 
+        FirebaseMessaging.getInstance().subscribeToTopic("user_"+user.getDisplayName().replaceAll("\\s", "_"));
+
         SharedPreferences pref = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
         String family = pref.getString("familyID", "LostData");
 
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference firstNode = rootRef.child(family);
+        rootRef = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference firstNode = rootRef.child(family);
         userNode = firstNode.child(user.getDisplayName());
 
         AddNew.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +133,7 @@ public class Home extends Fragment {
 
                 if (!pricelist.isEmpty()) {
 
-                    for (int i = 0; i < listAdapter.getItemCount(); i++) {
+                    for (int i = 0; i < pricelist.size(); i++) {
                         spinnerNode = userNode.child("spinner");
                         priceNode = userNode.child("price");
                         notesNode = userNode.child("notes");
@@ -134,6 +144,23 @@ public class Home extends Fragment {
                         timeNode.push().setValue(String.valueOf(getTimeStartOfDay()));
 
                     }
+
+                    firstNode.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                                String username = childDataSnapshot.getKey();
+                                if (username != user.getDisplayName()) {
+                                    sendNotificationToUser(username.replaceAll("\\s", "_"), user.getDisplayName()+" added new items to his list!");
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
                 showProgressDialog(ft, sdf);
             }
@@ -154,5 +181,15 @@ public class Home extends Fragment {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTimeInMillis();
+    }
+
+    public void sendNotificationToUser(String user, final String message) {
+        final DatabaseReference notifications = rootRef.child("notificationRequests");
+
+        Map notification = new HashMap<>();
+        notification.put("username", user);
+        notification.put("message", message);
+
+        notifications.push().setValue(notification);
     }
 }
