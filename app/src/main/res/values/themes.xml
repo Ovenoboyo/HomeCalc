@@ -15,6 +15,13 @@
         <item name="android:listDivider">@color/PrimaryTextDark</item>
         <item name="android:textColorSecondary">@color/PrimaryTextDark</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:itemBackground">?attr/Primary</item>
+        <item name="android:textColor">?attr/PrimaryText</item>
+        <item name="android:actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
+    </style>
+
+    <style name="ActionButtonOverflow" parent="@style/Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">?attr/PrimaryText</item>
     </style>
 
     <style name="Theme.App.Dark" parent="Theme.App">
