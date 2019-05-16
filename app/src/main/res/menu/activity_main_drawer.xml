@@ -56,7 +56,7 @@
             <group>
                 <item
                     android:id="@+id/nav_settings"
-                    android:icon="@drawable/ic_account"
+                    android:icon="@drawable/ic_settings"
                     android:title="@string/menu_settings" />
             </group>
         </menu>
