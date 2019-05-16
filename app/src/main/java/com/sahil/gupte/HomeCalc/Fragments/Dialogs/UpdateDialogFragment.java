@@ -31,7 +31,7 @@ public class UpdateDialogFragment extends DialogFragment
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
         SharedPreferences pref = mContext.getSharedPreferences("Theme", 0);
-        Boolean dark = pref.getBoolean("dark", true);
+        boolean dark = pref.getBoolean("dark", true);
         AlertDialog.Builder builder;
         if (dark) {
             builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.Dialog_Dark));

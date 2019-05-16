@@ -44,7 +44,7 @@ public class AccountDetails extends Fragment {
         Button change_pass = view.findViewById(R.id.change_password);
         Button show_uid = view.findViewById(R.id.family_uid);
 
-        email.setText(user.getEmail());
+        email.setText(Objects.requireNonNull(user).getEmail());
 
         show_uid.setOnClickListener(new View.OnClickListener() {
             @Override

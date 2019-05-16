@@ -69,7 +69,7 @@ public class Home extends Fragment {
 
         final FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         final SwitchDialogFragment sdf = new SwitchDialogFragment();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        Fragment prev = Objects.requireNonNull(getFragmentManager()).findFragmentByTag("dialog");
         if (prev != null) {
             ft.remove(prev);
         }
@@ -92,13 +92,13 @@ public class Home extends Fragment {
             ((ViewGroup)view.getParent()).removeView(view);
         }
 
-        FirebaseMessaging.getInstance().subscribeToTopic("user_"+user.getDisplayName().replaceAll("\\s", "_"));
+        FirebaseMessaging.getInstance().subscribeToTopic("user_"+ Objects.requireNonNull(user.getDisplayName()).replaceAll("\\s", "_"));
 
         SharedPreferences pref = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
         String family = pref.getString("familyID", "LostData");
 
         rootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference firstNode = rootRef.child(family);
+        final DatabaseReference firstNode = rootRef.child(Objects.requireNonNull(family));
         userNode = firstNode.child(user.getDisplayName());
 
         AddNew.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +151,7 @@ public class Home extends Fragment {
                             for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                                 String username = childDataSnapshot.getKey();
                                 if (username != user.getDisplayName()) {
-                                    sendNotificationToUser(username.replaceAll("\\s", "_"), user.getDisplayName()+" added new items to his list!");
+                                    sendNotificationToUser(Objects.requireNonNull(username).replaceAll("\\s", "_"), user.getDisplayName()+" added new items to his list!");
                                 }
                             }
                         }
@@ -183,7 +183,7 @@ public class Home extends Fragment {
         return cal.getTimeInMillis();
     }
 
-    public void sendNotificationToUser(String user, final String message) {
+    private void sendNotificationToUser(String user, final String message) {
         final DatabaseReference notifications = rootRef.child("notificationRequests");
 
         Map notification = new HashMap<>();

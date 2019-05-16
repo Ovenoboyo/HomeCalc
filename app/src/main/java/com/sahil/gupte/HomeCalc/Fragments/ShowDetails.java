@@ -31,8 +31,6 @@ import com.sahil.gupte.HomeCalc.R;
 
 import java.util.Objects;
 
-import static java.security.AccessController.getContext;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -66,7 +64,7 @@ public class ShowDetails extends Fragment {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference userNode = database.getReference(family).child(user.getDisplayName());
+        final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(user).getDisplayName());
 
         SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
         final int row1 = pref.getInt("row1", 0);

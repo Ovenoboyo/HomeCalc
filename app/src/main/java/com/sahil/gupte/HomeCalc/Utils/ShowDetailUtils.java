@@ -254,6 +254,8 @@ public class ShowDetailUtils {
             }
         }
 
+        Collections.sort(newList, Collections.reverseOrder());
+
         for(int i = 0; i<newList.size(); i++) {
 
             final LinearLayout linearLayoutOuter1 = new LinearLayout(mContext);

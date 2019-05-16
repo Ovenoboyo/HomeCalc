@@ -45,7 +45,7 @@ public class EditDialogFragment extends DialogFragment
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         setCancelable(true);
-        pos = getArguments().getInt("pos");
+        pos = Objects.requireNonNull(getArguments()).getInt("pos");
     }
 
     @Override
@@ -53,7 +53,7 @@ public class EditDialogFragment extends DialogFragment
     {
         View view = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.edit_dialog, null);
         SharedPreferences pref = mContext.getSharedPreferences("Theme", 0);
-        Boolean dark = pref.getBoolean("dark", true);
+        boolean dark = pref.getBoolean("dark", true);
         AlertDialog.Builder builder;
         if (dark) {
             builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.Dialog_Dark));
@@ -73,9 +73,9 @@ public class EditDialogFragment extends DialogFragment
 
         AlertDialog dialog = builder.create();
         TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = getContext().getTheme();
+        Resources.Theme theme = Objects.requireNonNull(getContext()).getTheme();
         theme.resolveAttribute(R.attr.Primary, typedValue, true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(typedValue.data));
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(typedValue.data));
         dialog.show();
 
         TextView save = view.findViewById(R.id.save);
@@ -101,9 +101,9 @@ public class EditDialogFragment extends DialogFragment
                 });
                 AlertDialog alertDialog = builder1.create();
                 TypedValue typedValue = new TypedValue();
-                Resources.Theme theme = getContext().getTheme();
+                Resources.Theme theme = Objects.requireNonNull(getContext()).getTheme();
                 theme.resolveAttribute(R.attr.Primary, typedValue, true);
-                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(typedValue.data));
+                Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(typedValue.data));
                 alertDialog.show();
             }
         });

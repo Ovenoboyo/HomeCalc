@@ -10,19 +10,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sahil.gupte.HomeCalc.R;
 
 public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecyclerViewInput.RecyclerViewHolder> {
-    private final Activity context;
     private int count = 1;
 
     public CustomRecyclerViewInput(Activity context) {
-        this.context = context;
+        Activity context1 = context;
 
     }
 
     @Override
     public CustomRecyclerViewInput.RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_list, parent, false);
-        RecyclerViewHolder viewHolder = new RecyclerViewHolder(view);
-        return viewHolder;
+        return new RecyclerViewHolder(view);
     }
 
     @Override
@@ -52,7 +50,7 @@ public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecycler
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        public RecyclerViewHolder(View itemView) {
+        RecyclerViewHolder(View itemView) {
             super(itemView);
         }
     }

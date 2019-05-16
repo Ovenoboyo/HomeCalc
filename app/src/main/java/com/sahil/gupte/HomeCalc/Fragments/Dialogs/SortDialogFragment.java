@@ -69,9 +69,9 @@ public class SortDialogFragment extends DialogFragment
 
         final AlertDialog dialog = builder.create();
         TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = getContext().getTheme();
+        Resources.Theme theme = Objects.requireNonNull(getContext()).getTheme();
         theme.resolveAttribute(R.attr.Primary, typedValue, true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(typedValue.data));
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(typedValue.data));
         dialog.show();
 
         TextView save = view.findViewById(R.id.save);

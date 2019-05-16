@@ -28,7 +28,6 @@ import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
 import static android.content.Context.WINDOW_SERVICE;
-import static java.security.AccessController.getContext;
 
 
 public class FamilyUID extends Fragment {

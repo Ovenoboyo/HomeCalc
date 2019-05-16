@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.sahil.gupte.HomeCalc.R;
 
+import java.util.Objects;
+
 public class SignupActivity extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword, inputUsername;
@@ -118,7 +120,7 @@ public class SignupActivity extends AppCompatActivity {
                 .setDisplayName(Username)
                 .build();
 
-        user.updateProfile(profileUpdates)
+        Objects.requireNonNull(user).updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

@@ -42,6 +42,7 @@ import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
 import com.sahil.gupte.HomeCalc.Utils.UpdateUtils;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity
                 alertDialog.show();
 
                 final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                final DatabaseReference userNode = database.getReference(family).child(user.getDisplayName());
+                final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(user).getDisplayName());
 
                 userNode.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity
             View headerView = navigationView.getHeaderView(0);
             TextView Username = headerView.findViewById(R.id.username_text);
             TextView Email = headerView.findViewById(R.id.email_text);
-            Username.setText(user.getDisplayName());
+            Username.setText(Objects.requireNonNull(user).getDisplayName());
             Email.setText(user.getEmail());
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -210,7 +211,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_settings:
-                navigationView.setCheckedItem(R.id.nav_account);
+                navigationView.setCheckedItem(R.id.nav_settings);
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 finish();

@@ -55,7 +55,7 @@ public class EditDetails extends Fragment {
 
         final ShowDetailUtils showDetailUtils = new ShowDetailUtils(getContext(), fm, ((MainActivity)getActivity()));
 
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        Fragment prev = Objects.requireNonNull(getFragmentManager()).findFragmentByTag("dialog");
         if (prev != null) {
             ft.remove(prev);
         }
@@ -67,7 +67,7 @@ public class EditDetails extends Fragment {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference userNode = database.getReference(family).child(user.getDisplayName());
+        final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(user).getDisplayName());
 
         Query query = userNode.orderByChild("spinner");
         query.addValueEventListener(new ValueEventListener() {
