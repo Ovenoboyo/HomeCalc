@@ -33,7 +33,7 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.App"></activity>
+            android:theme="@style/Theme.App.Dark"></activity>
         <activity
             android:name=".Auth.LoginActivity"
             android:label="@string/app_name"
