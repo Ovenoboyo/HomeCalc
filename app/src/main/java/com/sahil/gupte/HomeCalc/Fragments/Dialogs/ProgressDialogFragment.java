@@ -16,6 +16,7 @@ public class ProgressDialogFragment extends Dialog {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.dialog_progressbar);
         setCancelable(true);
 

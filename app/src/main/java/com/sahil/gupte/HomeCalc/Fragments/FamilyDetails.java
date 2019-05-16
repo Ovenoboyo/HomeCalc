@@ -3,10 +3,6 @@ package com.sahil.gupte.HomeCalc.Fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +31,7 @@ import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 import java.util.Objects;
 
 import static com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils.familyTotal;
+import static java.security.AccessController.getContext;
 
 /**
  * A simple {@link Fragment} subclass.

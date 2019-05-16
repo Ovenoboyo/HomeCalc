@@ -4,9 +4,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.fragment.app.DialogFragment;
+
+import com.sahil.gupte.HomeCalc.R;
 import com.sahil.gupte.HomeCalc.Utils.UpdateUtils;
 
 
@@ -26,7 +30,14 @@ public class UpdateDialogFragment extends DialogFragment
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        SharedPreferences pref = mContext.getSharedPreferences("Theme", 0);
+        Boolean dark = pref.getBoolean("dark", true);
+        AlertDialog.Builder builder;
+        if (dark) {
+            builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.Dialog_Dark));
+        } else {
+            builder = new AlertDialog.Builder(mContext);
+        }
         builder.setTitle(" New update available!");
         builder.setPositiveButton("Update now!", new DialogInterface.OnClickListener() {
                     @Override

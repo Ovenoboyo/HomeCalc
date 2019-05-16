@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     app:cardElevation="3dp"
-    android:paddingStart="5dp"
+    app:cardCornerRadius="15dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
     android:paddingEnd="5dp"
-    android:layout_marginBottom="5dp">
+    android:paddingStart="5dp"
+    android:layout_marginBottom="5dp"
+    android:background="?attr/PrimaryDark">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="?attr/PrimaryDark">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:entries="@array/category"
+                android:popupBackground="?attr/Primary"
                 android:spinnerMode="dropdown" />
 
             <EditText
@@ -35,6 +41,9 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="start|top"
+                android:textColor="?attr/PrimaryText"
+                android:hint="Price"
+                android:textColorHint="?attr/PrimaryTextDark"
                 android:inputType="number" />
 
         </LinearLayout>
@@ -54,6 +63,7 @@
                 android:gravity="center|left"
                 android:paddingStart="8dp"
                 android:text="Notes:"
+                android:textColor="?attr/PrimaryText"
                 android:textSize="16sp" />
 
             <EditText
@@ -65,8 +75,10 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="text"
+                android:textColor="?attr/PrimaryText"
+                android:textColorHint="?attr/PrimaryTextDark"
                 android:hint="Notes" />
         </LinearLayout>
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

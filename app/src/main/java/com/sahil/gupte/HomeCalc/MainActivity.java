@@ -5,24 +5,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +38,7 @@ import com.sahil.gupte.HomeCalc.Fragments.FamilyUID;
 import com.sahil.gupte.HomeCalc.Fragments.Home;
 import com.sahil.gupte.HomeCalc.Fragments.ShowDetails;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
+import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
 import com.sahil.gupte.HomeCalc.Utils.UpdateUtils;
 
 import java.util.Calendar;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ThemeUtils.onActivityCreateSetTheme(this, getApplicationContext());
         setContentView(R.layout.activity_main);
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity
 
             authListener = new FirebaseAuth.AuthStateListener() {
                 @Override
-                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                public void onAuthStateChanged(FirebaseAuth firebaseAuth) {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     if (user == null) {
                         // user auth state is changed - user is null
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity
 
                 userNode.addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
                         showDetailUtils.ClearDB(dataSnapshot);
                         alertDialog.dismiss();
 
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity
                     }
 
                     @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    public void onCancelled(DatabaseError databaseError) {
 
                     }
                 });
@@ -206,6 +207,13 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_account:
                 navigationView.setCheckedItem(R.id.nav_account);
                 fragment = new AccountDetails();
+                break;
+
+            case R.id.nav_settings:
+                navigationView.setCheckedItem(R.id.nav_account);
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                finish();
                 break;
         }
 

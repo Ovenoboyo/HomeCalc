@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:orientation="vertical"
-    tools:context=".Fragments.ShowDetails">
+    tools:context=".Fragments.ShowDetails"
+    android:background="?attr/Primary">
 
     <RelativeLayout
         android:id="@+id/progressLayout"
@@ -27,7 +28,7 @@
             android:layout_below="@id/progressBar"
             android:layout_centerHorizontal="true"
             android:text="Fetching data..."
-            android:textColor="@color/colorPrimary"
+            android:textColor="?attr/PrimaryText"
             android:textSize="22dp" />
 
     </RelativeLayout>

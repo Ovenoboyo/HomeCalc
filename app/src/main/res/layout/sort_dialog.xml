@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="?attr/Primary">
 
     <Spinner
         android:id="@+id/row1"
@@ -16,6 +17,7 @@
         android:background="@drawable/text_border"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
+        android:popupBackground="?attr/Primary"
         android:entries="@array/row_spinner"/>
 
     <LinearLayout
@@ -33,6 +35,7 @@
             android:background="@drawable/text_border"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:popupBackground="?attr/Primary"
             android:entries="@array/row_spinner"/>
 
         <Spinner
@@ -43,6 +46,7 @@
             android:background="@drawable/text_border"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:popupBackground="?attr/Primary"
             android:entries="@array/column_spinner"/>
 
         <Spinner
@@ -53,6 +57,7 @@
             android:background="@drawable/text_border"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:popupBackground="?attr/Primary"
             android:entries="@array/column_spinner" />
     </LinearLayout>
 
@@ -74,7 +79,7 @@
             android:paddingHorizontal="5dp"
             android:textSize="16sp"
             android:textAppearance="@style/Widget.AppCompat.ButtonBar.AlertDialog"
-            android:textColor="@color/colorAccent"
+            android:textColor="?attr/Accent"
             android:text="Cancel" />
 
         <TextView
@@ -82,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/Widget.AppCompat.ButtonBar.AlertDialog"
-            android:textColor="@color/colorAccent"
+            android:textColor="?attr/Accent"
             android:paddingVertical="5dp"
             android:paddingHorizontal="5dp"
             android:textSize="16sp"

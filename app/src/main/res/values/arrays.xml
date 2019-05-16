@@ -15,6 +15,14 @@
         <item>@string/category_11</item>
     </string-array>
 
+    <string-array name="accent">
+        <item>Blue</item>
+        <item>Orange</item>
+        <item>Yellow</item>
+        <item>Cyan</item>
+        <item>Pink</item>
+    </string-array>
+
     <string-array name="row_spinner">
         <item>@string/category</item>
         <item>@string/time</item>
@@ -23,6 +31,16 @@
     <string-array name="column_spinner">
         <item>@string/price</item>
         <item>@string/notes</item>
+    </string-array>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
     </string-array>
 
 </resources>

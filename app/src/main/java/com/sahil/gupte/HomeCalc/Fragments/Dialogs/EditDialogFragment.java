@@ -4,12 +4,18 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.fragment.app.DialogFragment;
 
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
@@ -46,7 +52,14 @@ public class EditDialogFragment extends DialogFragment
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
         View view = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.edit_dialog, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        SharedPreferences pref = mContext.getSharedPreferences("Theme", 0);
+        Boolean dark = pref.getBoolean("dark", true);
+        AlertDialog.Builder builder;
+        if (dark) {
+            builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.Dialog_Dark));
+        } else {
+            builder = new AlertDialog.Builder(mContext);
+        }
         builder.setView(view);
         builder.setTitle(getString(R.string.edit));
 
@@ -59,6 +72,10 @@ public class EditDialogFragment extends DialogFragment
         notes.setText(ShowDetailUtils.NotesList.get(pos));
 
         AlertDialog dialog = builder.create();
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = getContext().getTheme();
+        theme.resolveAttribute(R.attr.Primary, typedValue, true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(typedValue.data));
         dialog.show();
 
         TextView save = view.findViewById(R.id.save);
@@ -83,6 +100,10 @@ public class EditDialogFragment extends DialogFragment
                     }
                 });
                 AlertDialog alertDialog = builder1.create();
+                TypedValue typedValue = new TypedValue();
+                Resources.Theme theme = getContext().getTheme();
+                theme.resolveAttribute(R.attr.Primary, typedValue, true);
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(typedValue.data));
                 alertDialog.show();
             }
         });

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/Primary">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -23,6 +24,7 @@
         android:background="@drawable/text_border"
         android:paddingVertical="10dp"
         android:paddingHorizontal="10dp"
+        android:textColor="?attr/PrimaryText"
         android:text="Email Address" />
 
     <Button
@@ -34,7 +36,7 @@
         android:background="@drawable/button"
         android:text="@string/show_uid"
         android:textAllCaps="false"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/PrimaryText"
         android:layout_below="@id/account_email"/>
 
     <Button
@@ -46,6 +48,6 @@
         android:text="@string/reset_password"
         android:textAllCaps="false"
         android:layout_marginHorizontal="15dp"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/PrimaryText"
         android:layout_below="@id/family_uid"/>
 </RelativeLayout>

@@ -2,11 +2,12 @@ package com.sahil.gupte.HomeCalc.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -63,6 +67,7 @@ public class ShowDetailUtils {
     private int row1;
     private int column2;
     private int column3;
+    private int colorFromTheme;;
 
     //Passed by ShowDetails Fragment
     public ShowDetailUtils(Context context){
@@ -103,6 +108,15 @@ public class ShowDetailUtils {
             sortMap(mapTime, mapSpinner, mapPrice, mapNotes);
         } else {
             Toast.makeText(mContext, "Could not get data (Database could be empty)", Toast.LENGTH_LONG).show();
+        }
+
+        TypedValue tV = new TypedValue();
+        Resources.Theme theme = mContext.getTheme();
+        boolean success = theme.resolveAttribute(R.attr.PrimaryText, tV, true);
+        if(success) {
+            colorFromTheme = tV.data;
+        } else {
+            colorFromTheme = Color.BLACK;
         }
     }
 
@@ -189,6 +203,7 @@ public class ShowDetailUtils {
         TextView textViewUser = new TextView(mContext);
         textViewUser.setText(dataSnapshot.getKey());
         textViewUser.setTextSize(32);
+        textViewUser.setTextColor(colorFromTheme);
         textViewUser.setTypeface(null, Typeface.BOLD);
         textViewUser.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         textViewUser.setLayoutParams(lp11);
@@ -262,6 +277,7 @@ public class ShowDetailUtils {
                 textViewOuter.setText(SpinnerNameList[Integer.valueOf(newList.get(i))]);
             }
 
+            textViewOuter.setTextColor(colorFromTheme);
             textViewOuter.setTextSize(28);
             textViewOuter.setTypeface(null, Typeface.BOLD_ITALIC);
             textViewOuter.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -454,6 +470,7 @@ public class ShowDetailUtils {
         data.setPadding(0, 50, 0, 50);
         data.setGravity(Gravity.CENTER);
         data.setTypeface(null, Typeface.BOLD);
+        data.setTextColor(colorFromTheme);
         totalLinearLayout.addView(data);
 
     }
@@ -465,6 +482,7 @@ public class ShowDetailUtils {
         TextView column = new TextView(mContext);
         column.setText(title);
         column.setTextSize(24);
+        column.setTextColor(colorFromTheme);
         column.setBackgroundResource(R.drawable.text_border);
         column.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         column.setTypeface(null, Typeface.ITALIC);
@@ -498,6 +516,7 @@ public class ShowDetailUtils {
                 data.setText(SpinnerNameList[Integer.valueOf(SpinnerList.get(j))]);
         }
         data.setTextSize(16);
+        data.setTextColor(colorFromTheme);
         data.setBackgroundResource(R.drawable.text_border);
         data.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         data.setLayoutParams(lp1);

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <attr name="Primary" format="reference"/>
+        <attr name="PrimaryDark" format="reference"/>
+        <attr name="PrimaryText" format="reference" />
+        <attr name="PrimaryTextDark" format="reference" />
+        <attr name="Accent" format="reference"/>
+</resources>
