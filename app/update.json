@@ -2,4 +2,8 @@
   "latestVersion": "1.0.3",
   "latestVersionCode": "4",
   "url": "https://github.com/Ovenoboyo/HomeCalc/releases",
+    "releaseNotes": [
+    "- Improve Add Data",
+    "- Fix padding on Save and delete button in Sort"  
+  ]
 }
