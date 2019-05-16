@@ -97,6 +97,7 @@ public class SettingsActivity extends AppCompatActivity {
             final SwitchPreference dark_mode = findPreference("dark_mode");
             ListPreference red = findPreference("accent");
             dark[0] = dark_mode.isChecked();
+            ThemeUtils.PutDark(dark[0], getContext());
             accent = red.getValue();
             Log.d(TAG, "onCreatePreferences: "+dark[0]);
             dark_mode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
