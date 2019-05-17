@@ -5,8 +5,8 @@
     android:fitsSystemWindows="true">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="?attr/Primary"
         android:gravity="center"
         android:orientation="vertical"
@@ -20,50 +20,35 @@
             android:layout_marginBottom="30dp"
             android:src="@drawable/ic_launcher_round" />
 
-        <com.google.android.material.textfield.TextInputLayout
+        <EditText
+            android:id="@+id/email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/hint_email"
+            android:inputType="textEmailAddress"
+            android:textColor="?attr/PrimaryText"
+            android:textColorHint="?attr/PrimaryTextDark" />
 
-            <EditText
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:hint="@string/hint_email"
-                android:inputType="textEmailAddress"
-                android:textColor="?attr/PrimaryText"
-                android:textColorHint="?attr/PrimaryTextDark" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
+        <EditText
+            android:id="@+id/username"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/username"
+            android:inputType="textShortMessage"
+            android:textColor="?attr/PrimaryText"
+            android:textColorHint="?attr/PrimaryTextDark" />
 
-            <EditText
-                android:id="@+id/username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:hint="@string/username"
-                android:inputType="textShortMessage"
-                android:textColor="?attr/PrimaryText"
-                android:textColorHint="?attr/PrimaryTextDark" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:hint="@string/hint_password"
-                android:inputType="textPassword"
-                android:textColor="?attr/PrimaryText"
-                android:textColorHint="?attr/PrimaryTextDark" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
+            android:textColor="?attr/PrimaryText"
+            android:textColorHint="?attr/PrimaryTextDark" />
 
         <Button
             android:id="@+id/sign_up_button"
@@ -96,7 +81,7 @@
             android:background="@null"
             android:text="@string/btn_link_to_login"
             android:textAllCaps="false"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/PrimaryText"
             android:textSize="15sp" />
     </LinearLayout>
 
