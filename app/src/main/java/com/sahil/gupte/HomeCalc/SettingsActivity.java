@@ -40,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    static class SettingsFragment extends PreferenceFragmentCompat {
+    public static class SettingsFragment extends PreferenceFragmentCompat {
 
         final Boolean[] dark = new Boolean[1];
         Object accent;
