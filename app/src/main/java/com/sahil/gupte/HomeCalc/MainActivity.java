@@ -47,7 +47,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 886 ;
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 886;
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
     private NavigationView navigationView;
@@ -106,32 +106,29 @@ public class MainActivity extends AppCompatActivity
             String family = prefF.getString("familyID", "LostData");
             final ShowDetailUtils showDetailUtils = new ShowDetailUtils(getApplicationContext());
 
-            if (isFirstDayofMonth(calendar)) {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            final AlertDialog alertDialog = dialogBuilder.create();
+            LayoutInflater inflater = this.getLayoutInflater();
+            alertDialog.setContentView(inflater.inflate(R.layout.progress_dialog, null));
+            alertDialog.show();
 
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-                final AlertDialog alertDialog = dialogBuilder.create();
-                LayoutInflater inflater = this.getLayoutInflater();
-                alertDialog.setContentView(inflater.inflate(R.layout.progress_dialog, null));
-                alertDialog.show();
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(user).getDisplayName());
 
-                final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(user).getDisplayName());
+            userNode.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    showDetailUtils.ClearDB(dataSnapshot);
+                    alertDialog.dismiss();
 
-                userNode.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        showDetailUtils.ClearDB(dataSnapshot);
-                        alertDialog.dismiss();
+                    userNode.removeEventListener(this);
+                }
 
-                        userNode.removeEventListener(this);
-                    }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
+                }
+            });
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -168,6 +165,7 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
     public void displaySelectedScreen(int itemId) {
 
         //creating fragment object
@@ -229,15 +227,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
     }
 
-    private boolean isFirstDayofMonth(Calendar calendar){
-        if (calendar == null) {
-            throw new IllegalArgumentException("Calendar cannot be null.");
-        }
-
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        return dayOfMonth <= 15;
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -260,8 +249,7 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    protected void onSaveInstanceState(Bundle b)
-    {
+    protected void onSaveInstanceState(Bundle b) {
         super.onSaveInstanceState(b);
     }
 

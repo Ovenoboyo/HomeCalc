@@ -28,6 +28,7 @@ public class SortDialogFragment extends DialogFragment
     private static final String TAG = "SortDialogFragment";
     private Context mContext;
     private Spinner row1, column1, column2, column3;
+    private int fragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -35,6 +36,7 @@ public class SortDialogFragment extends DialogFragment
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         setCancelable(true);
+        fragment = savedInstanceState.getInt("fragment", 0);
     }
 
     @Override
@@ -84,7 +86,11 @@ public class SortDialogFragment extends DialogFragment
                 if (row1.getSelectedItemPosition() != column1.getSelectedItemPosition() && column2.getSelectedItemPosition() != column3.getSelectedItemPosition()) {
                     saveSort();
                     dialog.dismiss();
-                    ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_details);
+                    if (fragment == 0) {
+                        ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_details);
+                    } else {
+                        ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_family_view);
+                    }
                 } else {
                     Toast.makeText(mContext, "All items must be different", Toast.LENGTH_LONG).show();
                 }
