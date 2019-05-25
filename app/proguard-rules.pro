@@ -22,3 +22,5 @@
 -keepattributes Signature
 -keep class com.sahil.gupte.HomeCalc.*
 -keep class com.sahil.gupte.*
+-keep class com.sahil.gupte.HomeCalc.Fragments.*
+-keep class com.sahil.gupte.HomeCalc.Fragments.Dialogs*

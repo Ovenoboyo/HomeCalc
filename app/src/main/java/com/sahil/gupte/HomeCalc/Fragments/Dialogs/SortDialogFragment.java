@@ -36,7 +36,10 @@ public class SortDialogFragment extends DialogFragment
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         setCancelable(true);
-        fragment = savedInstanceState.getInt("fragment", 0);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            fragment = bundle.getInt("fragment", 0);
+        }
     }
 
     @Override

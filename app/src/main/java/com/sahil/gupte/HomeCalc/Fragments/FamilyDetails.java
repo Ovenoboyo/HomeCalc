@@ -138,7 +138,7 @@ public class FamilyDetails extends Fragment {
 
     private void ShowSortDialogFragment() {
         Bundle bundle = new Bundle();
-        bundle.putInt("fragment", 0);
+        bundle.putInt("fragment", 1);
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         SortDialogFragment sortDialogFragment = new SortDialogFragment();
