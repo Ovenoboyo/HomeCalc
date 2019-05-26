@@ -15,4 +15,11 @@
         android:visible="false"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/collective"
+        android:orderInCategory="100"
+        android:title="@string/action_collective"
+        android:visible="false"
+        app:showAsAction="never" />
+
 </menu>

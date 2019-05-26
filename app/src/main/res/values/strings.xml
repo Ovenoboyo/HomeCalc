@@ -8,6 +8,8 @@
     <string name="action_settings">Settings</string>
     <string name="action_sort">Sort</string>
     <string name="action_hint">Show Hints</string>
+    <string name="action_collective">Show Collective View</string>
+    <string name="action_separate">Show Separate View</string>
 
     <string name="menu_family_view">Family Report</string>
     <string name="menu_home">Add Data</string>

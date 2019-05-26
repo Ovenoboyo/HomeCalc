@@ -36,6 +36,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -58,6 +60,11 @@ public class ShowDetailUtils {
     private static final ArrayList<String> PriceKeyList = new ArrayList<>();
     private static final ArrayList<String> TimeKeyList = new ArrayList<>();
 
+    Map<String, Object> mapTimeC = new HashMap<>();
+    Map<String, Object> mapSpinnerC = new HashMap<>();
+    Map<String, Object> mapPriceC = new HashMap<>();
+    Map<String, Object> mapNotesC = new HashMap<>();
+
     public static int familyTotal = 0;
 
     private FragmentManager fm;
@@ -67,7 +74,7 @@ public class ShowDetailUtils {
     private int row1;
     private int column2;
     private int column3;
-    private int colorFromTheme;;
+    private int colorFromTheme;
 
     //Passed by ShowDetails Fragment
     public ShowDetailUtils(Context context){
@@ -120,6 +127,36 @@ public class ShowDetailUtils {
         }
     }
 
+    public void getCollectiveData(DataSnapshot dataSnapshot) {
+        Map<String, Object> mapTime = (Map<String, Object>) dataSnapshot.child("timestamp").getValue();
+        Map<String, Object> mapSpinner = (Map<String, Object>) dataSnapshot.child("spinner").getValue();
+        Map<String, Object> mapPrice = (Map<String, Object>) dataSnapshot.child("price").getValue();
+        Map<String, Object> mapNotes = (Map<String, Object>) dataSnapshot.child("notes").getValue();
+
+        mapTimeC.putAll(mapTime);
+        mapSpinnerC.putAll(mapSpinner);
+        mapPriceC.putAll(mapPrice);
+        mapNotesC.putAll(mapNotes);
+
+
+        SpinnerNameList = mContext.getResources().getStringArray(R.array.category);
+
+        SharedPreferences pref = mContext.getSharedPreferences("SpinnerSort", 0);
+        row1 = pref.getInt("row1", 0);
+        int column1 = pref.getInt("column1", 1);
+        column2 = pref.getInt("column2", 0);
+        column3 = pref.getInt("column3", 1);
+
+        TypedValue tV = new TypedValue();
+        Resources.Theme theme = mContext.getTheme();
+        boolean success = theme.resolveAttribute(R.attr.PrimaryText, tV, true);
+        if(success) {
+            colorFromTheme = tV.data;
+        } else {
+            colorFromTheme = Color.BLACK;
+        }
+    }
+
     private void sortMap(Map<String, Object> mapTime, Map<String, Object> mapSpinner, Map<String, Object> mapPrice, Map<String, Object> mapNotes) {
 
         Set<Map.Entry<String, Object>> EntryTime = mapTime.entrySet();
@@ -155,12 +192,12 @@ public class ShowDetailUtils {
 
 
     private void sortList(ArrayList<Map.Entry<String, Object>> ListOfEntry) {
-        Collections.sort(ListOfEntry, new Comparator<Map.Entry<String, Object>>() {
+        Collections.sort(ListOfEntry,Collections.reverseOrder(new Comparator<Map.Entry<String, Object>>() {
             @Override
             public int compare(Map.Entry<String, Object> o1, Map.Entry<String, Object> o2) {
                 return o1.getKey().compareTo(o2.getKey());
             }
-        });
+        }));
     }
 
     private void putDataInList(ArrayList<Map.Entry<String, Object>> ListOfEntry, ArrayList<String> list) {
@@ -183,63 +220,75 @@ public class ShowDetailUtils {
         }
     }
 
-    public void familyView (LinearLayout linearLayout, ArrayList<String> List, DataSnapshot dataSnapshot){
-        LinearLayout linearLayoutUser1 = new LinearLayout(mContext);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayoutUser1.setLayoutParams(lp);
-        linearLayoutUser1.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(linearLayoutUser1);
+    public void familyView (LinearLayout linearLayout, ArrayList<String> List, DataSnapshot dataSnapshot, boolean collective){
 
 
-        LinearLayout linearLayoutWButton = new LinearLayout(mContext);
-        linearLayoutWButton.setLayoutParams(lp);
-        linearLayoutWButton.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayoutWButton.setPadding(0, 25, 0, 25);
-        linearLayoutWButton.setBackgroundResource(R.drawable.text_border);
-
-        ViewGroup.LayoutParams lp11 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.15f);
-        ViewGroup.LayoutParams lp21 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0.85f);
-
-        TextView textViewUser = new TextView(mContext);
-        textViewUser.setText(dataSnapshot.getKey());
-        textViewUser.setTextSize(32);
-        textViewUser.setTextColor(colorFromTheme);
-        textViewUser.setTypeface(null, Typeface.BOLD);
-        textViewUser.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        textViewUser.setLayoutParams(lp11);
-        linearLayoutWButton.addView(textViewUser);
-
-        final ImageView expand = new ImageView(mContext);
-        expand.setImageResource(R.drawable.ic_arrow_drop_down);
-        expand.setLayoutParams(lp21);
-        linearLayoutWButton.addView(expand);
-
-        linearLayoutUser1.addView(linearLayoutWButton);
-
-
-        final LinearLayout linearLayoutUser = new LinearLayout(mContext);
-        linearLayoutUser.setLayoutParams(lp);
-        linearLayoutUser.setOrientation(LinearLayout.VERTICAL);
-        linearLayoutUser1.addView(linearLayoutUser);
-
-        final boolean[] expandLayout = {true};
-        expand.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!expandLayout[0]) {
-                    linearLayoutUser.setVisibility(View.GONE);
-                    expand.setImageResource(R.drawable.ic_arrow_drop_down);
-                } else {
-                    linearLayoutUser.setVisibility(View.VISIBLE);
-                    expand.setImageResource(R.drawable.ic_arrow_drop_up);
-                }
-                expandLayout[0] = !expandLayout[0];
+        if (collective) {
+            addTextViews(linearLayout, List);
+            if (mapTimeC != null && mapSpinnerC != null && mapPriceC != null && mapNotesC != null) {
+                sortMap(mapTimeC, mapSpinnerC, mapPriceC, mapNotesC);
+            } else {
+                Toast.makeText(mContext, "Could not get data (Database could be empty)", Toast.LENGTH_LONG).show();
             }
-        });
+        } else {
 
-        addTextViews(linearLayoutUser, List);
+            LinearLayout linearLayoutUser1 = new LinearLayout(mContext);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            linearLayoutUser1.setLayoutParams(lp);
+            linearLayoutUser1.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.addView(linearLayoutUser1);
 
-        linearLayoutUser.setVisibility(View.GONE);
+
+            LinearLayout linearLayoutWButton = new LinearLayout(mContext);
+            linearLayoutWButton.setLayoutParams(lp);
+            linearLayoutWButton.setOrientation(LinearLayout.HORIZONTAL);
+            linearLayoutWButton.setPadding(0, 25, 0, 25);
+            linearLayoutWButton.setBackgroundResource(R.drawable.text_border);
+
+            ViewGroup.LayoutParams lp11 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.15f);
+            ViewGroup.LayoutParams lp21 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0.85f);
+
+            TextView textViewUser = new TextView(mContext);
+            textViewUser.setText(dataSnapshot.getKey());
+            textViewUser.setTextSize(32);
+            textViewUser.setTextColor(colorFromTheme);
+            textViewUser.setTypeface(null, Typeface.BOLD);
+            textViewUser.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            textViewUser.setLayoutParams(lp11);
+            linearLayoutWButton.addView(textViewUser);
+
+            final ImageView expand = new ImageView(mContext);
+            expand.setImageResource(R.drawable.ic_arrow_drop_down);
+            expand.setLayoutParams(lp21);
+            linearLayoutWButton.addView(expand);
+
+            linearLayoutUser1.addView(linearLayoutWButton);
+
+
+            final LinearLayout linearLayoutUser = new LinearLayout(mContext);
+            linearLayoutUser.setLayoutParams(lp);
+            linearLayoutUser.setOrientation(LinearLayout.VERTICAL);
+            linearLayoutUser1.addView(linearLayoutUser);
+
+            final boolean[] expandLayout = {true};
+            expand.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!expandLayout[0]) {
+                        linearLayoutUser.setVisibility(View.GONE);
+                        expand.setImageResource(R.drawable.ic_arrow_drop_down);
+                    } else {
+                        linearLayoutUser.setVisibility(View.VISIBLE);
+                        expand.setImageResource(R.drawable.ic_arrow_drop_up);
+                    }
+                    expandLayout[0] = !expandLayout[0];
+                }
+            });
+
+            addTextViews(linearLayoutUser, List);
+
+            linearLayoutUser.setVisibility(View.GONE);
+        }
     }
 
     public void addTextViews(LinearLayout linearLayout, ArrayList<String> List) {

@@ -3,6 +3,7 @@ package com.sahil.gupte.HomeCalc.Fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SortDialogFragment;
+import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 
@@ -63,11 +65,13 @@ public class FamilyDetails extends Fragment {
         SharedPreferences prefF = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
         String family = prefF.getString("familyID", "LostData");
 
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference familyNode = database.getReference(Objects.requireNonNull(family));
 
         SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
+        final Boolean collective = pref.getBoolean("collective", false);
         final int row1 = pref.getInt("row1", 0);
         final int column2 = pref.getInt("column2", 0);
         final int column3 = pref.getInt("column3", 0);
@@ -81,11 +85,22 @@ public class FamilyDetails extends Fragment {
                     if (f instanceof FamilyDetails) {
                         familyTotal = 0;
                         for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                            showDetailUtils.getData(childDataSnapshot);
+                            if(collective) {
+                                showDetailUtils.getCollectiveData(childDataSnapshot);
+                            } else {
+                                showDetailUtils.getData(childDataSnapshot);
+                                if (row1 == 0) {
+                                    showDetailUtils.familyView(linear, ShowDetailUtils.SpinnerList, childDataSnapshot, false);
+                                } else if (row1 == 1) {
+                                    showDetailUtils.familyView(linear, ShowDetailUtils.DateList, childDataSnapshot, false);
+                                }
+                            }
+                        }
+                        if(collective) {
                             if (row1 == 0) {
-                                showDetailUtils.familyView(linear, ShowDetailUtils.SpinnerList, childDataSnapshot);
+                                showDetailUtils.familyView(linear, ShowDetailUtils.SpinnerList, dataSnapshot, true);
                             } else if (row1 == 1) {
-                                showDetailUtils.familyView(linear, ShowDetailUtils.DateList, childDataSnapshot);
+                                showDetailUtils.familyView(linear, ShowDetailUtils.DateList, dataSnapshot, true);
                             }
                         }
                         LinearLayout familytotalLinear = new LinearLayout(getContext());
@@ -118,8 +133,16 @@ public class FamilyDetails extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        // Inflate the menu; this adds items to the action bar if it is present.
+        SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
+        Boolean collective = pref.getBoolean("collective", false);
         inflater.inflate(R.menu.main, menu);
+        MenuItem collectiveM = menu.findItem(R.id.collective);
+        if(collective) {
+            collectiveM.setTitle(getString(R.string.action_separate));
+        } else {
+            collectiveM.setTitle(getString(R.string.action_collective));
+        }
+        collectiveM.setVisible(true);
     }
 
     @Override
@@ -131,6 +154,9 @@ public class FamilyDetails extends Fragment {
 
         if (id == R.id.sort) {
             ShowSortDialogFragment();
+        }
+        if (id == R.id.collective) {
+            SwitchView();
         }
 
         return super.onOptionsItemSelected(item);
@@ -144,6 +170,18 @@ public class FamilyDetails extends Fragment {
         SortDialogFragment sortDialogFragment = new SortDialogFragment();
         sortDialogFragment.setArguments(bundle);
         sortDialogFragment.show(ft, "dialog");
+    }
+
+    private void SwitchView() {
+        SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
+        Boolean collective = pref.getBoolean("collective", false);
+        collective = !collective;
+        Log.d("test", "SwitchView: "+collective);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean("collective", collective);
+        editor.commit();
+        ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_family_view);
+
     }
 
 }
