@@ -39,7 +39,9 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, PostSignupActivity.class));
+            Intent intent = new Intent(LoginActivity.this, PostSignupActivity.class);
+            intent.putExtra("login", true);
+            startActivity(intent);
             finish();
         }
 
@@ -112,13 +114,9 @@ public class LoginActivity extends AppCompatActivity {
                                     SharedPreferences pref = getSharedPreferences("Family", 0);
                                     String family = pref.getString("familyID", "null");
 
-                                    Intent intent;
-                                    if (!Objects.equals(family, "null")) {
-                                        intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    } else {
-                                        intent = new Intent(LoginActivity.this, PostSignupActivity.class);
-                                    }
 
+                                    Intent intent = new Intent(LoginActivity.this, PostSignupActivity.class);
+                                    intent.putExtra("login", true);
                                     startActivity(intent);
                                     finish();
                                 }

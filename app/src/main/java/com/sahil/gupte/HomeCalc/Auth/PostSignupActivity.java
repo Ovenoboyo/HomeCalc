@@ -19,10 +19,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.FamilyHintDialogFragment;
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
-import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class PostSignupActivity extends AppCompatActivity {
@@ -30,6 +28,10 @@ public class PostSignupActivity extends AppCompatActivity {
     private static final String TAG = "PostSignupActivity";
     private EditText inputID;
     private ProgressBar progressBar;
+    private Boolean fromLogin;
+
+    PostSignupActivity() {}
+
 
 
     @Override
@@ -37,6 +39,15 @@ public class PostSignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ThemeUtils.onActivityCreateSetTheme(this, getApplicationContext());
         setContentView(R.layout.activity_postsignup);
+
+        Bundle b = getIntent().getExtras();
+
+        if(b!= null) {
+            if (b.getBoolean("login", false)) {
+                startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
+                finish();
+            }
+        }
 
         ShowHintDialogFragment();
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +31,18 @@ import com.sahil.gupte.HomeCalc.CustomViews.CustomRecyclerViewInput;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SwitchDialogFragment;
 import com.sahil.gupte.HomeCalc.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Home extends Fragment {
 
@@ -49,11 +56,12 @@ public class Home extends Fragment {
     private DatabaseReference userNode;
     private DatabaseReference timeNode;
     private DatabaseReference rootRef;
-    private EditText price, notes;
+    private EditText price, notes, time;
     private Spinner spinner;
     private final ArrayList<Integer> pricelist = new ArrayList<>();
     private final ArrayList<String> noteslist = new ArrayList<>();
     private final ArrayList<Integer> spinnerlist = new ArrayList<>();
+    private final ArrayList<String> timelist = new ArrayList<>();
 
     public Home() {
         // Required empty public constructor
@@ -77,7 +85,6 @@ public class Home extends Fragment {
         }
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (view == null) {
             view = inflater.inflate(R.layout.fragment_home, container, false);
             listAdapter = new CustomRecyclerViewInput(getActivity());
             list = view.findViewById(R.id.custom_list);
@@ -89,10 +96,6 @@ public class Home extends Fragment {
             LinearLayoutManager llm = new LinearLayoutManager(getContext());
             llm.setOrientation(RecyclerView.VERTICAL);
             list.setLayoutManager(llm);
-
-        } else {
-            ((ViewGroup)view.getParent()).removeView(view);
-        }
 
         FirebaseMessaging.getInstance().subscribeToTopic("user_"+ Objects.requireNonNull(user.getDisplayName()).replaceAll("\\s", "_"));
 
@@ -126,13 +129,20 @@ public class Home extends Fragment {
                     price = list.getChildAt(i).findViewById(R.id.editText);
                     notes = list.getChildAt(i).findViewById(R.id.editText2);
                     spinner = list.getChildAt(i).findViewById(R.id.spinner);
-                    if (price.getText().toString().trim().isEmpty()) {
-                        showToast("Price can not be empty", getContext());
+                    time = list.getChildAt(i).findViewById(R.id.editText3);
+                    if (matchString(time.getText().toString())) {
+                        if (price.getText().toString().trim().isEmpty()) {
+                            showToast("Price can not be empty", getContext());
+                            return;
+                        } else if ((!TextUtils.isEmpty(price.getText().toString()))) {
+                            pricelist.add(Integer.parseInt(price.getText().toString()));
+                            noteslist.add(notes.getText().toString());
+                            spinnerlist.add(spinner.getSelectedItemPosition());
+                            timelist.add(time.getText().toString());
+                        }
+                    } else {
+                        showToast("Invalid date", getContext());
                         return;
-                    } else if ((!TextUtils.isEmpty(price.getText().toString()))) {
-                        pricelist.add(Integer.parseInt(price.getText().toString()));
-                        noteslist.add(notes.getText().toString());
-                        spinnerlist.add(spinner.getSelectedItemPosition());
                     }
                 }
 
@@ -146,7 +156,7 @@ public class Home extends Fragment {
                         spinnerNode.push().setValue(spinnerlist.get(i));
                         priceNode.push().setValue(pricelist.get(i));
                         notesNode.push().setValue(noteslist.get(i));
-                        timeNode.push().setValue(String.valueOf(getTimeStartOfDay()));
+                        timeNode.push().setValue(dateToTimestamp(timelist.get(i)));
 
                     }
 
@@ -192,6 +202,19 @@ public class Home extends Fragment {
         return cal.getTimeInMillis();
     }
 
+    private String dateToTimestamp(String value) {
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        try {
+            Date date = formatter.parse(value);
+            String newDate = String.valueOf(date.getTime());
+            Log.d("test", "dateToTimestamp: "+newDate);
+            return newDate;
+        } catch (ParseException e) {
+            Toast.makeText(getContext(), "Invalid Date format. Try DD/MM/YYYY", Toast.LENGTH_LONG).show();
+        }
+        return String.valueOf(getTimeStartOfDay());
+    }
+
     private void sendNotificationToUser(String user, final String message) {
         final DatabaseReference notifications = rootRef.child("notificationRequests");
 
@@ -200,5 +223,18 @@ public class Home extends Fragment {
         notification.put("message", message);
 
         notifications.push().setValue(notification);
+    }
+
+    private boolean matchString (String str) {
+        Pattern p = Pattern.compile("\\d\\d/\\d\\d/\\d\\d\\d\\d");
+        Matcher m = p.matcher(str);
+        if (m.find()) {
+            if(m.group() == str) {
+                return true;
+            }
+        } else {
+            return false;
+        }
+        return false;
     }
 }
