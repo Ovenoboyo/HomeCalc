@@ -1,5 +1,6 @@
 package com.sahil.gupte.HomeCalc.Fragments;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -124,7 +126,10 @@ public class Home extends Fragment {
                     price = list.getChildAt(i).findViewById(R.id.editText);
                     notes = list.getChildAt(i).findViewById(R.id.editText2);
                     spinner = list.getChildAt(i).findViewById(R.id.spinner);
-                    if ((!TextUtils.isEmpty(price.getText().toString()))) {
+                    if (price.getText().toString().trim().isEmpty()) {
+                        showToast("Price can not be empty", getContext());
+                        return;
+                    } else if ((!TextUtils.isEmpty(price.getText().toString()))) {
                         pricelist.add(Integer.parseInt(price.getText().toString()));
                         noteslist.add(notes.getText().toString());
                         spinnerlist.add(spinner.getSelectedItemPosition());
@@ -166,6 +171,10 @@ public class Home extends Fragment {
             }
         });
         return view;
+    }
+
+    void showToast(String text, Context mContext) {
+        Toast.makeText(mContext, text, Toast.LENGTH_LONG).show();
     }
 
     private void showProgressDialog(FragmentTransaction ft, SwitchDialogFragment pdf) {

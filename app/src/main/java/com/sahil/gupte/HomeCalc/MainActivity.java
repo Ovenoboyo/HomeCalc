@@ -178,11 +178,6 @@ public class MainActivity extends AppCompatActivity
                 fragment = new Home();
                 break;
 
-            case R.id.nav_details:
-                navigationView.setCheckedItem(R.id.nav_details);
-                fragment = new ShowDetails();
-                break;
-
             case R.id.nav_edit:
                 navigationView.setCheckedItem(R.id.nav_edit);
                 fragment = new EditDetails();

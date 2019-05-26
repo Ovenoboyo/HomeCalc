@@ -90,7 +90,7 @@ public class SortDialogFragment extends DialogFragment
                     saveSort();
                     dialog.dismiss();
                     if (fragment == 0) {
-                        ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_details);
+                        ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_edit);
                     } else {
                         ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_family_view);
                     }

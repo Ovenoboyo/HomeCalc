@@ -10,8 +10,7 @@
 
     <string name="menu_family_view">Family Report</string>
     <string name="menu_home">Add Data</string>
-    <string name="menu_details">Show Report</string>
-    <string name="menu_edit">Edit Report</string>
+    <string name="menu_edit">Your Report</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_account">Account Details</string>
     <string name="menu_settings">Settings</string>

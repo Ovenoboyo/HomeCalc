@@ -51,7 +51,7 @@ public class SwitchDialogFragment extends DialogFragment
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_details);
+                        ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_edit);
                     }
                 });
 
