@@ -224,7 +224,7 @@ public class ShowDetailUtils {
 
 
         if (collective) {
-            addTextViews(linearLayout, List);
+            addTextViews(linearLayout, List, false);
             if (mapTimeC != null && mapSpinnerC != null && mapPriceC != null && mapNotesC != null) {
                 sortMap(mapTimeC, mapSpinnerC, mapPriceC, mapNotesC);
             } else {
@@ -285,13 +285,13 @@ public class ShowDetailUtils {
                 }
             });
 
-            addTextViews(linearLayoutUser, List);
+            addTextViews(linearLayoutUser, List, false);
 
             linearLayoutUser.setVisibility(View.GONE);
         }
     }
 
-    public void addTextViews(LinearLayout linearLayout, ArrayList<String> List) {
+    public void addTextViews(LinearLayout linearLayout, ArrayList<String> List, boolean edit) {
 
         int totalamt = 0, grandTotal = 0;
 
@@ -404,20 +404,20 @@ public class ShowDetailUtils {
 
                         if (column3 == 0 && column2 == 1) {
                             if (row1 == 0) {
-                                addDataFields(j, linearLayout1, "date");
+                                addDataFields(j, linearLayout1, "date", edit);
                             } else {
-                                addDataFields(j, linearLayout1, "spinner");
+                                addDataFields(j, linearLayout1, "spinner", edit);
                             }
-                            addDataFields(j, linearLayout1, "notes");
-                            addDataFields(j, linearLayout1, "price");
+                            addDataFields(j, linearLayout1, "notes", edit);
+                            addDataFields(j, linearLayout1, "price", edit);
                         } else {
                             if (row1 == 0) {
-                                addDataFields(j, linearLayout1, "date");
+                                addDataFields(j, linearLayout1, "date", edit);
                             } else {
-                                addDataFields(j, linearLayout1, "spinner");
+                                addDataFields(j, linearLayout1, "spinner", edit);
                             }
-                            addDataFields(j, linearLayout1, "price");
-                            addDataFields(j, linearLayout1, "notes");
+                            addDataFields(j, linearLayout1, "price", edit);
+                            addDataFields(j, linearLayout1, "notes", edit);
                         }
                     }
                 } else {
@@ -432,20 +432,20 @@ public class ShowDetailUtils {
 
                         if (column3 == 0 && column2 == 1) {
                             if (row1 == 0) {
-                                addDataFields(j, linearLayout1, "date");
+                                addDataFields(j, linearLayout1, "date", edit);
                             } else {
-                                addDataFields(j, linearLayout1, "spinner");
+                                addDataFields(j, linearLayout1, "spinner", edit);
                             }
-                            addDataFields(j, linearLayout1, "notes");
-                            addDataFields(j, linearLayout1, "price");
+                            addDataFields(j, linearLayout1, "notes", edit);
+                            addDataFields(j, linearLayout1, "price", edit);
                         } else {
                             if (row1 == 1) {
-                                addDataFields(j, linearLayout1, "spinner");
+                                addDataFields(j, linearLayout1, "spinner", edit);
                             } else {
-                                addDataFields(j, linearLayout1, "date");
+                                addDataFields(j, linearLayout1, "date", edit);
                             }
-                            addDataFields(j, linearLayout1, "price");
-                            addDataFields(j, linearLayout1, "notes");
+                            addDataFields(j, linearLayout1, "price", edit);
+                            addDataFields(j, linearLayout1, "notes", edit);
                         }
                     }
                 }
@@ -544,7 +544,7 @@ public class ShowDetailUtils {
 
     }
 
-    private void addDataFields(final int j, LinearLayout linearLayout1, String type) {
+    private void addDataFields(final int j, LinearLayout linearLayout1, String type, boolean edit) {
 
         ViewGroup.LayoutParams lp1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
 
@@ -574,6 +574,7 @@ public class ShowDetailUtils {
         data.setPadding(0, 50, 0, 50);
         data.setGravity(Gravity.CENTER);
         linearLayout1.addView(data);
+        if(edit) {
 
             linearLayout1.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -581,6 +582,7 @@ public class ShowDetailUtils {
                     ShowDialogFragment(j);
                 }
             });
+        }
     }
 
     public static void UpdateDB(int pos, Context mContext) {

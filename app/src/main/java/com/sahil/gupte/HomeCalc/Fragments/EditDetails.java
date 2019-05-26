@@ -91,9 +91,9 @@ public class EditDetails extends Fragment {
                     Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
                     if (f instanceof EditDetails) {
                         if (row1 == 0) {
-                            showDetailUtils.addTextViews(linear, ShowDetailUtils.SpinnerList);
+                            showDetailUtils.addTextViews(linear, ShowDetailUtils.SpinnerList, true);
                         } else if (row1 == 1) {
-                            showDetailUtils.addTextViews(linear, ShowDetailUtils.DateList);
+                            showDetailUtils.addTextViews(linear, ShowDetailUtils.DateList, true);
                         }
                     }
                 }
