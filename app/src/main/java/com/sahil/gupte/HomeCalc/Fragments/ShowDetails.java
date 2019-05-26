@@ -78,9 +78,9 @@ public class ShowDetails extends Fragment {
                     Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
                     if (f instanceof ShowDetails) {
                         if (row1 == 0) {
-                            showDetailUtils.addTextViews(false, linear, ShowDetailUtils.SpinnerList);
+                            showDetailUtils.addTextViews(linear, ShowDetailUtils.SpinnerList);
                         } else if (row1 == 1) {
-                            showDetailUtils.addTextViews(false, linear, ShowDetailUtils.DateList);
+                            showDetailUtils.addTextViews(linear, ShowDetailUtils.DateList);
                         }
                     }
                 }

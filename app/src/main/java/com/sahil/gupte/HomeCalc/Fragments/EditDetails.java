@@ -4,6 +4,9 @@ package com.sahil.gupte.HomeCalc.Fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -21,6 +24,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.sahil.gupte.HomeCalc.Fragments.Dialogs.HintDialogFragment;
+import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SortDialogFragment;
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
@@ -38,7 +43,7 @@ public class EditDetails extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        //setHasOptionsMenu(false);
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
 
@@ -49,6 +54,11 @@ public class EditDetails extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_show_details, container, false);
         final LinearLayout linear = view.findViewById(R.id.linear);
+
+        SharedPreferences prefD = Objects.requireNonNull(getContext()).getSharedPreferences("hint_dialog", 0);
+        if(!prefD.getBoolean("hint", false)) {
+            ShowHintDialogFragment();
+        }
 
         FragmentManager fm = getChildFragmentManager();
         final FragmentTransaction ft = fm.beginTransaction();
@@ -69,6 +79,9 @@ public class EditDetails extends Fragment {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(user).getDisplayName());
 
+        SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
+        final int row1 = pref.getInt("row1", 0);
+
         Query query = userNode.orderByChild("spinner");
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -77,7 +90,11 @@ public class EditDetails extends Fragment {
                 if (getActivity() != null) {
                     Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
                     if (f instanceof EditDetails) {
-                        showDetailUtils.addTextViews(true, linear, ShowDetailUtils.SpinnerList);
+                        if (row1 == 0) {
+                            showDetailUtils.addTextViews(linear, ShowDetailUtils.SpinnerList);
+                        } else if (row1 == 1) {
+                            showDetailUtils.addTextViews(linear, ShowDetailUtils.DateList);
+                        }
                     }
                 }
                 progress.setVisibility(View.GONE);
@@ -91,6 +108,47 @@ public class EditDetails extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.sort) {
+            ShowSortDialogFragment();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void ShowSortDialogFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putInt("fragment", 1);
+        FragmentManager fm = getChildFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        SortDialogFragment sortDialogFragment = new SortDialogFragment();
+        sortDialogFragment.setArguments(bundle);
+        sortDialogFragment.show(ft, "dialog");
+    }
+
+    private void ShowHintDialogFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putInt("fragment", 1);
+        FragmentManager fm = getChildFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        HintDialogFragment hintDialogFragment = new HintDialogFragment();
+        hintDialogFragment.setArguments(bundle);
+        hintDialogFragment.show(ft, "dialog");
     }
 
 

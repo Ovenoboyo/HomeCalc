@@ -237,12 +237,12 @@ public class ShowDetailUtils {
             }
         });
 
-        addTextViews(false, linearLayoutUser, List);
+        addTextViews(linearLayoutUser, List);
 
         linearLayoutUser.setVisibility(View.GONE);
     }
 
-    public void addTextViews(boolean edit, LinearLayout linearLayout, ArrayList<String> List) {
+    public void addTextViews(LinearLayout linearLayout, ArrayList<String> List) {
 
         int totalamt = 0, grandTotal = 0;
 
@@ -273,7 +273,7 @@ public class ShowDetailUtils {
             ViewGroup.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0.85f);
 
             TextView textViewOuter = new TextView(mContext);
-            if (row1 == 1 && !edit) {
+            if (row1 == 1) {
                 textViewOuter.setText(newList.get(i));
             } else {
                 textViewOuter.setText(SpinnerNameList[Integer.valueOf(newList.get(i))]);
@@ -323,7 +323,7 @@ public class ShowDetailUtils {
             linearLayoutOuter.addView(linearLayoutTitles);
 
             //Add titles
-            if (column3 == 0 && column2 == 1 && !edit) {
+            if (column3 == 0 && column2 == 1) {
                 if (row1 == 0) {
                     addTitles(linearLayoutTitles, "Date");
                 } else {
@@ -332,7 +332,7 @@ public class ShowDetailUtils {
                 addTitles(linearLayoutTitles, "Notes");
                 addTitles(linearLayoutTitles, "Price");
             } else {
-                if (row1 == 1 && !edit) {
+                if (row1 == 1) {
                     addTitles(linearLayoutTitles, "Category");
                 } else {
                     addTitles(linearLayoutTitles, "Date");
@@ -343,7 +343,7 @@ public class ShowDetailUtils {
 
             for (int j = 0; j<NotesList.size(); j++) {
 
-                if (row1 == 1 && !edit) {
+                if (row1 == 1) {
                     if (List.get(j).equals(newList.get(i))) {
 
                         totalamt = totalamt + Integer.valueOf(PriceList.get(j));
@@ -355,20 +355,20 @@ public class ShowDetailUtils {
 
                         if (column3 == 0 && column2 == 1) {
                             if (row1 == 0) {
-                                addDataFields(j, linearLayout1, "date", false);
+                                addDataFields(j, linearLayout1, "date");
                             } else {
-                                addDataFields(j, linearLayout1, "spinner", false);
+                                addDataFields(j, linearLayout1, "spinner");
                             }
-                            addDataFields(j, linearLayout1, "notes", false);
-                            addDataFields(j, linearLayout1, "price", false);
+                            addDataFields(j, linearLayout1, "notes");
+                            addDataFields(j, linearLayout1, "price");
                         } else {
                             if (row1 == 0) {
-                                addDataFields(j, linearLayout1, "date", false);
+                                addDataFields(j, linearLayout1, "date");
                             } else {
-                                addDataFields(j, linearLayout1, "spinner", false);
+                                addDataFields(j, linearLayout1, "spinner");
                             }
-                            addDataFields(j, linearLayout1, "price", false);
-                            addDataFields(j, linearLayout1, "notes", false);
+                            addDataFields(j, linearLayout1, "price");
+                            addDataFields(j, linearLayout1, "notes");
                         }
                     }
                 } else {
@@ -381,22 +381,22 @@ public class ShowDetailUtils {
                         linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
                         linearLayoutOuter.addView(linearLayout1);
 
-                        if (column3 == 0 && column2 == 1 && !edit) {
+                        if (column3 == 0 && column2 == 1) {
                             if (row1 == 0) {
-                                addDataFields(j, linearLayout1, "date", false);
+                                addDataFields(j, linearLayout1, "date");
                             } else {
-                                addDataFields(j, linearLayout1, "spinner", false);
+                                addDataFields(j, linearLayout1, "spinner");
                             }
-                            addDataFields(j, linearLayout1, "notes", false);
-                            addDataFields(j, linearLayout1, "price", false);
+                            addDataFields(j, linearLayout1, "notes");
+                            addDataFields(j, linearLayout1, "price");
                         } else {
-                            if (row1 == 1 && !edit) {
-                                addDataFields(j, linearLayout1, "spinner", false);
+                            if (row1 == 1) {
+                                addDataFields(j, linearLayout1, "spinner");
                             } else {
-                                addDataFields(j, linearLayout1, "date", edit);
+                                addDataFields(j, linearLayout1, "date");
                             }
-                            addDataFields(j, linearLayout1, "price", edit);
-                            addDataFields(j, linearLayout1, "notes", edit);
+                            addDataFields(j, linearLayout1, "price");
+                            addDataFields(j, linearLayout1, "notes");
                         }
                     }
                 }
@@ -495,7 +495,7 @@ public class ShowDetailUtils {
 
     }
 
-    private void addDataFields(final int j, LinearLayout linearLayout1, String type, boolean edit) {
+    private void addDataFields(final int j, LinearLayout linearLayout1, String type) {
 
         ViewGroup.LayoutParams lp1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
 
@@ -526,14 +526,12 @@ public class ShowDetailUtils {
         data.setGravity(Gravity.CENTER);
         linearLayout1.addView(data);
 
-        if (edit) {
             linearLayout1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ShowDialogFragment(j);
                 }
             });
-        }
     }
 
     public static void UpdateDB(int pos, Context mContext) {

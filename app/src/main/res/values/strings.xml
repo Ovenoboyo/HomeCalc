@@ -50,6 +50,8 @@
     <string name="display_family">Family UID</string>
     <string name="reset_password">Reset Password</string>
     <string name="show_uid">Show Family UID</string>
+    <string name="hint_text1">On clicking an entry in \"Your Report\", </string>
+    <string name="hint_text2">A Dialog box will open allowing you to edit the data. </string>
 
 
     <string name="pleasewait">Please Wait</string>

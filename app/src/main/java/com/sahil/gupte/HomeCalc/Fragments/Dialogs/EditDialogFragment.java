@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
@@ -28,20 +29,20 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils.RemoveItemDB;
 import static com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils.UpdateDB;
 
 
-public class EditDialogFragment extends DialogFragment
-{
+public class EditDialogFragment extends DialogFragment {
     private Context mContext;
     private int pos;
-    private EditText date,price,notes;
+    private EditText date, price, notes;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         setCancelable(true);
@@ -49,8 +50,7 @@ public class EditDialogFragment extends DialogFragment
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState)
-    {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.edit_dialog, null);
         SharedPreferences pref = mContext.getSharedPreferences("Theme", 0);
         boolean dark = pref.getBoolean("dark", true);
@@ -118,41 +118,60 @@ public class EditDialogFragment extends DialogFragment
         return dialog;
     }
 
+    private boolean matchString (String str) {
+        Pattern p = Pattern.compile("\\d\\d/\\d\\d/\\d\\d\\d\\d");
+        Matcher m = p.matcher(str);
+        if (m.find()) {
+            Log.d("test", "matchString: " + m.group(0));
+            if(m.group() == str) {
+                return true;
+            }
+        } else {
+            return false;
+        }
+        return false;
+    }
+
     private void saveText() {
 
-        Date date1 = new Date();
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        try {
-            date1 = formatter.parse(date.getText().toString());
-        } catch (ParseException e) {
-            Toast.makeText(mContext, "Invalid Date format. Try DD/MM/YYYY", Toast.LENGTH_LONG).show();
-        }
+        if (matchString(date.getText().toString())) {
 
-        if (date != null) {
-            Calendar today = Calendar.getInstance();
-            today.add(Calendar.MONTH, -2);
-            today.set(Calendar.DAY_OF_MONTH, 0);
-            today.set(Calendar.HOUR_OF_DAY, 0);
-            today.set(Calendar.MINUTE, 0);
-            today.set(Calendar.SECOND, 0);
-            today.set(Calendar.MILLISECOND, 0);
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(date1.getTime());
-            cal.set(Calendar.DAY_OF_MONTH, 0);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-
-            if (cal.getTimeInMillis() <= today.getTimeInMillis()) {
-                Toast.makeText(mContext, "New time cannot be less than or equal to 2 months in the past", Toast.LENGTH_LONG).show();
-            } else {
-                ShowDetailUtils.setTime(pos, date.getText().toString(), getContext());
-                ShowDetailUtils.setPrice(pos, price.getText().toString());
-                ShowDetailUtils.setNotes(pos, notes.getText().toString());
-                UpdateDB(pos, Objects.requireNonNull(getContext()));
+            Date date1 = new Date();
+            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+            try {
+                date1 = formatter.parse(date.getText().toString());
+            } catch (ParseException e) {
+                Toast.makeText(mContext, "Invalid Date format. Try DD/MM/YYYY", Toast.LENGTH_LONG).show();
             }
+
+            if (date != null) {
+                Calendar today = Calendar.getInstance();
+                today.add(Calendar.MONTH, -2);
+                today.set(Calendar.DAY_OF_MONTH, 0);
+                today.set(Calendar.HOUR_OF_DAY, 0);
+                today.set(Calendar.MINUTE, 0);
+                today.set(Calendar.SECOND, 0);
+                today.set(Calendar.MILLISECOND, 0);
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(date1.getTime());
+                cal.set(Calendar.DAY_OF_MONTH, 0);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+
+                if (cal.getTimeInMillis() <= today.getTimeInMillis()) {
+                    Toast.makeText(mContext, "New time cannot be less than or equal to 2 months in the past", Toast.LENGTH_LONG).show();
+                } else {
+                    ShowDetailUtils.setTime(pos, date.getText().toString(), getContext());
+                    ShowDetailUtils.setPrice(pos, price.getText().toString());
+                    ShowDetailUtils.setNotes(pos, notes.getText().toString());
+                    UpdateDB(pos, Objects.requireNonNull(getContext()));
+                }
+            }
+        } else {
+            Toast.makeText(mContext, "Invalid Date format. Try DD/MM/YYYY", Toast.LENGTH_LONG).show();
         }
     }
 }

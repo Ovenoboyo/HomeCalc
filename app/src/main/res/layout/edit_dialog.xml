@@ -19,6 +19,7 @@
             android:ems="10"
             android:inputType="date"
             android:textColor="?attr/PrimaryText"
+            android:maxLength="10"
             android:text="Date" />
 
         <EditText
