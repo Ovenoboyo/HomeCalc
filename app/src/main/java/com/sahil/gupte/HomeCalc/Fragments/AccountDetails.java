@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.sahil.gupte.HomeCalc.Auth.PostSignupActivity;
 import com.sahil.gupte.HomeCalc.Auth.ResetPasswordActivity;
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
@@ -43,6 +44,7 @@ public class AccountDetails extends Fragment {
         TextView email = view.findViewById(R.id.account_email);
         Button change_pass = view.findViewById(R.id.change_password);
         Button show_uid = view.findViewById(R.id.family_uid);
+        Button change_uid = view.findViewById(R.id.change_family_uid);
 
         email.setText(Objects.requireNonNull(user).getEmail());
 
@@ -59,6 +61,15 @@ public class AccountDetails extends Fragment {
                 startActivity(new Intent(getActivity(), ResetPasswordActivity.class));
             }
         });
+
+        change_uid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), PostSignupActivity.class));
+            }
+        });
+
+
         return view;
     }
 }

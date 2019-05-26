@@ -12,10 +12,14 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.sahil.gupte.HomeCalc.Fragments.Dialogs.FamilyHintDialogFragment;
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
+import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
 
 import java.util.Objects;
@@ -34,6 +38,8 @@ public class PostSignupActivity extends AppCompatActivity {
         ThemeUtils.onActivityCreateSetTheme(this, getApplicationContext());
         setContentView(R.layout.activity_postsignup);
 
+        ShowHintDialogFragment();
+
         SharedPreferences pref = getApplicationContext().getSharedPreferences("Family", 0);
         final SharedPreferences.Editor editor = pref.edit();
 
@@ -43,11 +49,13 @@ public class PostSignupActivity extends AppCompatActivity {
         inputID = findViewById(R.id.family_id);
         progressBar = findViewById(R.id.progressBar);
 
+        String prevID = pref.getString("familyID", "");
+        inputID.setText(prevID);
+
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
-        if (auth.getCurrentUser() != null && !Objects.equals(pref.getString("familyID", "null"), "null")) {
-            startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
-            finish();
+        if(auth.getCurrentUser() == null) {
+            startActivity(new Intent(PostSignupActivity.this, LoginActivity.class));
         }
 
 
@@ -58,7 +66,7 @@ public class PostSignupActivity extends AppCompatActivity {
                 String familyID = inputID.getText().toString().trim();
 
                 if (TextUtils.isEmpty(familyID)) {
-                    Toast.makeText(getApplicationContext(), "Enter Some ID", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -66,7 +74,7 @@ public class PostSignupActivity extends AppCompatActivity {
                     UUID uuid = UUID.fromString(familyID);
                 } catch (IllegalArgumentException e) {
                     Log.d(TAG, "onClick: "+e);
-                    Toast.makeText(getApplicationContext(), "Invalid UUID", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -94,5 +102,15 @@ public class PostSignupActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         progressBar.setVisibility(View.GONE);
+    }
+
+    private void ShowHintDialogFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putInt("fragment", 1);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        FamilyHintDialogFragment familyHintDialogFragment = new FamilyHintDialogFragment();
+        familyHintDialogFragment.setArguments(bundle);
+        familyHintDialogFragment.show(ft, "dialog");
     }
 }

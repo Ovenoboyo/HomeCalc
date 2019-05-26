@@ -40,6 +40,18 @@
         android:layout_below="@id/account_email"/>
 
     <Button
+        android:id="@+id/change_family_uid"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button"
+        android:text="@string/reset_uid"
+        android:textAllCaps="false"
+        android:layout_marginHorizontal="15dp"
+        android:textColor="?attr/PrimaryText"
+        android:layout_below="@id/family_uid"/>
+
+    <Button
         android:id="@+id/change_password"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -49,5 +61,5 @@
         android:textAllCaps="false"
         android:layout_marginHorizontal="15dp"
         android:textColor="?attr/PrimaryText"
-        android:layout_below="@id/family_uid"/>
+        android:layout_below="@id/change_family_uid"/>
 </RelativeLayout>

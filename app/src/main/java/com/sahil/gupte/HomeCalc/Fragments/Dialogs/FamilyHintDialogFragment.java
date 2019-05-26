@@ -16,7 +16,7 @@ import com.sahil.gupte.HomeCalc.R;
 import java.util.Objects;
 
 
-public class HintDialogFragment extends DialogFragment
+public class FamilyHintDialogFragment extends DialogFragment
 {
     private Context mContext;
     @Override
@@ -39,21 +39,21 @@ public class HintDialogFragment extends DialogFragment
             builder = new AlertDialog.Builder(mContext);
         }
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.hint_dialog, null))
-                .setTitle("Your Report")
+        builder.setView(inflater.inflate(R.layout.family_hint_dialog, null))
+                .setTitle("Family UID")
                 .setCancelable(false)
                 .setPositiveButton("Understood",
-            new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog,
-                                    int which) {
-                    SharedPreferences prefD = Objects.requireNonNull(getContext()).getSharedPreferences("hint_dialog", 0);
-                    SharedPreferences.Editor editor = prefD.edit();
-                    editor.putBoolean("hint", true);
-                    editor.commit();
-                    dialog.dismiss();
-                }
-            });
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                SharedPreferences prefD = Objects.requireNonNull(getContext()).getSharedPreferences("family_hint_dialog", 0);
+                                SharedPreferences.Editor editor = prefD.edit();
+                                editor.putBoolean("hint", true);
+                                editor.commit();
+                                dialog.dismiss();
+                            }
+                        });
         final AlertDialog dialog = builder.create();
         dialog.show();
 

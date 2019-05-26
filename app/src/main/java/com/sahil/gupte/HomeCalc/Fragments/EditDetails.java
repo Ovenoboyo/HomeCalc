@@ -114,7 +114,10 @@ public class EditDetails extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.main, menu);
+         inflater.inflate(R.menu.main, menu);
+        MenuItem hint = menu.findItem(R.id.hint);
+        hint.setVisible(true);
+
     }
 
     @Override
@@ -126,6 +129,10 @@ public class EditDetails extends Fragment {
 
         if (id == R.id.sort) {
             ShowSortDialogFragment();
+        }
+
+        if(id == R.id.hint) {
+            ShowHintDialogFragment();
         }
 
         return super.onOptionsItemSelected(item);

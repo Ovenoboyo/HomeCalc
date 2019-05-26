@@ -7,6 +7,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="action_sort">Sort</string>
+    <string name="action_hint">Show Hints</string>
 
     <string name="menu_family_view">Family Report</string>
     <string name="menu_home">Add Data</string>
@@ -46,11 +47,12 @@
     <string name="btn_generate">Generate new ID</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
-    <string name="family_details">Family UID is Unique.\nYou can get one from the Family Administrator.\nIf not available, you can create a new one.</string>
+    <string name="family_details">Family UID is Unique.\nYou can get one from the Family Administrator.\nIf not available, you can create a new one.\n\nThe ID can be entered by the user during creation of his account or through the \"Account Details\" page.\n\nFamily ID allows you to keep a track of data of other members in your family.\n\n It is not to be shared with untrusted people.</string>
     <string name="display_family">Family UID</string>
     <string name="reset_password">Reset Password</string>
+    <string name="reset_uid">Change Family UID</string>
     <string name="show_uid">Show Family UID</string>
-    <string name="hint_text1">On clicking an entry in \"Your Report\", </string>
+    <string name="hint_text1">On clicking on an entry in \"Your Report\", </string>
     <string name="hint_text2">A Dialog box will open allowing you to edit the data. </string>
 
 
