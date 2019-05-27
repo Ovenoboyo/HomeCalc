@@ -28,11 +28,6 @@ public class PostSignupActivity extends AppCompatActivity {
     private static final String TAG = "PostSignupActivity";
     private EditText inputID;
     private ProgressBar progressBar;
-    private Boolean fromLogin;
-
-    PostSignupActivity() {}
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +35,22 @@ public class PostSignupActivity extends AppCompatActivity {
         ThemeUtils.onActivityCreateSetTheme(this, getApplicationContext());
         setContentView(R.layout.activity_postsignup);
 
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("Family", 0);
+        String prevID = pref.getString("familyID", "");
+
         Bundle b = getIntent().getExtras();
 
         if(b!= null) {
             if (b.getBoolean("login", false)) {
-                startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
-                finish();
+                if(!prevID.isEmpty()) {
+                    startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
+                    finish();
+                }
             }
         }
 
         ShowHintDialogFragment();
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("Family", 0);
         final SharedPreferences.Editor editor = pref.edit();
 
 
@@ -60,7 +59,6 @@ public class PostSignupActivity extends AppCompatActivity {
         inputID = findViewById(R.id.family_id);
         progressBar = findViewById(R.id.progressBar);
 
-        String prevID = pref.getString("familyID", "");
         inputID.setText(prevID);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();

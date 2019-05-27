@@ -50,7 +50,7 @@ public class HintDialogFragment extends DialogFragment
                     SharedPreferences prefD = Objects.requireNonNull(getContext()).getSharedPreferences("hint_dialog", 0);
                     SharedPreferences.Editor editor = prefD.edit();
                     editor.putBoolean("hint", true);
-                    editor.commit();
+                    editor.apply();
                     dialog.dismiss();
                 }
             });
