@@ -138,6 +138,8 @@ public class ShowDetailUtils {
         mapPriceC.putAll(mapPrice);
         mapNotesC.putAll(mapNotes);
 
+        Log.d(TAG, "getCollectiveData: "+mapPriceC);
+
 
         SpinnerNameList = mContext.getResources().getStringArray(R.array.category);
 
@@ -158,6 +160,16 @@ public class ShowDetailUtils {
     }
 
     private void sortMap(Map<String, Object> mapTime, Map<String, Object> mapSpinner, Map<String, Object> mapPrice, Map<String, Object> mapNotes) {
+
+        NotesList.clear();
+        TimeList.clear();
+        PriceList.clear();
+        SpinnerList.clear();
+
+        NotesKeyList.clear();
+        TimeKeyList.clear();
+        PriceKeyList.clear();
+        SpinnerKeyList.clear();
 
         Set<Map.Entry<String, Object>> EntryTime = mapTime.entrySet();
         ArrayList<Map.Entry<String, Object>> ListOfEntryTime = new ArrayList<>(EntryTime);
@@ -224,9 +236,9 @@ public class ShowDetailUtils {
 
 
         if (collective) {
-            addTextViews(linearLayout, List, false);
             if (mapTimeC != null && mapSpinnerC != null && mapPriceC != null && mapNotesC != null) {
-                sortMap(mapTimeC, mapSpinnerC, mapPriceC, mapNotesC);
+                sortMap(mapTimeC, mapSpinnerC, mapPriceC, mapNotesC);Log.d(TAG, "familyView: "+PriceList);
+                addTextViews(linearLayout, List, false);
             } else {
                 Toast.makeText(mContext, "Could not get data (Database could be empty)", Toast.LENGTH_LONG).show();
             }
