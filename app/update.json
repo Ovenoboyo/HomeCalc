@@ -1,8 +1,8 @@
 {
-  "latestVersion": "1.0.6",
-  "latestVersionCode": "7",
+  "latestVersion": "2.0.0",
+  "latestVersionCode": "8",
   "url": "https://github.com/Ovenoboyo/HomeCalc/releases",
     "releaseNotes": [
-    "- Fix sort dialog crashes"
+    "- Major improvements"
   ]
 }
