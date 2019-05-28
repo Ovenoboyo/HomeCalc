@@ -1,6 +1,7 @@
 package com.sahil.gupte.HomeCalc.Fragments.Dialogs;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,6 +73,30 @@ public class EditDialogFragment extends DialogFragment {
         price.setText(ShowDetailUtils.PriceList.get(pos));
         notes.setText(ShowDetailUtils.NotesList.get(pos));
 
+        final Calendar myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener dateClick = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel(myCalendar);
+            }
+
+        };
+
+        date.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(mContext, dateClick, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
         AlertDialog dialog = builder.create();
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = Objects.requireNonNull(getContext()).getTheme();
@@ -116,6 +142,13 @@ public class EditDialogFragment extends DialogFragment {
             }
         });
         return dialog;
+    }
+
+    private void updateLabel(Calendar myCalendar) {
+        String myFormat = "dd/MM/yyyy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        date.setText(sdf.format(myCalendar.getTime()));
     }
 
     private boolean matchString (String str) {

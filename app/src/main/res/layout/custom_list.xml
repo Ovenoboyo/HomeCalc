@@ -106,6 +106,7 @@
                 android:ems="10"
                 android:inputType="text"
                 android:maxLength="10"
+                android:focusable="false"
                 android:textColor="?attr/PrimaryText"
                 android:textColorHint="?attr/PrimaryTextDark"
                 android:hint="Date" />
