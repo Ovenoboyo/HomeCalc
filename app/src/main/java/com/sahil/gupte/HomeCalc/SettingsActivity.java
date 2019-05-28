@@ -89,6 +89,12 @@ public class SettingsActivity extends AppCompatActivity {
                 } else {
                     ThemeUtils.changeToTheme(ThemeUtils.PINK, Objects.requireNonNull(getContext()));
                 }
+            } else {
+                if (dark[0]) {
+                    ThemeUtils.changeToTheme(ThemeUtils.CYANDARK, Objects.requireNonNull(getContext()));
+                } else {
+                    ThemeUtils.changeToTheme(ThemeUtils.CYAN, Objects.requireNonNull(getContext()));
+                }
             }
         }
 

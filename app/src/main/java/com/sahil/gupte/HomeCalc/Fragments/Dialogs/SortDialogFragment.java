@@ -28,7 +28,7 @@ public class SortDialogFragment extends DialogFragment
     private static final String TAG = "SortDialogFragment";
     private Context mContext;
     private Spinner row1, column1, column2, column3;
-    private int fragment;
+    private int fragment = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState)

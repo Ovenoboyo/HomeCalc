@@ -17,6 +17,7 @@ public class ThemeUtils {
         SharedPreferences pref = mContext.getSharedPreferences("Theme", 0);
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("dark", dark);
+        editor.apply();
     }
 
     public static void changeToTheme(int theme, Context mContext)

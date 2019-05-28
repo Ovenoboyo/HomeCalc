@@ -140,7 +140,7 @@ public class EditDetails extends Fragment {
 
     private void ShowSortDialogFragment() {
         Bundle bundle = new Bundle();
-        bundle.putInt("fragment", 1);
+        bundle.putInt("fragment", 0);
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         SortDialogFragment sortDialogFragment = new SortDialogFragment();
@@ -149,12 +149,9 @@ public class EditDetails extends Fragment {
     }
 
     private void ShowHintDialogFragment() {
-        Bundle bundle = new Bundle();
-        bundle.putInt("fragment", 1);
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         HintDialogFragment hintDialogFragment = new HintDialogFragment();
-        hintDialogFragment.setArguments(bundle);
         hintDialogFragment.show(ft, "dialog");
     }
 
