@@ -65,6 +65,8 @@ public class ShowDetailUtils {
     Map<String, Object> mapPriceC = new HashMap<>();
     Map<String, Object> mapNotesC = new HashMap<>();
 
+    final boolean[] expandLayout = new boolean[1];
+
     public static int familyTotal = 0;
 
     private FragmentManager fm;
@@ -238,7 +240,7 @@ public class ShowDetailUtils {
         if (collective) {
             if (mapTimeC != null && mapSpinnerC != null && mapPriceC != null && mapNotesC != null) {
                 sortMap(mapTimeC, mapSpinnerC, mapPriceC, mapNotesC);Log.d(TAG, "familyView: "+PriceList);
-                addTextViews(linearLayout, List, false);
+                addTextViews(linearLayout, List, false, true);
             } else {
                 Toast.makeText(mContext, "Could not get data (Database could be empty)", Toast.LENGTH_LONG).show();
             }
@@ -297,13 +299,13 @@ public class ShowDetailUtils {
                 }
             });
 
-            addTextViews(linearLayoutUser, List, false);
+            addTextViews(linearLayoutUser, List, false, true);
 
             linearLayoutUser.setVisibility(View.GONE);
         }
     }
 
-    public void addTextViews(LinearLayout linearLayout, ArrayList<String> List, boolean edit) {
+    public void addTextViews(LinearLayout linearLayout, ArrayList<String> List, boolean edit, boolean family) {
 
         int totalamt = 0, grandTotal = 0;
 
@@ -362,7 +364,15 @@ public class ShowDetailUtils {
             linearLayoutOuter.setOrientation(LinearLayout.VERTICAL);
             linearLayout.addView(linearLayoutOuter);
 
-            final boolean[] expandLayout = {false};
+            if(family) {
+                expandLayout[0] = false;
+            } else {
+                expandLayout[0] = true;
+            }
+            if (!expandLayout[0]) {
+                linearLayoutOuter.setVisibility(View.GONE);
+                expand.setImageResource(R.drawable.ic_arrow_drop_down);
+            }
             expand.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

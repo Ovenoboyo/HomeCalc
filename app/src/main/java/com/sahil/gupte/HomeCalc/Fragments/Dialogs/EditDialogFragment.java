@@ -55,7 +55,7 @@ public class EditDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.edit_dialog, null);
         SharedPreferences pref = mContext.getSharedPreferences("Theme", 0);
-        boolean dark = pref.getBoolean("dark", true);
+        final boolean dark = pref.getBoolean("dark", true);
         AlertDialog.Builder builder;
         if (dark) {
             builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.Dialog_Dark));
@@ -91,9 +91,15 @@ public class EditDialogFragment extends DialogFragment {
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(mContext, dateClick, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                if(dark) {
+                    new DatePickerDialog(mContext, R.style.Dialog_Dark, dateClick, myCalendar
+                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                } else {
+                    new DatePickerDialog(mContext, dateClick, myCalendar
+                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                }
             }
         });
 

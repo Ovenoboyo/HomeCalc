@@ -2,6 +2,7 @@ package com.sahil.gupte.HomeCalc.CustomViews;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.widget.EditText;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
 
 import java.text.SimpleDateFormat;
@@ -36,6 +36,8 @@ public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecycler
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         date = formatter.format(new Date().getTime());
         time.setText(date);
+        SharedPreferences pref = context1.getSharedPreferences("Theme", 0);
+        final boolean dark = pref.getBoolean("dark", true);
         final Calendar myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener dateClick = new DatePickerDialog.OnDateSetListener() {
 
@@ -54,9 +56,15 @@ public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecycler
 
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(context1, dateClick, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                if(dark) {
+                    new DatePickerDialog(context1, R.style.Dialog_Dark, dateClick, myCalendar
+                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                } else {
+                    new DatePickerDialog(context1, dateClick, myCalendar
+                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                }
             }
         });
 
