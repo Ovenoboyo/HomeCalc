@@ -22,7 +22,8 @@
 
         <SwitchPreference
             app:key="dark_mode"
-            app:title="@string/dark_mode_title" />
+            app:title="@string/dark_mode_title"
+            android:defaultValue="true" />
         <ListPreference
             app:key="accent"
             android:defaultValue="1"
