@@ -1,8 +1,9 @@
 {
-  "latestVersion": "2.0.1",
+  "latestVersion": "2.1.0",
   "latestVersionCode": "9",
   "url": "https://github.com/Ovenoboyo/HomeCalc/releases",
     "releaseNotes": [
-    "- Fix collective view"
+    "- Bug fixes",
+	"- Add date picker for date changes",
   ]
 }
