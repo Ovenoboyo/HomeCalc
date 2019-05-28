@@ -34,6 +34,7 @@ import com.sahil.gupte.HomeCalc.R;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -131,14 +132,18 @@ public class Home extends Fragment {
                     spinner = list.getChildAt(i).findViewById(R.id.spinner);
                     time = list.getChildAt(i).findViewById(R.id.editText3);
                     if (matchString(time.getText().toString())) {
-                        if (price.getText().toString().trim().isEmpty()) {
-                            showToast("Price can not be empty", getContext());
+                        if(DateCheck(time.getText().toString())) {
+                            if (price.getText().toString().trim().isEmpty()) {
+                                showToast("Price can not be empty", getContext());
+                                return;
+                            } else if ((!TextUtils.isEmpty(price.getText().toString()))) {
+                                pricelist.add(Integer.parseInt(price.getText().toString()));
+                                noteslist.add(notes.getText().toString());
+                                spinnerlist.add(spinner.getSelectedItemPosition());
+                                timelist.add(time.getText().toString());
+                            }
+                        } else {
                             return;
-                        } else if ((!TextUtils.isEmpty(price.getText().toString()))) {
-                            pricelist.add(Integer.parseInt(price.getText().toString()));
-                            noteslist.add(notes.getText().toString());
-                            spinnerlist.add(spinner.getSelectedItemPosition());
-                            timelist.add(time.getText().toString());
                         }
                     } else {
                         showToast("Invalid date", getContext());
@@ -223,6 +228,24 @@ public class Home extends Fragment {
         notification.put("message", message);
 
         notifications.push().setValue(notification);
+    }
+
+    private boolean DateCheck(String date) {
+        Calendar pastCal = Calendar.getInstance();
+        Calendar futureCal = Calendar.getInstance();
+        pastCal.add(Calendar.MONTH, -2);
+        long past = pastCal.getTimeInMillis();
+        long future = futureCal.getTimeInMillis();
+
+        if(Long.parseLong(dateToTimestamp(date)) <= past) {
+            showToast("Date can not be more than 2 months in the past", getContext());
+            return false;
+        } else if (Long.parseLong(dateToTimestamp(date)) > future) {
+            showToast("Date can not be in future", getContext());
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private boolean matchString (String str) {
