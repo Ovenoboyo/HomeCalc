@@ -73,7 +73,11 @@ public class EditDialogFragment extends DialogFragment {
         price.setText(ShowDetailUtils.PriceList.get(pos));
         notes.setText(ShowDetailUtils.NotesList.get(pos));
 
+        String ogDateString = date.getText().toString();
+        String ogTimestamp = dateToTimestamp(ogDateString);
+        Date ogDate = new Date(Long.parseLong(ogTimestamp));
         final Calendar myCalendar = Calendar.getInstance();
+        myCalendar.setTime(ogDate);
         final DatePickerDialog.OnDateSetListener dateClick = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -212,5 +216,18 @@ public class EditDialogFragment extends DialogFragment {
         } else {
             Toast.makeText(mContext, "Invalid Date format. Try DD/MM/YYYY", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private String dateToTimestamp(String value) {
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        try {
+            Date date = formatter.parse(value);
+            String newDate = String.valueOf(date.getTime());
+            Log.d("test", "dateToTimestamp: "+newDate);
+            return newDate;
+        } catch (ParseException e) {
+            Toast.makeText(getContext(), "Invalid Date format. Try DD/MM/YYYY", Toast.LENGTH_LONG).show();
+        }
+        return "";
     }
 }

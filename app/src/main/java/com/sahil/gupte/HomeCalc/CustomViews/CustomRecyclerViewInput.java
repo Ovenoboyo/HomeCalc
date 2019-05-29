@@ -20,7 +20,7 @@ import java.util.Locale;
 
 public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecyclerViewInput.RecyclerViewHolder> {
     private int count = 1;
-    Activity context1;
+    private Activity context1;
 
     public CustomRecyclerViewInput(Activity context) {
         context1 = context;
