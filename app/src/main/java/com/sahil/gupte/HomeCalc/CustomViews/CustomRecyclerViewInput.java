@@ -21,7 +21,6 @@ import java.util.Locale;
 public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecyclerViewInput.RecyclerViewHolder> {
     private int count = 1;
     Activity context1;
-    EditText time;
 
     public CustomRecyclerViewInput(Activity context) {
         context1 = context;
@@ -31,11 +30,17 @@ public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecycler
     @Override
     public CustomRecyclerViewInput.RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_list, parent, false);
-        time = view.findViewById(R.id.editText3);
+
+        return new RecyclerViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(final CustomRecyclerViewInput.RecyclerViewHolder holder, int position) {
         String date;
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         date = formatter.format(new Date().getTime());
-        time.setText(date);
+        holder.time.setText(date);
+
         SharedPreferences pref = context1.getSharedPreferences("Theme", 0);
         final boolean dark = pref.getBoolean("dark", true);
         final Calendar myCalendar = Calendar.getInstance();
@@ -47,12 +52,15 @@ public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecycler
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(myCalendar);
+                String myFormat = "dd/MM/yyyy";
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                holder.time.setText(sdf.format(myCalendar.getTime()));
             }
 
         };
 
-        time.setOnClickListener(new View.OnClickListener() {
+        holder.time.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -68,18 +76,8 @@ public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecycler
             }
         });
 
-        return new RecyclerViewHolder(view);
-    }
 
-    private void updateLabel(Calendar myCalendar) {
-        String myFormat = "dd/MM/yyyy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        time.setText(sdf.format(myCalendar.getTime()));
-    }
-
-    @Override
-    public void onBindViewHolder(CustomRecyclerViewInput.RecyclerViewHolder holder, int position) {
     }
 
     @Override
@@ -105,8 +103,12 @@ public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecycler
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        RecyclerViewHolder(View itemView) {
-            super(itemView);
+        EditText time;
+
+        RecyclerViewHolder(View view) {
+            super(view);
+            time = view.findViewById(R.id.editText3);
+
         }
     }
 }
