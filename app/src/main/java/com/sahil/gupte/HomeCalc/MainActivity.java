@@ -44,6 +44,7 @@ import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
 import com.sahil.gupte.HomeCalc.Utils.UpdateUtils;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
@@ -165,7 +166,29 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            List fragmentList = getSupportFragmentManager().getFragments();
+
+            boolean handled = false;
+            for(Object f : fragmentList) {
+                if(f instanceof EditDetails || f instanceof FamilyDetails || f instanceof AccountDetails || f instanceof FamilyUID) {
+                    handled = true;
+                    displaySelectedScreen(R.id.nav_home);
+
+                    if(handled) {
+                        break;
+                    }
+                } else if (f instanceof Home) {
+                    handled = ((Home)f).onBackPressed();
+                }
+
+                if(handled) {
+                    break;
+                }
+            }
+
+            if(!handled) {
+                super.onBackPressed();
+            }
         }
     }
 

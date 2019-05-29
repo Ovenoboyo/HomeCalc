@@ -1,6 +1,7 @@
 package com.sahil.gupte.HomeCalc.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -31,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.sahil.gupte.HomeCalc.CustomViews.CustomRecyclerViewInput;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SwitchDialogFragment;
+import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
 
 import java.text.DateFormat;
@@ -74,6 +77,20 @@ public class Home extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
+    }
+
+    public boolean onBackPressed() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Exit?")
+                .setMessage("Are you sure you want to exit?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        getActivity().finish();
+                    }
+                }).create().show();
+        return true;
     }
 
     @Override
@@ -131,7 +148,6 @@ public class Home extends Fragment {
                 for (int i = 0; i < listAdapter.getItemCount(); i++) {
 
                     RecyclerView.ViewHolder holder = list.findViewHolderForAdapterPosition(i);
-                    Log.d("test", "onClick: "+holder);
                     if(holder == null) {
                         holder = listAdapter.holderHashMap.get(i);
                     }
