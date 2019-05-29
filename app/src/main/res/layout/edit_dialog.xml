@@ -5,10 +5,23 @@
     android:orientation="vertical"
     android:background="?attr/Primary">
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/category"
+        android:popupBackground="?attr/Primary"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:textAlignment="center"
+        android:background="?attr/Primary"
+        android:spinnerMode="dropdown" />
+
     <LinearLayout
         android:id="@+id/ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/spinner"
         android:orientation="horizontal">
 
         <EditText

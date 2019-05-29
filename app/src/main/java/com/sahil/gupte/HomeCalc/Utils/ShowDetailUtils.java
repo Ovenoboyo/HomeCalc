@@ -568,7 +568,7 @@ public class ShowDetailUtils {
 
     private void addDataFields(final int j, LinearLayout linearLayout1, String type, boolean edit) {
 
-        ViewGroup.LayoutParams lp1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
+        LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
 
         TextView data = new TextView(mContext);
 
@@ -593,7 +593,7 @@ public class ShowDetailUtils {
         data.setBackgroundResource(R.drawable.text_border);
         data.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         data.setLayoutParams(lp1);
-        data.setPadding(0, 50, 0, 50);
+        data.setPadding(5, 50, 5, 50);
         data.setGravity(Gravity.CENTER);
         linearLayout1.addView(data);
         if(edit) {
@@ -611,6 +611,7 @@ public class ShowDetailUtils {
         String notesKey = NotesKeyList.get(pos);
         String priceKey = PriceKeyList.get(pos);
         String timeKey = TimeKeyList.get(pos);
+        String spinnerKey = SpinnerKeyList.get(pos);
 
         SharedPreferences prefF = mContext.getSharedPreferences("Family", 0);
         String family = prefF.getString("familyID", "LostData");
@@ -622,6 +623,7 @@ public class ShowDetailUtils {
         userNode.child("notes").child(notesKey).setValue(NotesList.get(pos));
         userNode.child("price").child(priceKey).setValue(PriceList.get(pos));
         userNode.child("timestamp").child(timeKey).setValue(TimeList.get(pos));
+        userNode.child("spinner").child(spinnerKey).setValue(SpinnerList.get(pos));
 
         mainActivity.displaySelectedScreen(R.id.nav_edit);
 
@@ -685,6 +687,10 @@ public class ShowDetailUtils {
 
     public static void setPrice(int i, String value) {
         PriceList.set(i, value);
+    }
+
+    public static void setSpinner(int i, String value) {
+        SpinnerList.set(i, value);
     }
 
     public static void setNotes(int i, String value) {

@@ -12,8 +12,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,7 @@ public class EditDialogFragment extends DialogFragment {
     private Context mContext;
     private int pos;
     private EditText date, price, notes;
+    private Spinner category;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,10 +71,12 @@ public class EditDialogFragment extends DialogFragment {
         date = view.findViewById(R.id.edit_date);
         price = view.findViewById(R.id.edit_price);
         notes = view.findViewById(R.id.edit_notes);
+        category = view.findViewById(R.id.spinner);
 
         date.setText(ShowDetailUtils.DateList.get(pos));
         price.setText(ShowDetailUtils.PriceList.get(pos));
         notes.setText(ShowDetailUtils.NotesList.get(pos));
+        category.setSelection(Integer.valueOf(ShowDetailUtils.SpinnerList.get(pos)));
 
         String ogDateString = date.getText().toString();
         String ogTimestamp = dateToTimestamp(ogDateString);
@@ -155,7 +160,7 @@ public class EditDialogFragment extends DialogFragment {
     }
 
     private void updateLabel(Calendar myCalendar) {
-        String myFormat = "dd/MM/yyyy"; //In which you need put here
+        String myFormat = "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         date.setText(sdf.format(myCalendar.getTime()));
@@ -210,6 +215,7 @@ public class EditDialogFragment extends DialogFragment {
                     ShowDetailUtils.setTime(pos, date.getText().toString(), getContext());
                     ShowDetailUtils.setPrice(pos, price.getText().toString());
                     ShowDetailUtils.setNotes(pos, notes.getText().toString());
+                    ShowDetailUtils.setSpinner(pos, String.valueOf(category.getSelectedItemPosition()));
                     UpdateDB(pos, Objects.requireNonNull(getContext()));
                 }
             }
