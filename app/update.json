@@ -1,9 +1,9 @@
 {
-  "latestVersion": "2.2.0",
-  "latestVersionCode": "11",
+  "latestVersion": "2.3.0",
+  "latestVersionCode": "12",
   "url": "https://github.com/Ovenoboyo/HomeCalc/releases",
     "releaseNotes": [
-    "- Strengthen Date checks",
-	"- Implement QR Code Scanner"
+    "- Fix crashes",
+	"- Allow changing category while editing"
   ]
 }
