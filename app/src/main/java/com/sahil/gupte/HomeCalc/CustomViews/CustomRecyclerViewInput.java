@@ -16,14 +16,29 @@ import com.sahil.gupte.HomeCalc.R;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecyclerViewInput.RecyclerViewHolder> {
     private int count = 1;
     private Activity context1;
+    public HashMap<Integer, RecyclerView.ViewHolder> holderHashMap = new HashMap<>();
 
     public CustomRecyclerViewInput(Activity context) {
         context1 = context;
+
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(RecyclerViewHolder holder) {
+        holderHashMap.put(holder.getAdapterPosition(),holder);
+        super.onViewDetachedFromWindow(holder);
+    }
+
+    @Override
+    public void onViewAttachedToWindow(RecyclerViewHolder holder) {
+        holderHashMap.remove(holder.getAdapterPosition());
+        super.onViewAttachedToWindow(holder);
 
     }
 

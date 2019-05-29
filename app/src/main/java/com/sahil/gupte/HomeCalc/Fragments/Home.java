@@ -8,12 +8,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -100,7 +102,7 @@ public class Home extends Fragment {
 
         FirebaseMessaging.getInstance().subscribeToTopic("user_"+ Objects.requireNonNull(user.getDisplayName()).replaceAll("\\s", "_"));
 
-        SharedPreferences pref = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
+        final SharedPreferences pref = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
         String family = pref.getString("familyID", "LostData");
 
         rootRef = FirebaseDatabase.getInstance().getReference();
@@ -127,10 +129,16 @@ public class Home extends Fragment {
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < listAdapter.getItemCount(); i++) {
-                    price = list.getChildAt(i).findViewById(R.id.editText);
-                    notes = list.getChildAt(i).findViewById(R.id.editText2);
-                    spinner = list.getChildAt(i).findViewById(R.id.spinner);
-                    time = list.getChildAt(i).findViewById(R.id.editText3);
+
+                    RecyclerView.ViewHolder holder = list.findViewHolderForAdapterPosition(i);
+                    Log.d("test", "onClick: "+holder);
+                    if(holder == null) {
+                        holder = listAdapter.holderHashMap.get(i);
+                    }
+                    price = holder.itemView.findViewById(R.id.editText);
+                    notes = holder.itemView.findViewById(R.id.editText2);
+                    spinner = holder.itemView.findViewById(R.id.spinner);
+                    time = holder.itemView.findViewById(R.id.editText3);
                     if (matchString(time.getText().toString())) {
                         if(DateCheck(time.getText().toString())) {
                             if (price.getText().toString().trim().isEmpty()) {
