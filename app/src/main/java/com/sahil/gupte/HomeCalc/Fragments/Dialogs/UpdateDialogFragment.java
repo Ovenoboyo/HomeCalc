@@ -24,7 +24,6 @@ public class UpdateDialogFragment extends DialogFragment
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         setCancelable(true);
-        UpdateUtils updateUtils = new UpdateUtils();
     }
 
     @Override

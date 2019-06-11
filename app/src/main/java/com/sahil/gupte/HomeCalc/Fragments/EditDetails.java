@@ -82,8 +82,7 @@ public class EditDetails extends Fragment {
         SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
         final int row1 = pref.getInt("row1", 0);
 
-        Query query = userNode.orderByChild("spinner");
-        query.addValueEventListener(new ValueEventListener() {
+        userNode.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 showDetailUtils.getData(dataSnapshot);
@@ -93,7 +92,7 @@ public class EditDetails extends Fragment {
                         if (row1 == 0) {
                             showDetailUtils.addTextViews(linear, ShowDetailUtils.SpinnerList, true, false);
                         } else if (row1 == 1) {
-                            showDetailUtils.addTextViews(linear, ShowDetailUtils.DateList, true, false);
+                            showDetailUtils.addTextViews(linear, ShowDetailUtils.TimeList, true, false);
                         }
                     }
                 }

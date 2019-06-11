@@ -67,6 +67,7 @@
     <string name="confirm">Confirm Changes?</string>
     <string name="areyousure">Are you sure you want to apply the selected values?\n(Can not be reverted)</string>
 
+    <string name="default_spinner">Select an option</string>
     <string name="category_0">Shopping</string>
     <string name="category_1">Groceries</string>
     <string name="category_2">Meat and Fish</string>

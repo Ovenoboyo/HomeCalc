@@ -161,10 +161,15 @@ public class Home extends Fragment {
                                 showToast("Price can not be empty", getContext());
                                 return;
                             } else if ((!TextUtils.isEmpty(price.getText().toString()))) {
-                                pricelist.add(Integer.parseInt(price.getText().toString()));
-                                noteslist.add(notes.getText().toString());
-                                spinnerlist.add(spinner.getSelectedItemPosition());
-                                timelist.add(time.getText().toString());
+                                if(spinner.getSelectedItemPosition() != 0) {
+                                    pricelist.add(Integer.parseInt(price.getText().toString()));
+                                    noteslist.add(notes.getText().toString());
+                                    spinnerlist.add(spinner.getSelectedItemPosition());
+                                    timelist.add(time.getText().toString());
+                                } else {
+                                    showToast("Select an option from the dropdown menu", getContext());
+                                    return;
+                                }
                             }
                         } else {
                             return;

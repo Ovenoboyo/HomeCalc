@@ -7,9 +7,17 @@
     android:background="?attr/Primary"
     tools:context=".Fragments.Home">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/custom_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="?attr/Primary"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/custom_list"
         android:orientation="vertical">
 
         <LinearLayout
@@ -49,13 +57,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/custom_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:background="?attr/Primary"/>
 
 
     </LinearLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="category">
+        <item>@string/default_spinner</item>
         <item>@string/category_0</item>
         <item>@string/category_1</item>
         <item>@string/category_2</item>

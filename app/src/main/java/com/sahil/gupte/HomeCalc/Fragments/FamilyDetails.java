@@ -71,7 +71,7 @@ public class FamilyDetails extends Fragment {
         final DatabaseReference familyNode = database.getReference(Objects.requireNonNull(family));
 
         SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
-        final Boolean collective = pref.getBoolean("collective", false);
+        final boolean collective = pref.getBoolean("collective", false);
         final int row1 = pref.getInt("row1", 0);
         final int column2 = pref.getInt("column2", 0);
         final int column3 = pref.getInt("column3", 0);
@@ -84,6 +84,7 @@ public class FamilyDetails extends Fragment {
                     Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
                     if (f instanceof FamilyDetails) {
                         familyTotal = 0;
+                        ShowDetailUtils.clearLists();
                         for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                             if(collective) {
                                 showDetailUtils.getCollectiveData(childDataSnapshot);
@@ -92,7 +93,7 @@ public class FamilyDetails extends Fragment {
                                 if (row1 == 0) {
                                     showDetailUtils.familyView(linear, ShowDetailUtils.SpinnerList, childDataSnapshot, false);
                                 } else if (row1 == 1) {
-                                    showDetailUtils.familyView(linear, ShowDetailUtils.DateList, childDataSnapshot, false);
+                                    showDetailUtils.familyView(linear, ShowDetailUtils.TimeList, childDataSnapshot, false);
                                 }
                             }
                         }
@@ -100,7 +101,7 @@ public class FamilyDetails extends Fragment {
                             if (row1 == 0) {
                                 showDetailUtils.familyView(linear, ShowDetailUtils.SpinnerList, dataSnapshot, true);
                             } else if (row1 == 1) {
-                                showDetailUtils.familyView(linear, ShowDetailUtils.DateList, dataSnapshot, true);
+                                showDetailUtils.familyView(linear, ShowDetailUtils.TimeList, dataSnapshot, true);
                             }
                         }
                         LinearLayout familytotalLinear = new LinearLayout(getContext());

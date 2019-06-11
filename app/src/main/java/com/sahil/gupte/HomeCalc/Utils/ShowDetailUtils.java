@@ -31,6 +31,8 @@ import com.sahil.gupte.HomeCalc.R;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -50,7 +52,7 @@ public class ShowDetailUtils {
     public static final ArrayList<String> SpinnerList = new ArrayList<>();
     public static final ArrayList<String> NotesList = new ArrayList<>();
     public static final ArrayList<String> PriceList = new ArrayList<>();
-    private static final ArrayList<String> TimeList = new ArrayList<>();
+    public static final ArrayList<String> TimeList = new ArrayList<>();
     public static final ArrayList<String> DateList = new ArrayList<>();
 
     private static String[] SpinnerNameList;
@@ -59,11 +61,6 @@ public class ShowDetailUtils {
     private static final ArrayList<String> NotesKeyList = new ArrayList<>();
     private static final ArrayList<String> PriceKeyList = new ArrayList<>();
     private static final ArrayList<String> TimeKeyList = new ArrayList<>();
-
-    Map<String, Object> mapTimeC = new HashMap<>();
-    Map<String, Object> mapSpinnerC = new HashMap<>();
-    Map<String, Object> mapPriceC = new HashMap<>();
-    Map<String, Object> mapNotesC = new HashMap<>();
 
     final boolean[] expandLayout = new boolean[1];
 
@@ -91,19 +88,33 @@ public class ShowDetailUtils {
     }
 
     public void getData(DataSnapshot dataSnapshot) {
-        NotesList.clear();
-        PriceList.clear();
-        SpinnerList.clear();
-        TimeList.clear();
-        NotesKeyList.clear();
-        PriceKeyList.clear();
-        SpinnerKeyList.clear();
-        TimeKeyList.clear();
-        //noinspection unchecked
-        Map<String, Object> mapTime = (Map<String, Object>) dataSnapshot.child("timestamp").getValue();
-        Map<String, Object> mapSpinner = (Map<String, Object>) dataSnapshot.child("spinner").getValue();
-        Map<String, Object> mapPrice = (Map<String, Object>) dataSnapshot.child("price").getValue();
-        Map<String, Object> mapNotes = (Map<String, Object>) dataSnapshot.child("notes").getValue();
+        clearLists();
+
+        for(DataSnapshot ds : dataSnapshot.getChildren()) {
+            Log.d(TAG, "getData: "+ds.getKey());
+            if(ds.getKey().compareTo("notes") == 0 ) {
+                for (DataSnapshot dsN : ds.getChildren()) {
+                    NotesList.add(dsN.getValue().toString());
+                    NotesKeyList.add(dsN.getKey().toString());
+                }
+            } else if (ds.getKey().compareTo("price") == 0 ) {
+                for (DataSnapshot dsN : ds.getChildren()) {
+                    PriceList.add(dsN.getValue().toString());
+                    PriceKeyList.add(dsN.getKey().toString());
+                }
+            } else if (ds.getKey().compareTo("spinner") == 0 ) {
+                for (DataSnapshot dsN : ds.getChildren()) {
+                    SpinnerList.add(dsN.getValue().toString());
+                    SpinnerKeyList.add(dsN.getKey().toString());
+                }
+            } else if (ds.getKey().compareTo("timestamp") == 0 ) {
+                for (DataSnapshot dsN : ds.getChildren()) {
+                    TimeList.add(dsN.getValue().toString());
+                    TimeKeyList.add(dsN.getKey().toString());
+                }
+            }
+        }
+        setDateList(DateList, TimeList);
 
         SpinnerNameList = mContext.getResources().getStringArray(R.array.category);
 
@@ -113,9 +124,7 @@ public class ShowDetailUtils {
         column2 = pref.getInt("column2", 0);
         column3 = pref.getInt("column3", 1);
 
-        if (mapTime != null && mapSpinner != null && mapPrice != null && mapNotes != null) {
-            sortMap(mapTime, mapSpinner, mapPrice, mapNotes);
-        } else {
+        if (NotesList == null && SpinnerList == null && PriceList == null && NotesList == null) {
             Toast.makeText(mContext, "Could not get data (Database could be empty)", Toast.LENGTH_LONG).show();
         }
 
@@ -130,17 +139,32 @@ public class ShowDetailUtils {
     }
 
     public void getCollectiveData(DataSnapshot dataSnapshot) {
-        Map<String, Object> mapTime = (Map<String, Object>) dataSnapshot.child("timestamp").getValue();
-        Map<String, Object> mapSpinner = (Map<String, Object>) dataSnapshot.child("spinner").getValue();
-        Map<String, Object> mapPrice = (Map<String, Object>) dataSnapshot.child("price").getValue();
-        Map<String, Object> mapNotes = (Map<String, Object>) dataSnapshot.child("notes").getValue();
+        for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                Log.d(TAG, "getDataFam: " + ds.getKey());
+                if (ds.getKey().compareTo("notes") == 0) {
+                    for (DataSnapshot dsN : ds.getChildren()) {
+                        NotesList.add(dsN.getValue().toString());
+                        NotesKeyList.add(dsN.getKey().toString());
+                    }
+                } else if (ds.getKey().compareTo("price") == 0) {
+                    for (DataSnapshot dsP : ds.getChildren()) {
+                        PriceList.add(dsP.getValue().toString());
+                        PriceKeyList.add(dsP.getKey().toString());
+                    }
+                } else if (ds.getKey().compareTo("spinner") == 0) {
+                    for (DataSnapshot dsS : ds.getChildren()) {
+                        SpinnerList.add(dsS.getValue().toString());
+                        SpinnerKeyList.add(dsS.getKey().toString());
+                    }
+                } else if (ds.getKey().compareTo("timestamp") == 0) {
+                    for (DataSnapshot dsT : ds.getChildren()) {
+                        TimeList.add(dsT.getValue().toString());
+                        TimeKeyList.add(dsT.getKey().toString());
+                    }
+            }
+        }
 
-        mapTimeC.putAll(mapTime);
-        mapSpinnerC.putAll(mapSpinner);
-        mapPriceC.putAll(mapPrice);
-        mapNotesC.putAll(mapNotes);
-
-        Log.d(TAG, "getCollectiveData: "+mapPriceC);
+        setDateList(DateList, TimeList);
 
 
         SpinnerNameList = mContext.getResources().getStringArray(R.array.category);
@@ -161,76 +185,11 @@ public class ShowDetailUtils {
         }
     }
 
-    private void sortMap(Map<String, Object> mapTime, Map<String, Object> mapSpinner, Map<String, Object> mapPrice, Map<String, Object> mapNotes) {
-
-        NotesList.clear();
-        TimeList.clear();
-        PriceList.clear();
-        SpinnerList.clear();
-
-        NotesKeyList.clear();
-        TimeKeyList.clear();
-        PriceKeyList.clear();
-        SpinnerKeyList.clear();
-
-        Set<Map.Entry<String, Object>> EntryTime = mapTime.entrySet();
-        ArrayList<Map.Entry<String, Object>> ListOfEntryTime = new ArrayList<>(EntryTime);
-
-        Set<Map.Entry<String, Object>> EntrySpinner = mapSpinner.entrySet();
-        ArrayList<Map.Entry<String, Object>> ListOfEntrySpinner = new ArrayList<>(EntrySpinner);
-
-        Set<Map.Entry<String, Object>> EntryPrice = mapPrice.entrySet();
-        ArrayList<Map.Entry<String, Object>> ListOfEntryPrice = new ArrayList<>(EntryPrice);
-
-        Set<Map.Entry<String, Object>> EntryNotes = mapNotes.entrySet();
-        ArrayList<Map.Entry<String, Object>> ListOfEntryNotes = new ArrayList<>(EntryNotes);
-
-        sortList(ListOfEntryNotes);
-        sortList(ListOfEntryPrice);
-        sortList(ListOfEntrySpinner);
-        sortList(ListOfEntryTime);
-
-        putDataInList(ListOfEntryNotes, NotesList);
-        putDataInList(ListOfEntryTime, TimeList);
-        putDataInList(ListOfEntryPrice, PriceList);
-        putDataInList(ListOfEntrySpinner, SpinnerList);
-
-        putKeyInList(ListOfEntryNotes, NotesKeyList);
-        putKeyInList(ListOfEntryTime, TimeKeyList);
-        putKeyInList(ListOfEntryPrice, PriceKeyList);
-        putKeyInList(ListOfEntrySpinner, SpinnerKeyList);
-
-        setDateList();
-
-    }
-
-
-    private void sortList(ArrayList<Map.Entry<String, Object>> ListOfEntry) {
-        Collections.sort(ListOfEntry,Collections.reverseOrder(new Comparator<Map.Entry<String, Object>>() {
-            @Override
-            public int compare(Map.Entry<String, Object> o1, Map.Entry<String, Object> o2) {
-                return o1.getKey().compareTo(o2.getKey());
-            }
-        }));
-    }
-
-    private void putDataInList(ArrayList<Map.Entry<String, Object>> ListOfEntry, ArrayList<String> list) {
-        for (Map.Entry<String, Object> entry : ListOfEntry) {
-            list.add(entry.getValue().toString());
-        }
-    }
-
-    private void putKeyInList(ArrayList<Map.Entry<String, Object>> ListOfEntry, ArrayList<String> list) {
-        for (Map.Entry<String, Object> entry : ListOfEntry) {
-            list.add(entry.getKey());
-        }
-    }
-
-    private void setDateList() {
-        DateList.clear();
+    private void setDateList(ArrayList<String> dateList, ArrayList<String> List) {
+        dateList.clear();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        for (int i = 0; i < TimeList.size(); i++) {
-            DateList.add(i, formatter.format(new Date(Long.parseLong(TimeList.get(i)))));
+        for (int i = 0; i < List.size(); i++) {
+            dateList.add(i, formatter.format(new Date(Long.parseLong(List.get(i)))));
         }
     }
 
@@ -238,8 +197,8 @@ public class ShowDetailUtils {
 
 
         if (collective) {
-            if (mapTimeC != null && mapSpinnerC != null && mapPriceC != null && mapNotesC != null) {
-                sortMap(mapTimeC, mapSpinnerC, mapPriceC, mapNotesC);Log.d(TAG, "familyView: "+PriceList);
+            if (TimeList != null && SpinnerList != null && PriceList != null && NotesList != null) {
+                Log.d(TAG, "familyView: "+PriceList);
                 addTextViews(linearLayout, List, false, true);
             } else {
                 Toast.makeText(mContext, "Could not get data (Database could be empty)", Toast.LENGTH_LONG).show();
@@ -318,8 +277,17 @@ public class ShowDetailUtils {
         }
 
         Collections.sort(newList, Collections.reverseOrder());
+        ArrayList<String> newListC = newList;
+
+        if (row1 == 1) {
+            ArrayList<String> DateListC = new ArrayList<>();
+            setDateList(DateListC, newList);
+            newList = DateListC;
+        }
 
         for(int i = 0; i<newList.size(); i++) {
+
+            //TODO: Check limits
 
             final LinearLayout linearLayoutOuter1 = new LinearLayout(mContext);
             ViewGroup.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -412,10 +380,12 @@ public class ShowDetailUtils {
                 addTitles(linearLayoutTitles, "Notes");
             }
 
+
+            Log.d(TAG, "addTextViews1: "+NotesList);
             for (int j = 0; j<NotesList.size(); j++) {
 
                 if (row1 == 1) {
-                    if (List.get(j).equals(newList.get(i))) {
+                    if (List.get(j).equals(newListC.get(i))) {
 
                         totalamt = totalamt + Integer.valueOf(PriceList.get(j));
 
@@ -707,5 +677,16 @@ public class ShowDetailUtils {
             Log.d(TAG, "setTime: Parse Exception");
             Toast.makeText(mContext, "Invalid Date format. Try DD/MM/YYYY", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public static void clearLists() {
+        NotesList.clear();
+        PriceList.clear();
+        SpinnerList.clear();
+        TimeList.clear();
+        NotesKeyList.clear();
+        PriceKeyList.clear();
+        SpinnerKeyList.clear();
+        TimeKeyList.clear();
     }
 }
