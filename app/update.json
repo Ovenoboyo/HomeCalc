@@ -1,9 +1,9 @@
 {
-  "latestVersion": "2.3.0",
-  "latestVersionCode": "12",
+  "latestVersion": "2.4.0",
+  "latestVersionCode": "13",
   "url": "https://github.com/Ovenoboyo/HomeCalc/releases",
     "releaseNotes": [
-    "- Fix crashes",
-	"- Allow changing category while editing"
+    "- Fixed Date sorting",
+	"- New Logo"
   ]
 }
