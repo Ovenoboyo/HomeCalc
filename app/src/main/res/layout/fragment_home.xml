@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="?attr/Primary"
+    android:orientation="vertical"
     tools:context=".Fragments.Home">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -12,12 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="?attr/Primary"/>
+        android:layout_weight="50"
+        android:background="?attr/Primary" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/custom_list"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
@@ -61,4 +63,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
