@@ -91,6 +91,7 @@
     <!-- Preference Titles -->
     <string name="dark_mode_title">Toggle Dark Mode</string>
     <string name="accent_title">Accent Colors</string>
+    <string name="currency_title">Default Currency</string>
 
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>

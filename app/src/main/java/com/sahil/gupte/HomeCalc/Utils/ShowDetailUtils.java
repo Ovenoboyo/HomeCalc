@@ -31,18 +31,12 @@ import com.sahil.gupte.HomeCalc.R;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
 public class ShowDetailUtils {
@@ -54,6 +48,7 @@ public class ShowDetailUtils {
     public static final ArrayList<String> PriceList = new ArrayList<>();
     public static final ArrayList<String> TimeList = new ArrayList<>();
     public static final ArrayList<String> DateList = new ArrayList<>();
+    public static final ArrayList<String> CurrencyList = new ArrayList<>();
 
     private static String[] SpinnerNameList;
 
@@ -61,10 +56,11 @@ public class ShowDetailUtils {
     private static final ArrayList<String> NotesKeyList = new ArrayList<>();
     private static final ArrayList<String> PriceKeyList = new ArrayList<>();
     private static final ArrayList<String> TimeKeyList = new ArrayList<>();
+    private static final ArrayList<String> CurrencyKeyList = new ArrayList<>();
 
     final boolean[] expandLayout = new boolean[1];
 
-    public static int familyTotal = 0;
+    public static float familyTotal = 0;
 
     private FragmentManager fm;
 
@@ -112,9 +108,15 @@ public class ShowDetailUtils {
                     TimeList.add(dsN.getValue().toString());
                     TimeKeyList.add(dsN.getKey().toString());
                 }
+            } else if (ds.getKey().compareTo("currency") == 0) {
+                for (DataSnapshot dsN : ds.getChildren()) {
+                    CurrencyList.add(dsN.getValue().toString());
+                    CurrencyKeyList.add(dsN.getKey().toString());
+                }
             }
         }
         setDateList(DateList, TimeList);
+        sortCurrencies(CurrencyList);
 
         SpinnerNameList = mContext.getResources().getStringArray(R.array.category);
 
@@ -140,31 +142,36 @@ public class ShowDetailUtils {
 
     public void getCollectiveData(DataSnapshot dataSnapshot) {
         for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                Log.d(TAG, "getDataFam: " + ds.getKey());
-                if (ds.getKey().compareTo("notes") == 0) {
-                    for (DataSnapshot dsN : ds.getChildren()) {
-                        NotesList.add(dsN.getValue().toString());
-                        NotesKeyList.add(dsN.getKey().toString());
-                    }
-                } else if (ds.getKey().compareTo("price") == 0) {
-                    for (DataSnapshot dsP : ds.getChildren()) {
-                        PriceList.add(dsP.getValue().toString());
-                        PriceKeyList.add(dsP.getKey().toString());
-                    }
-                } else if (ds.getKey().compareTo("spinner") == 0) {
-                    for (DataSnapshot dsS : ds.getChildren()) {
-                        SpinnerList.add(dsS.getValue().toString());
-                        SpinnerKeyList.add(dsS.getKey().toString());
-                    }
-                } else if (ds.getKey().compareTo("timestamp") == 0) {
-                    for (DataSnapshot dsT : ds.getChildren()) {
-                        TimeList.add(dsT.getValue().toString());
-                        TimeKeyList.add(dsT.getKey().toString());
-                    }
+            if (ds.getKey().compareTo("notes") == 0) {
+                for (DataSnapshot dsN : ds.getChildren()) {
+                    NotesList.add(dsN.getValue().toString());
+                    NotesKeyList.add(dsN.getKey().toString());
+                }
+            } else if (ds.getKey().compareTo("price") == 0) {
+                for (DataSnapshot dsP : ds.getChildren()) {
+                    PriceList.add(dsP.getValue().toString());
+                    PriceKeyList.add(dsP.getKey().toString());
+                }
+            } else if (ds.getKey().compareTo("spinner") == 0) {
+                for (DataSnapshot dsS : ds.getChildren()) {
+                    SpinnerList.add(dsS.getValue().toString());
+                    SpinnerKeyList.add(dsS.getKey().toString());
+                }
+            } else if (ds.getKey().compareTo("timestamp") == 0) {
+                for (DataSnapshot dsT : ds.getChildren()) {
+                    TimeList.add(dsT.getValue().toString());
+                    TimeKeyList.add(dsT.getKey().toString());
+                }
+            } else if (ds.getKey().compareTo("currency") == 0) {
+                for (DataSnapshot dsN : ds.getChildren()) {
+                    CurrencyList.add(dsN.getValue().toString());
+                    CurrencyKeyList.add(dsN.getKey().toString());
+                }
             }
         }
 
         setDateList(DateList, TimeList);
+        sortCurrencies(CurrencyList);
 
 
         SpinnerNameList = mContext.getResources().getStringArray(R.array.category);
@@ -182,6 +189,24 @@ public class ShowDetailUtils {
             colorFromTheme = tV.data;
         } else {
             colorFromTheme = Color.BLACK;
+        }
+    }
+
+    private void sortCurrencies(ArrayList<String> currencyList) {
+        for (int i = 0; i < currencyList.size(); i++) {
+            String currency = currencyList.get(i);
+            if (!currency.equals(CurrencyUtils.defaultCurrency)) {
+                Float finalValue = Float.valueOf(PriceList.get(i));
+                try {
+                    finalValue = new CurrencyUtils(currency, CurrencyUtils.defaultCurrency, Float.valueOf(PriceList.get(i))).execute().get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                setPrice(i, String.valueOf(finalValue));
+            } else {
+            }
         }
     }
 
@@ -266,7 +291,8 @@ public class ShowDetailUtils {
 
     public void addTextViews(LinearLayout linearLayout, ArrayList<String> List, boolean edit, boolean family) {
 
-        int totalamt = 0, grandTotal = 0;
+        float totalamt = 0;
+        float grandTotal = 0;
 
         //new list will contain unique elements
         ArrayList<String> newList = new ArrayList<>();
@@ -415,7 +441,7 @@ public class ShowDetailUtils {
                 } else {
                     if (Integer.valueOf(List.get(j)).equals(Integer.valueOf(newList.get(i)))) {
 
-                        totalamt = totalamt + Integer.valueOf(PriceList.get(j));
+                        totalamt = totalamt + Float.valueOf(PriceList.get(j));
 
                         LinearLayout linearLayout1 = new LinearLayout(mContext);
                         linearLayout1.setLayoutParams(lp);
@@ -475,7 +501,7 @@ public class ShowDetailUtils {
         linearLayout.addView(grandtotalLinear);
     }
 
-    public void addTotal (int totalamt, LinearLayout totalLinearLayout, String type, boolean bg) {
+    public void addTotal (float totalamt, LinearLayout totalLinearLayout, String type, boolean bg) {
         LinearLayout.LayoutParams lpt = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
 
         TextView data = new TextView(mContext);
@@ -496,7 +522,19 @@ public class ShowDetailUtils {
                 break;
 
             case "totalAmt":
-                data.setText("₹"+totalamt);
+                switch (CurrencyUtils.defaultCurrency) {
+                    case "INR":
+                        data.setText("₹" + totalamt);
+                    case "USD":
+                        data.setText("$" + totalamt);
+                    case "SGD":
+                        data.setText("$" + totalamt);
+                    case "GBP":
+                        data.setText("£" + totalamt);
+                    case "EUR":
+                        data.setText("€" + totalamt);
+                }
+
                 data.setTextSize(20);
                 break;
 
@@ -548,7 +586,19 @@ public class ShowDetailUtils {
                 break;
 
             case "price":
-                data.setText("₹" + PriceList.get(j));
+                switch (CurrencyUtils.defaultCurrency) {
+                    case "INR":
+                        data.setText("₹" + PriceList.get(j));
+                    case "USD":
+                        data.setText("$" + PriceList.get(j));
+                    case "SGD":
+                        data.setText("$" + PriceList.get(j));
+                    case "GBP":
+                        data.setText("£" + PriceList.get(j));
+                    case "EUR":
+                        data.setText("€" + PriceList.get(j));
+                }
+
                 break;
 
             case "notes":
@@ -684,9 +734,11 @@ public class ShowDetailUtils {
         PriceList.clear();
         SpinnerList.clear();
         TimeList.clear();
+        CurrencyList.clear();
         NotesKeyList.clear();
         PriceKeyList.clear();
         SpinnerKeyList.clear();
         TimeKeyList.clear();
+        CurrencyKeyList.clear();
     }
 }

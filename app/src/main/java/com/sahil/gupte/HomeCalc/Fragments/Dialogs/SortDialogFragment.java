@@ -124,7 +124,7 @@ public class SortDialogFragment extends DialogFragment
         editor.putInt("column1", column1Item);
         editor.putInt("column2", column2Item);
         editor.putInt("column3", column3Item);
-        editor.commit();
+        editor.apply();
 
     }
 }

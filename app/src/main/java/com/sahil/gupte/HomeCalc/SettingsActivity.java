@@ -1,16 +1,17 @@
 package com.sahil.gupte.HomeCalc;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.ListPreference;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
+import com.sahil.gupte.HomeCalc.Utils.CurrencyUtils;
 import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
 
 import java.util.Objects;
@@ -103,30 +104,42 @@ public class SettingsActivity extends AppCompatActivity {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
             final SwitchPreference dark_mode = findPreference("dark_mode");
             ListPreference red = findPreference("accent");
+            assert dark_mode != null;
             dark[0] = dark_mode.isChecked();
             ThemeUtils.PutDark(dark[0], Objects.requireNonNull(getContext()));
+            assert red != null;
             accent = red.getValue();
             Log.d(TAG, "onCreatePreferences: "+dark[0]);
-            dark_mode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    dark[0] = Boolean.parseBoolean(newValue.toString());
-                    ThemeUtils.PutDark(dark[0], Objects.requireNonNull(getContext()));
-                    setTheme();
-                    return true;
-                }
+            dark_mode.setOnPreferenceChangeListener((preference, newValue) -> {
+                dark[0] = Boolean.parseBoolean(newValue.toString());
+                ThemeUtils.PutDark(dark[0], Objects.requireNonNull(getContext()));
+                setTheme();
+                return true;
             });
 
-            red.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Log.d(TAG, "onPreferenceChange: " + dark[0] + ", " + newValue.toString());
-                    Log.d(TAG, "onPreferenceChange: " + (newValue.equals("Blue")));
-                    accent = newValue;
-                    setTheme();
-                    return true;
-                }
+            red.setOnPreferenceChangeListener((preference, newValue) -> {
+                accent = newValue;
+                setTheme();
+                return true;
             });
+
+            SharedPreferences pref = Objects.requireNonNull(getContext()).getSharedPreferences("Currency", 0);
+            SharedPreferences.Editor editor = pref.edit();
+
+            ListPreference defaultCurrency = findPreference("currency");
+            assert defaultCurrency != null;
+            CurrencyUtils.defaultCurrency = defaultCurrency.getValue();
+            Log.d(TAG, "onCreatePreferences: "+CurrencyUtils.defaultCurrency);
+
+            defaultCurrency.setOnPreferenceChangeListener((preference, newValue) -> {
+                CurrencyUtils.defaultCurrency = (String) defaultCurrency.getEntries()[Integer.valueOf(newValue.toString())];
+                Log.d(TAG, "onCreatePreferences: "+CurrencyUtils.defaultCurrency);
+                editor.putString("defaultCurrency", CurrencyUtils.defaultCurrency);
+                editor.apply();
+                return true;
+            });
+
+
         }
     }
 }

@@ -33,6 +33,15 @@
             android:title="@string/accent_title"
             />
 
+        <ListPreference
+            app:key="currency"
+            android:defaultValue="1"
+            android:entries="@array/currencies"
+            android:entryValues="@array/currencyInts"
+            android:key="list_preference_2"
+            android:title="@string/currency_title"
+            />
+
 
     </PreferenceCategory>
 

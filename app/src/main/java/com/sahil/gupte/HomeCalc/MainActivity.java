@@ -38,12 +38,11 @@ import com.sahil.gupte.HomeCalc.Fragments.EditDetails;
 import com.sahil.gupte.HomeCalc.Fragments.FamilyDetails;
 import com.sahil.gupte.HomeCalc.Fragments.FamilyUID;
 import com.sahil.gupte.HomeCalc.Fragments.Home;
-import com.sahil.gupte.HomeCalc.Fragments.ShowDetails;
+import com.sahil.gupte.HomeCalc.Utils.CurrencyUtils;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
 import com.sahil.gupte.HomeCalc.Utils.UpdateUtils;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -83,7 +82,6 @@ public class MainActivity extends AppCompatActivity
             }
         } else {
 
-
             auth = FirebaseAuth.getInstance();
             final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user == null) {
@@ -105,6 +103,13 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
             };
+
+            SharedPreferences prefC = getSharedPreferences("Currency", 0);
+            String defaultCurrency = prefC.getString("defaultCurrency", "INR");
+
+            if (CurrencyUtils.defaultCurrency == null) {
+                CurrencyUtils.defaultCurrency = defaultCurrency;
+            }
 
             SharedPreferences prefF = getSharedPreferences("Family", 0);
             String family = prefF.getString("familyID", "LostData");

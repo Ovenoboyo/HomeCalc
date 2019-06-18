@@ -1,7 +1,6 @@
 package com.sahil.gupte.HomeCalc.Fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -17,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,13 +30,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.sahil.gupte.HomeCalc.CustomViews.CustomRecyclerViewInput;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SwitchDialogFragment;
-import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
+import com.sahil.gupte.HomeCalc.Utils.CurrencyUtils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,13 +48,12 @@ import java.util.regex.Pattern;
 
 public class Home extends Fragment {
 
-    private View view;
     private RecyclerView list;
     private CustomRecyclerViewInput listAdapter;
-    private Button AddNew, RemoveNew, Submit;
     private DatabaseReference priceNode;
     private DatabaseReference notesNode;
     private DatabaseReference spinnerNode;
+    private DatabaseReference currencyNode;
     private DatabaseReference userNode;
     private DatabaseReference timeNode;
     private DatabaseReference rootRef;
@@ -68,6 +63,7 @@ public class Home extends Fragment {
     private final ArrayList<String> noteslist = new ArrayList<>();
     private final ArrayList<Integer> spinnerlist = new ArrayList<>();
     private final ArrayList<String> timelist = new ArrayList<>();
+    private final ArrayList<String> currencylist = new ArrayList<>();
 
     public Home() {
         // Required empty public constructor
@@ -84,12 +80,7 @@ public class Home extends Fragment {
                 .setTitle("Exit?")
                 .setMessage("Are you sure you want to exit?")
                 .setNegativeButton(android.R.string.no, null)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        getActivity().finish();
-                    }
-                }).create().show();
+                .setPositiveButton(android.R.string.yes, (arg0, arg1) -> Objects.requireNonNull(getActivity()).finish()).create().show();
         return true;
     }
 
@@ -104,14 +95,16 @@ public class Home extends Fragment {
             ft.remove(prev);
         }
 
+        new CurrencyUtils("INR", "GBP", 5000).execute();
+
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
             listAdapter = new CustomRecyclerViewInput(getActivity());
             list = view.findViewById(R.id.custom_list);
             list.setAdapter(listAdapter);
-            AddNew = view.findViewById(R.id.button);
-            RemoveNew = view.findViewById(R.id.button2);
-            Submit = view.findViewById(R.id.submit);
+        Button addNew = view.findViewById(R.id.button);
+        Button removeNew = view.findViewById(R.id.button2);
+        Button submit = view.findViewById(R.id.submit);
 
             LinearLayoutManager llm = new LinearLayoutManager(getContext());
             llm.setOrientation(RecyclerView.VERTICAL);
@@ -126,93 +119,88 @@ public class Home extends Fragment {
         final DatabaseReference firstNode = rootRef.child(Objects.requireNonNull(family));
         userNode = firstNode.child(user.getDisplayName());
 
-        AddNew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listAdapter.notifyItemInserted(listAdapter.getItemCount()+1);
-                listAdapter.addItem();
-            }
+        addNew.setOnClickListener(v -> {
+            listAdapter.notifyItemInserted(listAdapter.getItemCount()+1);
+            listAdapter.addItem();
         });
 
-        RemoveNew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listAdapter.notifyItemRemoved(listAdapter.getItemCount()+1);
-                listAdapter.removeItem();
-            }
+        removeNew.setOnClickListener(v -> {
+            listAdapter.notifyItemRemoved(listAdapter.getItemCount()+1);
+            listAdapter.removeItem();
         });
 
-        Submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int i = 0; i < listAdapter.getItemCount(); i++) {
+        submit.setOnClickListener(v -> {
+            for (int i = 0; i < listAdapter.getItemCount(); i++) {
 
-                    RecyclerView.ViewHolder holder = list.findViewHolderForAdapterPosition(i);
-                    if(holder == null) {
-                        holder = listAdapter.holderHashMap.get(i);
-                    }
-                    price = holder.itemView.findViewById(R.id.editText);
-                    notes = holder.itemView.findViewById(R.id.editText2);
-                    spinner = holder.itemView.findViewById(R.id.spinner);
-                    time = holder.itemView.findViewById(R.id.editText3);
-                    if (matchString(time.getText().toString())) {
-                        if(DateCheck(time.getText().toString())) {
-                            if (price.getText().toString().trim().isEmpty()) {
-                                showToast("Price can not be empty", getContext());
-                                return;
-                            } else if ((!TextUtils.isEmpty(price.getText().toString()))) {
-                                if(spinner.getSelectedItemPosition() != 0) {
-                                    pricelist.add(Integer.parseInt(price.getText().toString()));
-                                    noteslist.add(notes.getText().toString());
-                                    spinnerlist.add(spinner.getSelectedItemPosition());
-                                    timelist.add(time.getText().toString());
-                                } else {
-                                    showToast("Select an option from the dropdown menu", getContext());
-                                    return;
-                                }
-                            }
-                        } else {
+                RecyclerView.ViewHolder holder = list.findViewHolderForAdapterPosition(i);
+                if(holder == null) {
+                    holder = listAdapter.holderHashMap.get(i);
+                }
+                assert holder != null;
+                price = holder.itemView.findViewById(R.id.editText);
+                notes = holder.itemView.findViewById(R.id.editText2);
+                spinner = holder.itemView.findViewById(R.id.spinner);
+                time = holder.itemView.findViewById(R.id.editText3);
+                if (matchString(time.getText().toString())) {
+                    if(DateCheck(time.getText().toString())) {
+                        if (price.getText().toString().trim().isEmpty()) {
+                            showToast("Price can not be empty", getContext());
                             return;
+                        } else if ((!TextUtils.isEmpty(price.getText().toString())) && CurrencyUtils.defaultCurrency != null) {
+                            if(spinner.getSelectedItemPosition() != 0) {
+                                pricelist.add(Integer.parseInt(price.getText().toString()));
+                                noteslist.add(notes.getText().toString());
+                                spinnerlist.add(spinner.getSelectedItemPosition());
+                                timelist.add(time.getText().toString());
+                                currencylist.add(CurrencyUtils.defaultCurrency);
+                            } else {
+                                showToast("Select an option from the dropdown menu", getContext());
+                                return;
+                            }
                         }
                     } else {
-                        showToast("Invalid date", getContext());
                         return;
                     }
+                } else {
+                    showToast("Invalid date", getContext());
+                    return;
+                }
+            }
+
+            if (!pricelist.isEmpty()) {
+
+                for (int i = 0; i < pricelist.size(); i++) {
+                    spinnerNode = userNode.child("spinner");
+                    priceNode = userNode.child("price");
+                    notesNode = userNode.child("notes");
+                    timeNode = userNode.child(("timestamp"));
+                    currencyNode = userNode.child("currency");
+                    spinnerNode.push().setValue(spinnerlist.get(i));
+                    priceNode.push().setValue(pricelist.get(i));
+                    notesNode.push().setValue(noteslist.get(i));
+                    timeNode.push().setValue(dateToTimestamp(timelist.get(i)));
+                    currencyNode.push().setValue(currencylist.get(i));
+
                 }
 
-                if (!pricelist.isEmpty()) {
-
-                    for (int i = 0; i < pricelist.size(); i++) {
-                        spinnerNode = userNode.child("spinner");
-                        priceNode = userNode.child("price");
-                        notesNode = userNode.child("notes");
-                        timeNode = userNode.child(("timestamp"));
-                        spinnerNode.push().setValue(spinnerlist.get(i));
-                        priceNode.push().setValue(pricelist.get(i));
-                        notesNode.push().setValue(noteslist.get(i));
-                        timeNode.push().setValue(dateToTimestamp(timelist.get(i)));
-
-                    }
-
-                    firstNode.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                                String username = childDataSnapshot.getKey();
-                                if (username != user.getDisplayName()) {
-                                    sendNotificationToUser(Objects.requireNonNull(username).replaceAll("\\s", "_"), user.getDisplayName()+" added new items to his list!");
-                                }
+                firstNode.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                            String username = childDataSnapshot.getKey();
+                            if (!username.equals(user.getDisplayName())) {
+                                sendNotificationToUser(Objects.requireNonNull(username).replaceAll("\\s", "_"), user.getDisplayName()+" added new items to his list!");
                             }
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
-                }
-                showProgressDialog(ft, sdf);
+                    }
+                });
             }
+            showProgressDialog(ft, sdf);
         });
         return view;
     }
