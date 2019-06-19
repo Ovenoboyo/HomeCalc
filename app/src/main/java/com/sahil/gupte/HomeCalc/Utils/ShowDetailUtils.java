@@ -740,6 +740,7 @@ public class ShowDetailUtils {
         String priceKey = PriceKeyList.get(pos);
         String timeKey = TimeKeyList.get(pos);
         String spinnerKey = SpinnerKeyList.get(pos);
+        String currencyKey = CurrencyKeyList.get(pos);
 
         SharedPreferences prefF = mContext.getSharedPreferences("Family", 0);
         String family = prefF.getString("familyID", "LostData");
@@ -752,6 +753,7 @@ public class ShowDetailUtils {
         userNode.child("price").child(priceKey).setValue(PriceList.get(pos));
         userNode.child("timestamp").child(timeKey).setValue(TimeList.get(pos));
         userNode.child("spinner").child(spinnerKey).setValue(SpinnerList.get(pos));
+        userNode.child("currency").child(currencyKey).setValue(CurrencyList.get(pos));
 
         mainActivity.displaySelectedScreen(R.id.nav_edit);
 
@@ -762,6 +764,7 @@ public class ShowDetailUtils {
         String priceKey = PriceKeyList.get(pos);
         String timeKey = TimeKeyList.get(pos);
         String spinnerKey = SpinnerKeyList.get(pos);
+        String currencyKey = CurrencyKeyList.get(pos);
 
         SharedPreferences prefF = mContext.getSharedPreferences("Family", 0);
         String family = prefF.getString("familyID", "LostData");
@@ -774,8 +777,8 @@ public class ShowDetailUtils {
         userNode.child("price").child(priceKey).removeValue();
         userNode.child("timestamp").child(timeKey).removeValue();
         userNode.child("spinner").child(spinnerKey).removeValue();
-
-
+        userNode.child("currency").child(currencyKey).removeValue();
+        
     }
 
     public void ClearDB(DataSnapshot dataSnapshot) {
@@ -823,6 +826,10 @@ public class ShowDetailUtils {
 
     public static void setNotes(int i, String value) {
         NotesList.set(i, value);
+    }
+
+    public static void setCurrency(int i, String value) {
+        CurrencyList.set(i, value);
     }
 
     public static void setTime(int i, String value, Context mContext) {

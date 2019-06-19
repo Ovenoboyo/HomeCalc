@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -23,8 +22,9 @@ import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.DialogFragment;
 
 import com.sahil.gupte.HomeCalc.MainActivity;
-import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 import com.sahil.gupte.HomeCalc.R;
+import com.sahil.gupte.HomeCalc.Utils.CurrencyUtils;
+import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -216,6 +216,7 @@ public class EditDialogFragment extends DialogFragment {
                     ShowDetailUtils.setPrice(pos, price.getText().toString());
                     ShowDetailUtils.setNotes(pos, notes.getText().toString());
                     ShowDetailUtils.setSpinner(pos, String.valueOf(category.getSelectedItemPosition()));
+                    ShowDetailUtils.setCurrency(pos, CurrencyUtils.defaultCurrency);
                     UpdateDB(pos, Objects.requireNonNull(getContext()));
                 }
             }
