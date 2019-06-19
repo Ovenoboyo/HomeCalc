@@ -1,9 +1,9 @@
 {
-  "latestVersion": "2.4.0",
-  "latestVersionCode": "13",
+  "latestVersion": "3.0.0",
+  "latestVersionCode": "14",
   "url": "https://github.com/Ovenoboyo/HomeCalc/releases",
     "releaseNotes": [
-    "- Fixed Date sorting",
-	"- New Logo"
+    "- Add multiple currencies",
+	"- Sort by month"
   ]
 }
