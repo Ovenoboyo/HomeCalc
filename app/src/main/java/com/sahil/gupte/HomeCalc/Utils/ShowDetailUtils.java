@@ -58,6 +58,8 @@ public class ShowDetailUtils {
     private static final ArrayList<String> TimeKeyList = new ArrayList<>();
     private static final ArrayList<String> CurrencyKeyList = new ArrayList<>();
 
+    private final String[] monthArray = {"", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
     final boolean[] expandLayout = new boolean[1];
 
     public static float familyTotal = 0;
@@ -71,8 +73,11 @@ public class ShowDetailUtils {
     private int column3;
     private int colorFromTheme;
 
+    private float totalamt = 0;
+    private float grandTotal = 0;
+
     //Passed by ShowDetails Fragment
-    public ShowDetailUtils(Context context){
+    public ShowDetailUtils(Context context) {
         mContext = context;
     }
 
@@ -86,24 +91,23 @@ public class ShowDetailUtils {
     public void getData(DataSnapshot dataSnapshot) {
         clearLists();
 
-        for(DataSnapshot ds : dataSnapshot.getChildren()) {
-            Log.d(TAG, "getData: "+ds.getKey());
-            if(ds.getKey().compareTo("notes") == 0 ) {
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            if (ds.getKey().compareTo("notes") == 0) {
                 for (DataSnapshot dsN : ds.getChildren()) {
                     NotesList.add(dsN.getValue().toString());
                     NotesKeyList.add(dsN.getKey().toString());
                 }
-            } else if (ds.getKey().compareTo("price") == 0 ) {
+            } else if (ds.getKey().compareTo("price") == 0) {
                 for (DataSnapshot dsN : ds.getChildren()) {
                     PriceList.add(dsN.getValue().toString());
                     PriceKeyList.add(dsN.getKey().toString());
                 }
-            } else if (ds.getKey().compareTo("spinner") == 0 ) {
+            } else if (ds.getKey().compareTo("spinner") == 0) {
                 for (DataSnapshot dsN : ds.getChildren()) {
                     SpinnerList.add(dsN.getValue().toString());
                     SpinnerKeyList.add(dsN.getKey().toString());
                 }
-            } else if (ds.getKey().compareTo("timestamp") == 0 ) {
+            } else if (ds.getKey().compareTo("timestamp") == 0) {
                 for (DataSnapshot dsN : ds.getChildren()) {
                     TimeList.add(dsN.getValue().toString());
                     TimeKeyList.add(dsN.getKey().toString());
@@ -133,7 +137,7 @@ public class ShowDetailUtils {
         TypedValue tV = new TypedValue();
         Resources.Theme theme = mContext.getTheme();
         boolean success = theme.resolveAttribute(R.attr.PrimaryText, tV, true);
-        if(success) {
+        if (success) {
             colorFromTheme = tV.data;
         } else {
             colorFromTheme = Color.BLACK;
@@ -141,7 +145,7 @@ public class ShowDetailUtils {
     }
 
     public void getCollectiveData(DataSnapshot dataSnapshot) {
-        for(DataSnapshot ds : dataSnapshot.getChildren()) {
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
             if (ds.getKey().compareTo("notes") == 0) {
                 for (DataSnapshot dsN : ds.getChildren()) {
                     NotesList.add(dsN.getValue().toString());
@@ -185,7 +189,7 @@ public class ShowDetailUtils {
         TypedValue tV = new TypedValue();
         Resources.Theme theme = mContext.getTheme();
         boolean success = theme.resolveAttribute(R.attr.PrimaryText, tV, true);
-        if(success) {
+        if (success) {
             colorFromTheme = tV.data;
         } else {
             colorFromTheme = Color.BLACK;
@@ -218,12 +222,11 @@ public class ShowDetailUtils {
         }
     }
 
-    public void familyView (LinearLayout linearLayout, ArrayList<String> List, DataSnapshot dataSnapshot, boolean collective){
+    public void familyView(LinearLayout linearLayout, ArrayList<String> List, DataSnapshot dataSnapshot, boolean collective) {
 
 
         if (collective) {
             if (TimeList != null && SpinnerList != null && PriceList != null && NotesList != null) {
-                Log.d(TAG, "familyView: "+PriceList);
                 addTextViews(linearLayout, List, false, true);
             } else {
                 Toast.makeText(mContext, "Could not get data (Database could be empty)", Toast.LENGTH_LONG).show();
@@ -289,13 +292,191 @@ public class ShowDetailUtils {
         }
     }
 
-    public void addTextViews(LinearLayout linearLayout, ArrayList<String> List, boolean edit, boolean family) {
+    private void addTextViewsMethod(LinearLayout linearLayout, ArrayList<String> List, boolean edit, boolean family, ArrayList<String> monthList, ArrayList<String> newList, ArrayList<String> newListC, int i, int k) {
+        if (k != -1) {
+            String element = monthArray[Integer.valueOf(newList.get(i).substring(3, 5))];
+            Log.d(TAG, "addTextViewsMethod: "+element+", "+monthList.get(k));
+            if (!element.equals(monthList.get(k))) {
+                return;
+            }
+        }
+        final LinearLayout linearLayoutOuter1 = new LinearLayout(mContext);
+        ViewGroup.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayoutOuter1.setLayoutParams(lp);
+        linearLayoutOuter1.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(linearLayoutOuter1);
 
-        float totalamt = 0;
-        float grandTotal = 0;
+        LinearLayout linearLayoutWButton = new LinearLayout(mContext);
+        linearLayoutWButton.setLayoutParams(lp);
+        linearLayoutWButton.setOrientation(LinearLayout.HORIZONTAL);
+
+        ViewGroup.LayoutParams lp1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.15f);
+        ViewGroup.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0.85f);
+
+        final LinearLayout linearLayoutOuter = new LinearLayout(mContext);
+        linearLayoutOuter.setLayoutParams(lp);
+        linearLayoutOuter.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(linearLayoutOuter);
+
+        TextView textViewOuter = new TextView(mContext);
+        if (row1 == 1) {
+
+            textViewOuter.setText(newList.get(i));
+            linearLayoutWButton.addView(textViewOuter);
+            linearLayoutOuter1.addView(linearLayoutWButton);
+
+        } else {
+            textViewOuter.setText(SpinnerNameList[Integer.valueOf(newList.get(i))]);
+            linearLayoutWButton.addView(textViewOuter);
+            linearLayoutOuter1.addView(linearLayoutWButton);
+        }
+
+        textViewOuter.setTextColor(colorFromTheme);
+        textViewOuter.setTextSize(28);
+        textViewOuter.setTypeface(null, Typeface.BOLD_ITALIC);
+        textViewOuter.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        textViewOuter.setPadding(0, 25, 0, 25);
+        textViewOuter.setLayoutParams(lp1);
+
+
+        final ImageView expand = new ImageView(mContext);
+        expand.setImageResource(R.drawable.ic_arrow_drop_up);
+        expand.setLayoutParams(lp2);
+
+        linearLayoutWButton.addView(expand);
+
+        if (family) {
+            expandLayout[0] = false;
+        } else {
+            expandLayout[0] = true;
+        }
+        if (!expandLayout[0]) {
+            linearLayoutOuter.setVisibility(View.GONE);
+            expand.setImageResource(R.drawable.ic_arrow_drop_down);
+        }
+        expand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!expandLayout[0]) {
+                    linearLayoutOuter.setVisibility(View.GONE);
+                    expand.setImageResource(R.drawable.ic_arrow_drop_down);
+                } else {
+                    linearLayoutOuter.setVisibility(View.VISIBLE);
+                    expand.setImageResource(R.drawable.ic_arrow_drop_up);
+                }
+                expandLayout[0] = !expandLayout[0];
+            }
+        });
+
+        //Layout for titles
+        LinearLayout linearLayoutTitles = new LinearLayout(mContext);
+        linearLayoutTitles.setLayoutParams(lp);
+        linearLayoutTitles.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayoutOuter.addView(linearLayoutTitles);
+
+        //Add titles
+        if (column3 == 0 && column2 == 1) {
+            if (row1 == 0) {
+                addTitles(linearLayoutTitles, "Date");
+            } else {
+                addTitles(linearLayoutTitles, "Category");
+            }
+            addTitles(linearLayoutTitles, "Notes");
+            addTitles(linearLayoutTitles, "Price");
+        } else {
+            if (row1 == 1) {
+                addTitles(linearLayoutTitles, "Category");
+            } else {
+                addTitles(linearLayoutTitles, "Date");
+            }
+            addTitles(linearLayoutTitles, "Price");
+            addTitles(linearLayoutTitles, "Notes");
+        }
+
+        for (int j = 0; j < NotesList.size(); j++) {
+
+            if (row1 == 1) {
+                if (List.get(j).equals(newListC.get(i))) {
+
+                    totalamt = totalamt + Float.valueOf(PriceList.get(j));
+
+                    LinearLayout linearLayout1 = new LinearLayout(mContext);
+                    linearLayout1.setLayoutParams(lp);
+                    linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
+                    linearLayoutOuter.addView(linearLayout1);
+
+                    if (column3 == 0 && column2 == 1) {
+                        if (row1 == 0) {
+                            addDataFields(j, linearLayout1, "date", edit);
+                        } else {
+                            addDataFields(j, linearLayout1, "spinner", edit);
+                        }
+                        addDataFields(j, linearLayout1, "notes", edit);
+                        addDataFields(j, linearLayout1, "price", edit);
+                    } else {
+                        if (row1 == 0) {
+                            addDataFields(j, linearLayout1, "date", edit);
+                        } else {
+                            addDataFields(j, linearLayout1, "spinner", edit);
+                        }
+                        addDataFields(j, linearLayout1, "price", edit);
+                        addDataFields(j, linearLayout1, "notes", edit);
+                    }
+                }
+            } else {
+                if (Integer.valueOf(List.get(j)).equals(Integer.valueOf(newList.get(i)))) {
+
+                    totalamt = totalamt + Float.valueOf(PriceList.get(j));
+
+                    LinearLayout linearLayout1 = new LinearLayout(mContext);
+                    linearLayout1.setLayoutParams(lp);
+                    linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
+                    linearLayoutOuter.addView(linearLayout1);
+
+                    if (column3 == 0 && column2 == 1) {
+                        if (row1 == 0) {
+                            addDataFields(j, linearLayout1, "date", edit);
+                        } else {
+                            addDataFields(j, linearLayout1, "spinner", edit);
+                        }
+                        addDataFields(j, linearLayout1, "notes", edit);
+                        addDataFields(j, linearLayout1, "price", edit);
+                    } else {
+                        if (row1 == 1) {
+                            addDataFields(j, linearLayout1, "spinner", edit);
+                        } else {
+                            addDataFields(j, linearLayout1, "date", edit);
+                        }
+                        addDataFields(j, linearLayout1, "price", edit);
+                        addDataFields(j, linearLayout1, "notes", edit);
+                    }
+                }
+            }
+        }
+        LinearLayout totalLinearLayout = new LinearLayout(mContext);
+        totalLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        totalLinearLayout.setLayoutParams(lp);
+
+        if (column2 == 0 && column3 == 1) {
+            addTotal(totalamt, totalLinearLayout, "totalText", true);
+            addTotal(totalamt, totalLinearLayout, "totalAmt", true);
+            addTotal(totalamt, totalLinearLayout, "view", true);
+        } else {
+            addTotal(totalamt, totalLinearLayout, "totalText", true);
+            addTotal(totalamt, totalLinearLayout, "view", true);
+            addTotal(totalamt, totalLinearLayout, "totalAmt", true);
+        }
+        grandTotal = grandTotal + totalamt;
+        totalamt = 0;
+        linearLayoutOuter.addView(totalLinearLayout);
+    }
+
+
+    public void addTextViews(LinearLayout linearLayout, ArrayList<String> List, boolean edit, boolean family) {
 
         //new list will contain unique elements
         ArrayList<String> newList = new ArrayList<>();
+        ArrayList<String> monthList = new ArrayList<>();
         for (String element : List) {
             if (!newList.contains(element)) {
                 newList.add(element);
@@ -309,196 +490,125 @@ public class ShowDetailUtils {
             ArrayList<String> DateListC = new ArrayList<>();
             setDateList(DateListC, newList);
             newList = DateListC;
+
+            for (String element : newList) {
+                String monthElement = element.substring(3, 5);
+                String month = monthArray[Integer.valueOf(monthElement)];
+                if (!monthList.contains(month)) {
+                    monthList.add(month);
+                }
+            }
         }
 
-        for(int i = 0; i<newList.size(); i++) {
 
-            //TODO: Check limits
+        if (row1 == 1) {
+            float monthTotal = 0;
+            for (int k = 0; k < monthList.size(); k++) {
 
-            final LinearLayout linearLayoutOuter1 = new LinearLayout(mContext);
-            ViewGroup.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            linearLayoutOuter1.setLayoutParams(lp);
-            linearLayoutOuter1.setOrientation(LinearLayout.VERTICAL);
-            linearLayout.addView(linearLayoutOuter1);
+                ViewGroup.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams lp1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.15f);
+                ViewGroup.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0.85f);
 
-            LinearLayout linearLayoutWButton = new LinearLayout(mContext);
-            linearLayoutWButton.setLayoutParams(lp);
-            linearLayoutWButton.setOrientation(LinearLayout.HORIZONTAL);
-            linearLayoutWButton.setBackgroundResource(R.drawable.text_border);
+                final LinearLayout linearLayoutMonthButton = new LinearLayout(mContext);
+                linearLayoutMonthButton.setLayoutParams(lp);
+                linearLayoutMonthButton.setOrientation(LinearLayout.HORIZONTAL);
+                linearLayoutMonthButton.setBackgroundResource(R.drawable.text_border);
+                linearLayout.addView(linearLayoutMonthButton);
 
-            ViewGroup.LayoutParams lp1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.15f);
-            ViewGroup.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0.85f);
+                final LinearLayout linearLayoutMonth = new LinearLayout(mContext);
+                linearLayoutMonth.setLayoutParams(lp);
+                linearLayoutMonth.setOrientation(LinearLayout.VERTICAL);
+                linearLayout.addView(linearLayoutMonth);
 
-            TextView textViewOuter = new TextView(mContext);
-            if (row1 == 1) {
-                textViewOuter.setText(newList.get(i));
-            } else {
-                textViewOuter.setText(SpinnerNameList[Integer.valueOf(newList.get(i))]);
-            }
+                TextView textViewMonth = new TextView(mContext);
+                textViewMonth.setText(monthList.get(k));
+                textViewMonth.setTextColor(colorFromTheme);
+                textViewMonth.setTextSize(28);
+                textViewMonth.setTypeface(null, Typeface.BOLD_ITALIC);
+                textViewMonth.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                textViewMonth.setPadding(0, 25, 0, 25);
+                textViewMonth.setLayoutParams(lp1);
 
-            textViewOuter.setTextColor(colorFromTheme);
-            textViewOuter.setTextSize(28);
-            textViewOuter.setTypeface(null, Typeface.BOLD_ITALIC);
-            textViewOuter.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            textViewOuter.setPadding(0, 25, 0, 25);
-            textViewOuter.setLayoutParams(lp1);
+                linearLayoutMonthButton.addView(textViewMonth);
 
-            linearLayoutWButton.addView(textViewOuter);
+                final ImageView expand = new ImageView(mContext);
+                expand.setImageResource(R.drawable.ic_arrow_drop_up);
+                expand.setLayoutParams(lp2);
 
-            final ImageView expand = new ImageView(mContext);
-            expand.setImageResource(R.drawable.ic_arrow_drop_up);
-            expand.setLayoutParams(lp2);
+                linearLayoutMonthButton.addView(expand);
 
-            linearLayoutWButton.addView(expand);
-
-            linearLayoutOuter1.addView(linearLayoutWButton);
-
-            final LinearLayout linearLayoutOuter = new LinearLayout(mContext);
-            linearLayoutOuter.setLayoutParams(lp);
-            linearLayoutOuter.setOrientation(LinearLayout.VERTICAL);
-            linearLayout.addView(linearLayoutOuter);
-
-            if(family) {
-                expandLayout[0] = false;
-            } else {
-                expandLayout[0] = true;
-            }
-            if (!expandLayout[0]) {
-                linearLayoutOuter.setVisibility(View.GONE);
-                expand.setImageResource(R.drawable.ic_arrow_drop_down);
-            }
-            expand.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!expandLayout[0]) {
-                        linearLayoutOuter.setVisibility(View.GONE);
-                        expand.setImageResource(R.drawable.ic_arrow_drop_down);
-                    } else {
-                        linearLayoutOuter.setVisibility(View.VISIBLE);
-                        expand.setImageResource(R.drawable.ic_arrow_drop_up);
-                    }
-                    expandLayout[0] = !expandLayout[0];
-                }
-            });
-
-            //Layout for titles
-            LinearLayout linearLayoutTitles = new LinearLayout(mContext);
-            linearLayoutTitles.setLayoutParams(lp);
-            linearLayoutTitles.setOrientation(LinearLayout.HORIZONTAL);
-            linearLayoutOuter.addView(linearLayoutTitles);
-
-            //Add titles
-            if (column3 == 0 && column2 == 1) {
-                if (row1 == 0) {
-                    addTitles(linearLayoutTitles, "Date");
+                if (family) {
+                    expandLayout[0] = false;
                 } else {
-                    addTitles(linearLayoutTitles, "Category");
+                    expandLayout[0] = true;
                 }
-                addTitles(linearLayoutTitles, "Notes");
-                addTitles(linearLayoutTitles, "Price");
-            } else {
-                if (row1 == 1) {
-                    addTitles(linearLayoutTitles, "Category");
-                } else {
-                    addTitles(linearLayoutTitles, "Date");
+                if (!expandLayout[0]) {
+                    linearLayoutMonth.setVisibility(View.GONE);
+                    expand.setImageResource(R.drawable.ic_arrow_drop_down);
                 }
-                addTitles(linearLayoutTitles, "Price");
-                addTitles(linearLayoutTitles, "Notes");
-            }
-
-
-            Log.d(TAG, "addTextViews1: "+NotesList);
-            for (int j = 0; j<NotesList.size(); j++) {
-
-                if (row1 == 1) {
-                    if (List.get(j).equals(newListC.get(i))) {
-
-                        totalamt = totalamt + Integer.valueOf(PriceList.get(j));
-
-                        LinearLayout linearLayout1 = new LinearLayout(mContext);
-                        linearLayout1.setLayoutParams(lp);
-                        linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
-                        linearLayoutOuter.addView(linearLayout1);
-
-                        if (column3 == 0 && column2 == 1) {
-                            if (row1 == 0) {
-                                addDataFields(j, linearLayout1, "date", edit);
-                            } else {
-                                addDataFields(j, linearLayout1, "spinner", edit);
-                            }
-                            addDataFields(j, linearLayout1, "notes", edit);
-                            addDataFields(j, linearLayout1, "price", edit);
+                expand.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!expandLayout[0]) {
+                            linearLayoutMonth.setVisibility(View.GONE);
+                            expand.setImageResource(R.drawable.ic_arrow_drop_down);
                         } else {
-                            if (row1 == 0) {
-                                addDataFields(j, linearLayout1, "date", edit);
-                            } else {
-                                addDataFields(j, linearLayout1, "spinner", edit);
-                            }
-                            addDataFields(j, linearLayout1, "price", edit);
-                            addDataFields(j, linearLayout1, "notes", edit);
+                            linearLayoutMonth.setVisibility(View.VISIBLE);
+                            expand.setImageResource(R.drawable.ic_arrow_drop_up);
                         }
+                        expandLayout[0] = !expandLayout[0];
                     }
-                } else {
-                    if (Integer.valueOf(List.get(j)).equals(Integer.valueOf(newList.get(i)))) {
+                });
 
-                        totalamt = totalamt + Float.valueOf(PriceList.get(j));
-
-                        LinearLayout linearLayout1 = new LinearLayout(mContext);
-                        linearLayout1.setLayoutParams(lp);
-                        linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
-                        linearLayoutOuter.addView(linearLayout1);
-
-                        if (column3 == 0 && column2 == 1) {
-                            if (row1 == 0) {
-                                addDataFields(j, linearLayout1, "date", edit);
-                            } else {
-                                addDataFields(j, linearLayout1, "spinner", edit);
-                            }
-                            addDataFields(j, linearLayout1, "notes", edit);
-                            addDataFields(j, linearLayout1, "price", edit);
-                        } else {
-                            if (row1 == 1) {
-                                addDataFields(j, linearLayout1, "spinner", edit);
-                            } else {
-                                addDataFields(j, linearLayout1, "date", edit);
-                            }
-                            addDataFields(j, linearLayout1, "price", edit);
-                            addDataFields(j, linearLayout1, "notes", edit);
-                        }
-                    }
+                for (int i = 0; i < newList.size(); i++) {
+                    addTextViewsMethod(linearLayoutMonth, List, edit, family, monthList, newList, newListC, i, k);
                 }
-            }
-            LinearLayout totalLinearLayout = new LinearLayout(mContext);
-            totalLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-            totalLinearLayout.setLayoutParams(lp);
 
-            if (column2 == 0 && column3 == 1) {
-                addTotal(totalamt, totalLinearLayout, "totalText", true);
-                addTotal(totalamt, totalLinearLayout, "totalAmt", true);
-                addTotal(totalamt, totalLinearLayout, "view", true);
-            } else {
-                addTotal(totalamt, totalLinearLayout, "totalText", true);
-                addTotal(totalamt, totalLinearLayout, "view", true);
-                addTotal(totalamt, totalLinearLayout, "totalAmt", true);
-            }
-            grandTotal = grandTotal + totalamt;
-            totalamt = 0;
-            linearLayoutOuter.addView(totalLinearLayout);
-        }
-        LinearLayout grandtotalLinear = new LinearLayout(mContext);
-        grandtotalLinear.setBackgroundResource(R.drawable.text_border);
-        familyTotal = familyTotal + grandTotal;
+                LinearLayout grandtotalLinear = new LinearLayout(mContext);
+                grandtotalLinear.setBackgroundResource(R.drawable.text_border);
+                familyTotal =familyTotal +grandTotal;
 
-        if (column2 == 0 && column3 == 1) {
-            addTotal(grandTotal, grandtotalLinear, "grandTotal", false);
-            addTotal(grandTotal, grandtotalLinear, "totalAmt", false);
-            addTotal(grandTotal, grandtotalLinear, "view", false);
+                monthTotal = grandTotal - monthTotal;
+
+                if(column2 ==0&&column3 ==1)
+
+                {
+                    addTotal(monthTotal, grandtotalLinear, "grandTotal", false);
+                    addTotal(monthTotal, grandtotalLinear, "totalAmt", false);
+                    addTotal(monthTotal, grandtotalLinear, "view", false);
+                } else
+
+                {
+                    addTotal(monthTotal, grandtotalLinear, "grandTotal", false);
+                    addTotal(monthTotal, grandtotalLinear, "view", false);
+                    addTotal(monthTotal, grandtotalLinear, "totalAmt", false);
+                }
+                linearLayoutMonth.addView(grandtotalLinear);
+            }
         } else {
-            addTotal(grandTotal, grandtotalLinear, "grandTotal", false);
-            addTotal(grandTotal, grandtotalLinear, "view", false);
-            addTotal(grandTotal, grandtotalLinear, "totalAmt", false);
+            for (int i = 0; i < newList.size(); i++) {
+                addTextViewsMethod(linearLayout, List, edit, family, monthList, newList, newListC, i, -1);
+            }
+            LinearLayout grandtotalLinear = new LinearLayout(mContext);
+            grandtotalLinear.setBackgroundResource(R.drawable.text_border);
+            familyTotal =familyTotal +grandTotal;
+
+            if(column2 ==0&&column3 ==1)
+
+            {
+                addTotal(grandTotal, grandtotalLinear, "grandTotal", false);
+                addTotal(grandTotal, grandtotalLinear, "totalAmt", false);
+                addTotal(grandTotal, grandtotalLinear, "view", false);
+            } else
+
+            {
+                addTotal(grandTotal, grandtotalLinear, "grandTotal", false);
+                addTotal(grandTotal, grandtotalLinear, "view", false);
+                addTotal(grandTotal, grandtotalLinear, "totalAmt", false);
+            }
+            linearLayout.addView(grandtotalLinear);
         }
-        linearLayout.addView(grandtotalLinear);
+
     }
 
     public void addTotal (float totalamt, LinearLayout totalLinearLayout, String type, boolean bg) {
