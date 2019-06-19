@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
     private NavigationView navigationView;
-    InputMethodManager inputMethodManager;
+    private InputMethodManager inputMethodManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,16 +91,13 @@ public class MainActivity extends AppCompatActivity
                 finish();
             }
 
-            authListener = new FirebaseAuth.AuthStateListener() {
-                @Override
-                public void onAuthStateChanged(FirebaseAuth firebaseAuth) {
-                    FirebaseUser user = firebaseAuth.getCurrentUser();
-                    if (user == null) {
-                        // user auth state is changed - user is null
-                        // launch login activity
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        finish();
-                    }
+            authListener = firebaseAuth -> {
+                FirebaseUser user1 = firebaseAuth.getCurrentUser();
+                if (user1 == null) {
+                    // user auth state is changed - user is null
+                    // launch login activity
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
                 }
             };
 
@@ -122,7 +119,7 @@ public class MainActivity extends AppCompatActivity
             alertDialog.show();
 
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(user).getDisplayName());
+            final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(Objects.requireNonNull(user).getDisplayName()));
 
             userNode.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -179,9 +176,7 @@ public class MainActivity extends AppCompatActivity
                     handled = true;
                     displaySelectedScreen(R.id.nav_home);
 
-                    if(handled) {
-                        break;
-                    }
+                    break;
                 } else if (f instanceof Home) {
                     handled = ((Home)f).onBackPressed();
                 }

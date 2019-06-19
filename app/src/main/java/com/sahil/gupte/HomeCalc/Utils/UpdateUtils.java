@@ -100,12 +100,7 @@ public class UpdateUtils {
                     OpenFile(mContext.get());
                 } else {
                     Log.d(TAG, "onPostExecute: Download Failed");//If download failed change button text
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d(TAG, "onPostExecute: download again");
-                        }
-                    }, 3000);
+                    new Handler().postDelayed(() -> Log.d(TAG, "onPostExecute: download again"), 3000);
 
                     Log.e(TAG, "Download Failed");
 
@@ -115,12 +110,7 @@ public class UpdateUtils {
 
                 //Change button text if exception occurs
                 Log.d(TAG, "onPostExecute: Download Failed");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "onPostExecute: Download again");
-                    }
-                }, 3000);
+                new Handler().postDelayed(() -> Log.d(TAG, "onPostExecute: Download again"), 3000);
                 Log.e(TAG, "Download Failed with Exception - " + e.getLocalizedMessage());
 
             }

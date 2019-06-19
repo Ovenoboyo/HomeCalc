@@ -11,7 +11,6 @@ import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.DialogFragment;
 
 import com.sahil.gupte.HomeCalc.R;
-import com.sahil.gupte.HomeCalc.Utils.UpdateUtils;
 
 
 public class UpdateDialogFragment extends DialogFragment
@@ -38,19 +37,11 @@ public class UpdateDialogFragment extends DialogFragment
             builder = new AlertDialog.Builder(mContext);
         }
         builder.setTitle(" New update available!");
-        builder.setPositiveButton("Update now!", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment(mContext);
-                        progressDialogFragment.show();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+        builder.setPositiveButton("Update now!", (dialog, which) -> {
+            ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment(mContext);
+            progressDialogFragment.show();
+        });
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
         return builder.create();
     }

@@ -19,7 +19,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +40,7 @@ import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Objects;
 import java.util.UUID;
 
 public class PostSignupActivity extends AppCompatActivity {
@@ -69,7 +69,7 @@ public class PostSignupActivity extends AppCompatActivity {
 
         if(b!= null) {
             if (b.getBoolean("login", false)) {
-                if(!prevID.isEmpty()) {
+                if(!Objects.requireNonNull(prevID).isEmpty()) {
                     startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
                     finish();
                 }
@@ -91,13 +91,8 @@ public class PostSignupActivity extends AppCompatActivity {
             imageUri = Uri.parse(savedInstanceState.getString(SAVED_INSTANCE_URI));
             inputID.setText(savedInstanceState.getString(SAVED_INSTANCE_RESULT));
         }
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ActivityCompat.requestPermissions(PostSignupActivity.this, new
-                        String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
-            }
-        });
+        button.setOnClickListener(view -> ActivityCompat.requestPermissions(PostSignupActivity.this, new
+                String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION));
 
         detector = new BarcodeDetector.Builder(getApplicationContext())
                 .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
@@ -116,46 +111,40 @@ public class PostSignupActivity extends AppCompatActivity {
         }
 
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        btnSignUp.setOnClickListener(v -> {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-                String familyID = inputID.getText().toString().trim();
+            String familyID = inputID.getText().toString().trim();
 
-                if (TextUtils.isEmpty(familyID)) {
-                    Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                try {
-                    UUID uuid = UUID.fromString(familyID);
-                } catch (IllegalArgumentException e) {
-                    Log.d(TAG, "onClick: "+e);
-                    Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                progressBar.setVisibility(View.VISIBLE);
-                editor.putString("familyID", familyID);
-                editor.apply();
-                startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
-                finish();
-
+            if (TextUtils.isEmpty(familyID)) {
+                Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            try {
+                UUID uuid = UUID.fromString(familyID);
+            } catch (IllegalArgumentException e) {
+                Log.d(TAG, "onClick: "+e);
+                Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            progressBar.setVisibility(View.VISIBLE);
+            editor.putString("familyID", familyID);
+            editor.apply();
+            startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
+            finish();
+
         });
 
-        btnGenerate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                editor.putString("familyID", UUID.randomUUID().toString());
-                editor.apply();
-                startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
-                finish();
-            }
+        btnGenerate.setOnClickListener(v -> {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            editor.putString("familyID", UUID.randomUUID().toString());
+            editor.apply();
+            startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
+            finish();
         });
     }
 

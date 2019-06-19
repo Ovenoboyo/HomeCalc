@@ -83,29 +83,21 @@ public class SortDialogFragment extends DialogFragment
         TextView cancel = view.findViewById(R.id.cancel);
 
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (row1.getSelectedItemPosition() != column1.getSelectedItemPosition() && column2.getSelectedItemPosition() != column3.getSelectedItemPosition()) {
-                    saveSort();
-                    dialog.dismiss();
-                    if (fragment == 0) {
-                        ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_edit);
-                    } else {
-                        ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_family_view);
-                    }
+        save.setOnClickListener(v -> {
+            if (row1.getSelectedItemPosition() != column1.getSelectedItemPosition() && column2.getSelectedItemPosition() != column3.getSelectedItemPosition()) {
+                saveSort();
+                dialog.dismiss();
+                if (fragment == 0) {
+                    ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_edit);
                 } else {
-                    Toast.makeText(mContext, "All items must be different", Toast.LENGTH_LONG).show();
+                    ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_family_view);
                 }
+            } else {
+                Toast.makeText(mContext, "All items must be different", Toast.LENGTH_LONG).show();
             }
         });
 
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        cancel.setOnClickListener(v -> dialog.dismiss());
 
         return dialog;
     }

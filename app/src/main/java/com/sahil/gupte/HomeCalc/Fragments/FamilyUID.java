@@ -26,8 +26,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.zxing.WriterException;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.FamilyHintDialogFragment;
-import com.sahil.gupte.HomeCalc.Fragments.Dialogs.HintDialogFragment;
-import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SortDialogFragment;
 import com.sahil.gupte.HomeCalc.R;
 
 import java.util.Objects;
@@ -89,14 +87,11 @@ public class FamilyUID extends Fragment {
 
         Familyid.setText(family);
 
-        clipboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClipboardManager clipboardManager = (ClipboardManager) Objects.requireNonNull(getContext()).getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("FamilyUID", family);
-                clipboardManager.setPrimaryClip(clip);
-                Toast.makeText(getContext(), "Copied ID to clipboard", Toast.LENGTH_SHORT).show();
-            }
+        clipboard.setOnClickListener(v -> {
+            ClipboardManager clipboardManager = (ClipboardManager) Objects.requireNonNull(getContext()).getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("FamilyUID", family);
+            clipboardManager.setPrimaryClip(clip);
+            Toast.makeText(getContext(), "Copied ID to clipboard", Toast.LENGTH_SHORT).show();
         });
         return view;
     }

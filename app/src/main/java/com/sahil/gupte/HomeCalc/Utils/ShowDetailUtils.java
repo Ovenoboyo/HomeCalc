@@ -569,6 +569,7 @@ public class ShowDetailUtils {
                 familyTotal =familyTotal +grandTotal;
 
                 monthTotal = grandTotal - monthTotal;
+                Log.d(TAG, "addTextViews: "+grandTotal+", "+monthTotal);
 
                 if(column2 ==0&&column3 ==1)
 
@@ -778,7 +779,7 @@ public class ShowDetailUtils {
         userNode.child("timestamp").child(timeKey).removeValue();
         userNode.child("spinner").child(spinnerKey).removeValue();
         userNode.child("currency").child(currencyKey).removeValue();
-        
+
     }
 
     public void ClearDB(DataSnapshot dataSnapshot) {

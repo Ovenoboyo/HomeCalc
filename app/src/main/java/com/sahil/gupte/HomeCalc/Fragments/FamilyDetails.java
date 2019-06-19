@@ -133,8 +133,8 @@ public class FamilyDetails extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
-        Boolean collective = pref.getBoolean("collective", false);
+        SharedPreferences pref = Objects.requireNonNull(getContext()).getSharedPreferences("SpinnerSort", 0);
+        boolean collective = pref.getBoolean("collective", false);
         inflater.inflate(R.menu.main, menu);
         MenuItem collectiveM = menu.findItem(R.id.collective);
         if(collective) {
@@ -173,8 +173,8 @@ public class FamilyDetails extends Fragment {
     }
 
     private void SwitchView() {
-        SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
-        Boolean collective = pref.getBoolean("collective", false);
+        SharedPreferences pref = Objects.requireNonNull(getContext()).getSharedPreferences("SpinnerSort", 0);
+        boolean collective = pref.getBoolean("collective", false);
         collective = !collective;
         Log.d("test", "SwitchView: "+collective);
         SharedPreferences.Editor editor = pref.edit();

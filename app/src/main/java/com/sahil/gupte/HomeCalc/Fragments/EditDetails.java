@@ -22,7 +22,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.HintDialogFragment;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SortDialogFragment;
@@ -77,7 +76,7 @@ public class EditDetails extends Fragment {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(user).getDisplayName());
+        final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(Objects.requireNonNull(user).getDisplayName()));
 
         SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
         final int row1 = pref.getInt("row1", 0);

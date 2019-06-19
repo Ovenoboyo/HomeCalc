@@ -18,15 +18,16 @@ import java.util.HashMap;
 public class CurrencyUtils extends AsyncTask<Void, Void, Float> {
 
     public static String defaultCurrency;
-    private String from, to;
-    private float value;
+    private final String from;
+    private final String to;
+    private final float value;
 
     private static final String ACCESS_KEY = "WM1PJ9WL556FF12K"; //free
     private static final String BASE_URL = "https://www.alphavantage.co/";
     private static final String QUERY_URL = "query?function=CURRENCY_EXCHANGE_RATE&";
     private static final HashMap<String, Double> CurrencyCache = new HashMap<>();
 
-    private static CloseableHttpClient httpClient = HttpClients.createDefault();
+    private static final CloseableHttpClient httpClient = HttpClients.createDefault();
 
 
     public CurrencyUtils(String from, String to, float value) {

@@ -21,8 +21,8 @@ import java.util.Locale;
 
 public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecyclerViewInput.RecyclerViewHolder> {
     private int count = 1;
-    private Activity context1;
-    public HashMap<Integer, RecyclerView.ViewHolder> holderHashMap = new HashMap<>();
+    private final Activity context1;
+    public final HashMap<Integer, RecyclerView.ViewHolder> holderHashMap = new HashMap<>();
 
     public CustomRecyclerViewInput(Activity context) {
         context1 = context;
@@ -59,35 +59,25 @@ public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecycler
         SharedPreferences pref = context1.getSharedPreferences("Theme", 0);
         final boolean dark = pref.getBoolean("dark", true);
         final Calendar myCalendar = Calendar.getInstance();
-        final DatePickerDialog.OnDateSetListener dateClick = new DatePickerDialog.OnDateSetListener() {
+        final DatePickerDialog.OnDateSetListener dateClick = (view, year, monthOfYear, dayOfMonth) -> {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            String myFormat = "dd/MM/yyyy";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                String myFormat = "dd/MM/yyyy";
-                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
-                holder.time.setText(sdf.format(myCalendar.getTime()));
-            }
-
+            holder.time.setText(sdf.format(myCalendar.getTime()));
         };
 
-        holder.time.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if(dark) {
-                    new DatePickerDialog(context1, R.style.Dialog_Dark, dateClick, myCalendar
-                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                } else {
-                    new DatePickerDialog(context1, dateClick, myCalendar
-                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                }
+        holder.time.setOnClickListener(v -> {
+            if(dark) {
+                new DatePickerDialog(context1, R.style.Dialog_Dark, dateClick, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            } else {
+                new DatePickerDialog(context1, dateClick, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
 
@@ -118,7 +108,7 @@ public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecycler
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        EditText time;
+        final EditText time;
 
         RecyclerViewHolder(View view) {
             super(view);

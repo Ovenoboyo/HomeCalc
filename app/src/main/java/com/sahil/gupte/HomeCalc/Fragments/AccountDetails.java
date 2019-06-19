@@ -48,26 +48,11 @@ public class AccountDetails extends Fragment {
 
         email.setText(Objects.requireNonNull(user).getEmail());
 
-        show_uid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_family);
-            }
-        });
+        show_uid.setOnClickListener(v -> ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_family));
 
-        change_pass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), ResetPasswordActivity.class));
-            }
-        });
+        change_pass.setOnClickListener(v -> startActivity(new Intent(getActivity(), ResetPasswordActivity.class)));
 
-        change_uid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), PostSignupActivity.class));
-            }
-        });
+        change_uid.setOnClickListener(v -> startActivity(new Intent(getActivity(), PostSignupActivity.class)));
 
 
         return view;

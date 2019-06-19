@@ -42,18 +42,8 @@ public class SwitchDialogFragment extends DialogFragment
             builder = new AlertDialog.Builder(mContext);
         }
         builder.setTitle(getString(R.string.keep));
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_home);
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_edit);
-                    }
-                });
+        builder.setPositiveButton("Yes", (dialog, which) -> ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_home));
+                builder.setNegativeButton("No", (dialog, which) -> ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_edit));
 
         final AlertDialog dialog = builder.create();
         TypedValue typedValue = new TypedValue();

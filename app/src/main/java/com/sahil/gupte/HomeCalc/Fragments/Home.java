@@ -76,7 +76,7 @@ public class Home extends Fragment {
     }
 
     public boolean onBackPressed() {
-        new AlertDialog.Builder(getContext())
+        new AlertDialog.Builder(Objects.requireNonNull(getContext()))
                 .setTitle("Exit?")
                 .setMessage("Are you sure you want to exit?")
                 .setNegativeButton(android.R.string.no, null)
@@ -110,7 +110,7 @@ public class Home extends Fragment {
             llm.setOrientation(RecyclerView.VERTICAL);
             list.setLayoutManager(llm);
 
-        FirebaseMessaging.getInstance().subscribeToTopic("user_"+ Objects.requireNonNull(user.getDisplayName()).replaceAll("\\s", "_"));
+        FirebaseMessaging.getInstance().subscribeToTopic("user_"+ Objects.requireNonNull(Objects.requireNonNull(user).getDisplayName()).replaceAll("\\s", "_"));
 
         final SharedPreferences pref = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
         String family = pref.getString("familyID", "LostData");
@@ -188,7 +188,7 @@ public class Home extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                             String username = childDataSnapshot.getKey();
-                            if (!username.equals(user.getDisplayName())) {
+                            if (!Objects.requireNonNull(username).equals(user.getDisplayName())) {
                                 sendNotificationToUser(Objects.requireNonNull(username).replaceAll("\\s", "_"), user.getDisplayName()+" added new items to his list!");
                             }
                         }
@@ -205,7 +205,7 @@ public class Home extends Fragment {
         return view;
     }
 
-    void showToast(String text, Context mContext) {
+    private void showToast(String text, Context mContext) {
         Toast.makeText(mContext, text, Toast.LENGTH_LONG).show();
     }
 
@@ -269,12 +269,9 @@ public class Home extends Fragment {
         Pattern p = Pattern.compile("\\d\\d/\\d\\d/\\d\\d\\d\\d");
         Matcher m = p.matcher(str);
         if (m.find()) {
-            if(m.group() == str) {
-                return true;
-            }
+            return Objects.equals(m.group(), str);
         } else {
             return false;
         }
-        return false;
     }
 }

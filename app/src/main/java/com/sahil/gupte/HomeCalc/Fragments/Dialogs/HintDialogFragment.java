@@ -38,22 +38,18 @@ public class HintDialogFragment extends DialogFragment
         } else {
             builder = new AlertDialog.Builder(mContext);
         }
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.hint_dialog, null))
                 .setTitle("Your Report")
                 .setCancelable(false)
                 .setPositiveButton("Understood",
-            new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog,
-                                    int which) {
-                    SharedPreferences prefD = Objects.requireNonNull(getContext()).getSharedPreferences("hint_dialog", 0);
-                    SharedPreferences.Editor editor = prefD.edit();
-                    editor.putBoolean("hint", true);
-                    editor.apply();
-                    dialog.dismiss();
-                }
-            });
+                        (dialog, which) -> {
+                            SharedPreferences prefD = Objects.requireNonNull(getContext()).getSharedPreferences("hint_dialog", 0);
+                            SharedPreferences.Editor editor = prefD.edit();
+                            editor.putBoolean("hint", true);
+                            editor.apply();
+                            dialog.dismiss();
+                        });
         final AlertDialog dialog = builder.create();
         dialog.show();
 

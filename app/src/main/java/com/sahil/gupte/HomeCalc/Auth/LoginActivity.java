@@ -20,11 +20,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
 import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
-
-import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -63,74 +60,62 @@ public class LoginActivity extends AppCompatActivity {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        btnSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
-            }
+        btnSignup.setOnClickListener(v -> {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            startActivity(new Intent(LoginActivity.this, SignupActivity.class));
         });
 
-        btnReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
-            }
+        btnReset.setOnClickListener(v -> {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
         });
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                String email = inputEmail.getText().toString();
-                final String password = inputPassword.getText().toString();
+        btnLogin.setOnClickListener(v -> {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            String email = inputEmail.getText().toString();
+            final String password = inputPassword.getText().toString();
 
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            if (TextUtils.isEmpty(email)) {
+                Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            if (TextUtils.isEmpty(password)) {
+                Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                progressBar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
 
-                //authenticate user
-                auth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
-                                progressBar.setVisibility(View.GONE);
-                                if (!task.isSuccessful()) {
-                                    // there was an error
-                                    if (password.length() < 6) {
-                                        inputPassword.setError(getString(R.string.minimum_password));
-                                    } else {
-                                        Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
-                                    }
-                                } else {
-
-                                    SharedPreferences pref = getSharedPreferences("Family", 0);
-                                    String family = pref.getString("familyID", "null");
-
-
-                                    Intent intent = new Intent(LoginActivity.this, PostSignupActivity.class);
-                                    intent.putExtra("login", true);
-                                    startActivity(intent);
-                                    finish();
-                                }
+            //authenticate user
+            auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(LoginActivity.this, task -> {
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        progressBar.setVisibility(View.GONE);
+                        if (!task.isSuccessful()) {
+                            // there was an error
+                            if (password.length() < 6) {
+                                inputPassword.setError(getString(R.string.minimum_password));
+                            } else {
+                                Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                             }
-                        });
-            }
+                        } else {
+
+                            SharedPreferences pref = getSharedPreferences("Family", 0);
+                            String family = pref.getString("familyID", "null");
+
+
+                            Intent intent = new Intent(LoginActivity.this, PostSignupActivity.class);
+                            intent.putExtra("login", true);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
         });
     }
 }

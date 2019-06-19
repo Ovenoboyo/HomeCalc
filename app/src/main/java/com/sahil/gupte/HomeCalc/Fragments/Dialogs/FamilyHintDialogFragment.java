@@ -38,21 +38,17 @@ public class FamilyHintDialogFragment extends DialogFragment
         } else {
             builder = new AlertDialog.Builder(mContext);
         }
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.family_hint_dialog, null))
                 .setTitle("Family UID")
                 .setCancelable(false)
                 .setPositiveButton("Understood",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                SharedPreferences prefD = Objects.requireNonNull(getContext()).getSharedPreferences("family_hint_dialog", 0);
-                                SharedPreferences.Editor editor = prefD.edit();
-                                editor.putBoolean("hint", true);
-                                editor.commit();
-                                dialog.dismiss();
-                            }
+                        (dialog, which) -> {
+                            SharedPreferences prefD = Objects.requireNonNull(getContext()).getSharedPreferences("family_hint_dialog", 0);
+                            SharedPreferences.Editor editor = prefD.edit();
+                            editor.putBoolean("hint", true);
+                            editor.commit();
+                            dialog.dismiss();
                         });
         final AlertDialog dialog = builder.create();
         dialog.show();

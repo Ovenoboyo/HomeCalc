@@ -34,7 +34,7 @@ import java.util.Objects;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShowDetails extends Fragment {
+class ShowDetails extends Fragment {
 
     public ShowDetails() {
         // Required empty public constructor
@@ -64,7 +64,7 @@ public class ShowDetails extends Fragment {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(user).getDisplayName());
+        final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(Objects.requireNonNull(user).getDisplayName()));
 
         SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
         final int row1 = pref.getInt("row1", 0);

@@ -83,32 +83,22 @@ public class EditDialogFragment extends DialogFragment {
         Date ogDate = new Date(Long.parseLong(ogTimestamp));
         final Calendar myCalendar = Calendar.getInstance();
         myCalendar.setTime(ogDate);
-        final DatePickerDialog.OnDateSetListener dateClick = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(myCalendar);
-            }
-
+        final DatePickerDialog.OnDateSetListener dateClick = (view1, year, monthOfYear, dayOfMonth) -> {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel(myCalendar);
         };
 
-        date.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if(dark) {
-                    new DatePickerDialog(mContext, R.style.Dialog_Dark, dateClick, myCalendar
-                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                } else {
-                    new DatePickerDialog(mContext, dateClick, myCalendar
-                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                }
+        date.setOnClickListener(v -> {
+            if(dark) {
+                new DatePickerDialog(mContext, R.style.Dialog_Dark, dateClick, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            } else {
+                new DatePickerDialog(mContext, dateClick, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
 
@@ -122,39 +112,25 @@ public class EditDialogFragment extends DialogFragment {
         TextView save = view.findViewById(R.id.save);
         TextView delete = view.findViewById(R.id.delete);
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
-                builder1.setTitle(getString(R.string.confirm));
-                builder1.setTitle(getString(R.string.areyousure));
+        save.setOnClickListener(v -> {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
+            builder1.setTitle(getString(R.string.confirm));
+            builder1.setTitle(getString(R.string.areyousure));
 
-                builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        saveText();
-                    }
-                });
-                builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                AlertDialog alertDialog = builder1.create();
-                TypedValue typedValue = new TypedValue();
-                Resources.Theme theme = Objects.requireNonNull(getContext()).getTheme();
-                theme.resolveAttribute(R.attr.Primary, typedValue, true);
-                Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(typedValue.data));
-                alertDialog.show();
-            }
+            builder1.setPositiveButton("Yes", (dialog12, which) -> saveText());
+            builder1.setNegativeButton("No", (dialog1, which) -> {
+            });
+            AlertDialog alertDialog = builder1.create();
+            TypedValue typedValue1 = new TypedValue();
+            Resources.Theme theme1 = Objects.requireNonNull(getContext()).getTheme();
+            theme1.resolveAttribute(R.attr.Primary, typedValue1, true);
+            Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(typedValue1.data));
+            alertDialog.show();
         });
 
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RemoveItemDB(pos, Objects.requireNonNull(getContext()));
-                ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_edit);
-            }
+        delete.setOnClickListener(v -> {
+            RemoveItemDB(pos, Objects.requireNonNull(getContext()));
+            ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_edit);
         });
         return dialog;
     }
@@ -171,13 +147,10 @@ public class EditDialogFragment extends DialogFragment {
         Matcher m = p.matcher(str);
         if (m.find()) {
             Log.d("test", "matchString: " + m.group(0));
-            if(m.group() == str) {
-                return true;
-            }
+            return Objects.equals(m.group(), str);
         } else {
             return false;
         }
-        return false;
     }
 
     private void saveText() {
