@@ -76,7 +76,6 @@ public class FamilyDetails extends Fragment {
         final int column2 = pref.getInt("column2", 0);
         final int column3 = pref.getInt("column3", 0);
 
-
         familyNode.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -522,17 +522,16 @@ public class ShowDetailUtils {
                 break;
 
             case "totalAmt":
-                switch (CurrencyUtils.defaultCurrency) {
-                    case "INR":
-                        data.setText("₹" + totalamt);
-                    case "USD":
-                        data.setText("$" + totalamt);
-                    case "SGD":
-                        data.setText("$" + totalamt);
-                    case "GBP":
-                        data.setText("£" + totalamt);
-                    case "EUR":
-                        data.setText("€" + totalamt);
+                if (CurrencyUtils.defaultCurrency.equals("INR")) {
+                    data.setText("₹" + totalamt);
+                } else if (CurrencyUtils.defaultCurrency.equals("USD")) {
+                    data.setText("$" + totalamt);
+                } else if (CurrencyUtils.defaultCurrency.equals("SGD")) {
+                    data.setText("$" + totalamt);
+                } else if (CurrencyUtils.defaultCurrency.equals("GBP")) {
+                    data.setText("£" + totalamt);
+                } else if (CurrencyUtils.defaultCurrency.equals("EUR")) {
+                    data.setText("€" + totalamt);
                 }
 
                 data.setTextSize(20);
@@ -586,17 +585,16 @@ public class ShowDetailUtils {
                 break;
 
             case "price":
-                switch (CurrencyUtils.defaultCurrency) {
-                    case "INR":
-                        data.setText("₹" + PriceList.get(j));
-                    case "USD":
-                        data.setText("$" + PriceList.get(j));
-                    case "SGD":
-                        data.setText("$" + PriceList.get(j));
-                    case "GBP":
-                        data.setText("£" + PriceList.get(j));
-                    case "EUR":
-                        data.setText("€" + PriceList.get(j));
+                if (CurrencyUtils.defaultCurrency.equals("INR")) {
+                    data.setText("₹" + PriceList.get(j));
+                } else if (CurrencyUtils.defaultCurrency.equals("USD")) {
+                    data.setText("$" + PriceList.get(j));
+                } else if (CurrencyUtils.defaultCurrency.equals("SGD")) {
+                    data.setText("$" + PriceList.get(j));
+                } else if (CurrencyUtils.defaultCurrency.equals("GBP")) {
+                    data.setText("£" + PriceList.get(j));
+                } else if (CurrencyUtils.defaultCurrency.equals("EUR")) {
+                    data.setText("€" + PriceList.get(j));
                 }
 
                 break;
