@@ -126,7 +126,6 @@ public class ShowDetailUtils {
 
         SharedPreferences pref = mContext.getSharedPreferences("SpinnerSort", 0);
         row1 = pref.getInt("row1", 0);
-        int column1 = pref.getInt("column1", 1);
         column2 = pref.getInt("column2", 0);
         column3 = pref.getInt("column3", 1);
 
@@ -182,7 +181,6 @@ public class ShowDetailUtils {
 
         SharedPreferences pref = mContext.getSharedPreferences("SpinnerSort", 0);
         row1 = pref.getInt("row1", 0);
-        int column1 = pref.getInt("column1", 1);
         column2 = pref.getInt("column2", 0);
         column3 = pref.getInt("column3", 1);
 
