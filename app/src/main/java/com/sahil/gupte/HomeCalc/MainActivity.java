@@ -33,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sahil.gupte.HomeCalc.Auth.LoginActivity;
+import com.sahil.gupte.HomeCalc.Auth.PostSignupActivity;
 import com.sahil.gupte.HomeCalc.Fragments.AccountDetails;
 import com.sahil.gupte.HomeCalc.Fragments.EditDetails;
 import com.sahil.gupte.HomeCalc.Fragments.FamilyDetails;
@@ -110,6 +111,12 @@ public class MainActivity extends AppCompatActivity
 
             SharedPreferences prefF = getSharedPreferences("Family", 0);
             String family = prefF.getString("familyID", "LostData");
+
+            assert family != null;
+            if (family.equals("LostData")) {
+               startActivity(new Intent(this, PostSignupActivity.class));
+               finish();
+            }
             final ShowDetailUtils showDetailUtils = new ShowDetailUtils(getApplicationContext());
 
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
