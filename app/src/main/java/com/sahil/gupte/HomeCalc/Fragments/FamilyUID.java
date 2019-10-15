@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.zxing.WriterException;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.FamilyHintDialogFragment;
 import com.sahil.gupte.HomeCalc.R;
+import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 
 import java.util.Objects;
 
@@ -73,8 +74,7 @@ public class FamilyUID extends Fragment {
         int smallerDimension = width < height ? width : height;
         smallerDimension = smallerDimension * 3 / 4;
 
-        SharedPreferences prefF = getContext().getSharedPreferences("Family", 0);
-        final String family = prefF.getString("familyID", "Unknown");
+        final String family = ShowDetailUtils.FID;
 
         QRGEncoder qrgEncoder = new QRGEncoder(family, null, QRGContents.Type.TEXT, smallerDimension);
 

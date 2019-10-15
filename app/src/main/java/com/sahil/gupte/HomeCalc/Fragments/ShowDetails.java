@@ -3,6 +3,7 @@ package com.sahil.gupte.HomeCalc.Fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,12 +60,13 @@ class ShowDetails extends Fragment {
         final RelativeLayout progress = view.findViewById(R.id.progressLayout);
         progress.setVisibility(View.VISIBLE);
 
-        SharedPreferences prefF = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
-        String family = prefF.getString("familyID", "LostData");
+        String family = ShowDetailUtils.FID;
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        Log.d("test", "onCreateView: "+user);
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(Objects.requireNonNull(user).getDisplayName()));
+        final DatabaseReference familyNode = database.getReference(Objects.requireNonNull(family));
+        final DatabaseReference userNode = familyNode.child(user.getDisplayName());
 
         SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
         final int row1 = pref.getInt("row1", 0);

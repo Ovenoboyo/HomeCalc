@@ -3,7 +3,6 @@ package com.sahil.gupte.HomeCalc.Fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,8 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,11 +59,8 @@ public class FamilyDetails extends Fragment {
         final RelativeLayout progress = view.findViewById(R.id.progressLayout);
         progress.setVisibility(View.VISIBLE);
 
-        SharedPreferences prefF = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
-        String family = prefF.getString("familyID", "LostData");
+        String family = ShowDetailUtils.FID;
 
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference familyNode = database.getReference(Objects.requireNonNull(family));
 
@@ -176,10 +170,9 @@ public class FamilyDetails extends Fragment {
         SharedPreferences pref = Objects.requireNonNull(getContext()).getSharedPreferences("SpinnerSort", 0);
         boolean collective = pref.getBoolean("collective", false);
         collective = !collective;
-        Log.d("test", "SwitchView: "+collective);
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("collective", collective);
-        editor.commit();
+        editor.apply();
         ((MainActivity) Objects.requireNonNull(getActivity())).displaySelectedScreen(R.id.nav_family_view);
 
     }

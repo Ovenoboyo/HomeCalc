@@ -52,7 +52,13 @@ public class AccountDetails extends Fragment {
 
         change_pass.setOnClickListener(v -> startActivity(new Intent(getActivity(), ResetPasswordActivity.class)));
 
-        change_uid.setOnClickListener(v -> startActivity(new Intent(getActivity(), PostSignupActivity.class)));
+        change_uid.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), PostSignupActivity.class);
+            intent.putExtra("login", false);
+            intent.putExtra("UID", user.getUid());
+            startActivity(intent);
+            Objects.requireNonNull(getActivity()).finish();
+        });
 
 
         return view;

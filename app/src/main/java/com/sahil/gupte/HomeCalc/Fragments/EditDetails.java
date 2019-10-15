@@ -71,8 +71,7 @@ public class EditDetails extends Fragment {
         final RelativeLayout progress = view.findViewById(R.id.progressLayout);
         progress.setVisibility(View.VISIBLE);
 
-        SharedPreferences prefF = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
-        String family = prefF.getString("familyID", "LostData");
+        String family = ShowDetailUtils.FID;
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();

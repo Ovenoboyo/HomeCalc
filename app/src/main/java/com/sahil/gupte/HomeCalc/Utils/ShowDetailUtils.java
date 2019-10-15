@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
@@ -76,6 +77,8 @@ public class ShowDetailUtils {
     private float totalamt = 0;
     private float grandTotal = 0;
 
+    public static String FID;
+
     //Passed by ShowDetails Fragment
     public ShowDetailUtils(Context context) {
         mContext = context;
@@ -86,6 +89,16 @@ public class ShowDetailUtils {
         mContext = context;
         fm = fragmentManager;
         mainActivity = activity;
+    }
+
+
+    public static String getFamilyID(DataSnapshot dataSnapshot, String UID) {
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            if (Objects.equals(ds.getKey(), UID)) {
+                FID = ds.getValue().toString();
+            }
+        }
+        return FID;
     }
 
     public void getData(DataSnapshot dataSnapshot) {

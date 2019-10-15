@@ -12,12 +12,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -100,7 +96,9 @@ public class SignupActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             addUserNameToUser(username);
-                            startActivity(new Intent(SignupActivity.this, PostSignupActivity.class));
+                            Intent intent = new Intent(SignupActivity.this, PostSignupActivity.class);
+                            intent.putExtra("UID", auth.getUid());
+                            startActivity(intent);
                             finish();
                         }
                     });

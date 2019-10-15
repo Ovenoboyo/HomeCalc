@@ -2,7 +2,6 @@ package com.sahil.gupte.HomeCalc.Auth;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,13 +11,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sahil.gupte.HomeCalc.R;
 import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
@@ -40,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         if (auth.getCurrentUser() != null) {
             Intent intent = new Intent(LoginActivity.this, PostSignupActivity.class);
             intent.putExtra("login", true);
+            intent.putExtra("UID", auth.getUid());
             startActivity(intent);
             finish();
         }
@@ -105,13 +101,9 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                             }
                         } else {
-
-                            SharedPreferences pref = getSharedPreferences("Family", 0);
-                            String family = pref.getString("familyID", "null");
-
-
                             Intent intent = new Intent(LoginActivity.this, PostSignupActivity.class);
                             intent.putExtra("login", true);
+                            intent.putExtra("UID", auth.getUid());
                             startActivity(intent);
                             finish();
                         }

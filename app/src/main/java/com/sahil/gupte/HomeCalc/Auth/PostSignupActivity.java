@@ -3,7 +3,6 @@ package com.sahil.gupte.HomeCalc.Auth;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,21 +31,28 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sahil.gupte.HomeCalc.BuildConfig;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.FamilyHintDialogFragment;
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
+import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Objects;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class PostSignupActivity extends AppCompatActivity {
 
     private static final String TAG = "PostSignupActivity";
     private static final String LOG_TAG = "PostSignupActivity";
+    private String uid;
     private EditText inputID;
     private ProgressBar progressBar;
     private BarcodeDetector detector;
@@ -62,24 +68,40 @@ public class PostSignupActivity extends AppCompatActivity {
         ThemeUtils.onActivityCreateSetTheme(this, getApplicationContext());
         setContentView(R.layout.activity_postsignup);
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("Family", 0);
-        String prevID = pref.getString("familyID", "");
-
         Bundle b = getIntent().getExtras();
 
-        if(b!= null) {
-            if (b.getBoolean("login", false)) {
-                if(!Objects.requireNonNull(prevID).isEmpty()) {
-                    startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
-                    finish();
-                }
-            }
+        assert b != null;
+        uid = b.getString("UID");
+
+        if (uid == null) {
+            startActivity(new Intent(PostSignupActivity.this, LoginActivity.class));
+            finish();
         }
 
+
+        final String[] prevID = new String[1];
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference firstNode = rootRef.child("Users");
+
+        firstNode.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                prevID[0] = ShowDetailUtils.getFamilyID(dataSnapshot, uid);
+                if (b.getBoolean("login", false)) {
+                    if (prevID[0] != null) {
+                        startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
+                        finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         ShowHintDialogFragment();
-
-        final SharedPreferences.Editor editor = pref.edit();
-
 
         Button btnSignUp = findViewById(R.id.sign_up_button);
         Button btnGenerate = findViewById(R.id.generate_button);
@@ -102,7 +124,7 @@ public class PostSignupActivity extends AppCompatActivity {
             return;
         }
 
-        inputID.setText(prevID);
+        inputID.setText(prevID[0]);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -123,16 +145,19 @@ public class PostSignupActivity extends AppCompatActivity {
             }
 
             try {
-                UUID uuid = UUID.fromString(familyID);
+                UUID.fromString(familyID);
             } catch (IllegalArgumentException e) {
                 Log.d(TAG, "onClick: "+e);
                 Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            HashMap<String, String> taskMap = new HashMap<>();
+            taskMap.put(uid, familyID);
+
+            firstNode.setValue(taskMap);
+
             progressBar.setVisibility(View.VISIBLE);
-            editor.putString("familyID", familyID);
-            editor.apply();
             startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
             finish();
 
@@ -141,10 +166,7 @@ public class PostSignupActivity extends AppCompatActivity {
         btnGenerate.setOnClickListener(v -> {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            editor.putString("familyID", UUID.randomUUID().toString());
-            editor.apply();
-            startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
-            finish();
+            inputID.setText(UUID.randomUUID().toString());
         });
     }
 
