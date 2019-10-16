@@ -1,89 +1,90 @@
 package com.sahil.gupte.HomeCalc.Utils;
 
-import android.os.AsyncTask;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 
-import org.apache.hc.client5.http.ClientProtocolException;
-import org.apache.hc.client5.http.classic.methods.HttpGet;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.io.entity.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
-import java.util.HashMap;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-public class CurrencyUtils extends AsyncTask<Void, Void, Float> {
+public class CurrencyUtils {
 
     public static String defaultCurrency;
-    private final String from;
-    private final String to;
-    private final float value;
 
-    private static final String ACCESS_KEY = "WM1PJ9WL556FF12K"; //free
-    private static final String BASE_URL = "https://www.alphavantage.co/";
-    private static final String QUERY_URL = "query?function=CURRENCY_EXCHANGE_RATE&";
-    private static final HashMap<String, Double> CurrencyCache = new HashMap<>();
+    private Context context;
 
-    private static final CloseableHttpClient httpClient = HttpClients.createDefault();
-
-
-    public CurrencyUtils(String from, String to, float value) {
-        this.from = from;
-        this.to = to;
-        this.value = value;
+    public CurrencyUtils(Context context) {
+        this.context = context;
     }
-    private static float sendConvertRequest(String from, String to, float value){
 
-        HttpGet get = new HttpGet(BASE_URL + QUERY_URL + "from_currency=" + from + "&to_currency=" + to + "&apikey=" + ACCESS_KEY);
-        try {
-            CloseableHttpResponse response =  httpClient.execute(get);
-            HttpEntity entity = response.getEntity();
-            JSONObject jsonObject = new JSONObject(EntityUtils.toString(entity));
+    public float getCurrencyData(String to, String from, float value) {
 
-            Double rate;
-            if (CurrencyCache.get(from+to) != null) {
-                rate = CurrencyCache.get(from+to);
-            } else {
-                rate = Double.parseDouble(jsonObject.getJSONObject("Realtime Currency Exchange Rate").getString("5. Exchange Rate"));
-                CurrencyCache.put(from+to, rate);
+        float rate = 0;
+        SharedPreferences pref = context.getSharedPreferences("currency", 0);
+        if (!checkCurrencyExists(to+from, pref)) {
+            try {
+                rate = new CurrencyHttpTask(to, from).execute().get();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
             }
 
-            response.close();
+            Date date = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(date.getTime());
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+            SharedPreferences.Editor editor = pref.edit();
 
-            if (rate != null) {
-                return (float) (value * rate);
-            } else {
-                throw new Exception();
-            }
+            ArrayList<String> list = new ArrayList<>();
+            list.add(to+from);
+            list.add(String.valueOf(rate));
+            list.add(String.valueOf(cal.getTimeInMillis()));
 
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (org.apache.hc.core5.http.ParseException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+            Gson gson = new Gson();
+            String json = gson.toJson(list);
+
+            editor.putString(to+from, json);
+            editor.apply();
+        } else {
+            rate = getRate(to+from , pref);
+            Log.d("test", "getCurrencyData: "+rate);
         }
-        return 0;
+        return (rate*value);
     }
 
+    private boolean checkCurrencyExists(String tofrom, SharedPreferences currencySharedPrefs) {
+        if (currencySharedPrefs.getString(tofrom, null) != null) {
+            Date date = new Date();
+            ArrayList<String> list;
 
-    @Override
-    protected Float doInBackground(Void... voids) {
-        return sendConvertRequest(from, to, value);
+            String json = currencySharedPrefs.getString(tofrom, null);
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<String>>() {}.getType();
+            list = gson.fromJson(json, type);
+
+            return date.getTime() < Float.parseFloat(list != null ? list.get(2) : "" + 0);
+        } else {
+            return false;
+        }
     }
 
-    @Override
-    protected void onPostExecute(Float finalValue) {
-        super.onPostExecute(finalValue);
+    private float getRate(String tofrom, SharedPreferences currencySharedPrefs) {
+        ArrayList<String> list;
+
+        String json = currencySharedPrefs.getString(tofrom, null);
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<String>>() {}.getType();
+        list = gson.fromJson(json, type);
+        if (list != null) {
+            return Float.parseFloat(list.get(1));
+        } else {
+            return 0;
+        }
     }
 }

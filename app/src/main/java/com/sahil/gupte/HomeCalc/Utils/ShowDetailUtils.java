@@ -37,7 +37,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
 public class ShowDetailUtils {
@@ -212,13 +211,8 @@ public class ShowDetailUtils {
             String currency = currencyList.get(i);
             if (!currency.equals(CurrencyUtils.defaultCurrency)) {
                 Float finalValue = Float.valueOf(PriceList.get(i));
-                try {
-                    finalValue = new CurrencyUtils(currency, CurrencyUtils.defaultCurrency, Float.valueOf(PriceList.get(i))).execute().get();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                CurrencyUtils currencyUtils = new CurrencyUtils(mContext);
+                finalValue = currencyUtils.getCurrencyData(currency, CurrencyUtils.defaultCurrency, Float.valueOf(PriceList.get(i)));
                 setPrice(i, String.valueOf(finalValue));
             } else {
             }
