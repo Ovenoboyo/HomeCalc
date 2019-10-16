@@ -4,15 +4,15 @@ HomeCalc is an android app to store your daily expenses.
 
 ## Features
 
-### Categorize your expenses with the help of a pre-defined set of categories
+1. Categorize your expenses with the help of a pre-defined set of categories
 
-### Currency conversion 
+2. Currency conversion 
 
-### View reports of all people under the same family
+3. View reports of all people under the same family
 
-### View expenses per day or per category
+4. View expenses per day or per category
 
-### Dark theme :)
+5. Dark theme :)
 
 ## Working
 
