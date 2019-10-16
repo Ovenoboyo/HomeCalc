@@ -160,10 +160,10 @@ public class PostSignupActivity extends AppCompatActivity {
                 return;
             }
 
-            HashMap<String, String> taskMap = new HashMap<>();
+            HashMap<String, Object> taskMap = new HashMap<>();
             taskMap.put(uid, familyID);
 
-            firstNode.setValue(taskMap);
+            firstNode.updateChildren(taskMap);
 
             progressBar.setVisibility(View.VISIBLE);
             startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
