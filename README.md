@@ -42,9 +42,9 @@ Realtime currency details fetched from alphavantage
 
 ## Credits
 
-App Logo by [Androbuddy](t.me/AndroBuddy007)
+App Logo by [Androbuddy](https://t.me/AndroBuddy007)
 
-App design and development by [Sahil Gupte](t.me/Ovenoboyo)
+App design and development by [Sahil Gupte](https://t.me/Ovenoboyo)
 
 Database provider [Firebase](https://firebase.google.com)
 
