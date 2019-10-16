@@ -38,3 +38,14 @@ Realtime currency details fetched from alphavantage
 ![Screenshot 2](Screenshot%20(2).jpg)
 ![Screenshot 3](Screenshot%20(3).jpg)
 ![Screenshot 4](Screenshot%20(4).jpg)
+
+
+## Credits
+
+App Logo by [Androbuddy](t.me/AndroBuddy007)
+
+App design and development by [Sahil Gupte](t.me/Ovenoboyo)
+
+Database provider [Firebase](https://firebase.google.com)
+
+Currency Conversins provider [AlphaVantage](https://www.alphavantage.co/)
