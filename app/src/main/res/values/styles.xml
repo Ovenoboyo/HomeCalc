@@ -21,4 +21,8 @@
         <item name="android:windowBackground">@drawable/launch_screen</item>
     </style>
 
+    <style name="HeaderBar">
+        <item name="android:background">?attr/PrimaryDark</item>
+    </style>
+
 </resources>

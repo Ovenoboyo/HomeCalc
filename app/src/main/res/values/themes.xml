@@ -4,8 +4,8 @@
         parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/Primary</item>
+        <item name="colorPrimaryDark">@color/PrimaryDark</item>
         <item name="colorAccent">@color/Accent</item>
         <item name="Accent">@color/Accent</item>
         <item name="Primary">@color/Primary</item>
@@ -19,6 +19,7 @@
         <item name="android:itemBackground">?attr/Primary</item>
         <item name="android:textColor">?attr/PrimaryText</item>
         <item name="android:actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
+        <item name="ToolbarTheme">@style/Theme.App</item>
     </style>
 
     <style name="ActionButtonOverflow" parent="@style/Widget.AppCompat.ActionButton.Overflow">
@@ -26,6 +27,8 @@
     </style>
 
     <style name="Theme.App.Dark" parent="Theme.App">
+        <item name="colorPrimary">@color/PrimaryBlack</item>
+        <item name="colorPrimaryDark">@color/PrimaryDarkBlack</item>
         <item name="colorAccent">@color/Accent</item>
         <item name="Accent">@color/Accent</item>
         <item name="Primary">@color/PrimaryBlack</item>
@@ -38,6 +41,7 @@
         <item name="android:textColor">@color/PrimaryTextBlack</item>
         <item name="alertDialogTheme">@style/Dialog.Dark</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="ToolbarTheme">@style/Theme.App.Dark</item>
     </style>
 
     <style name="Theme.app.blue" parent="Theme.App">

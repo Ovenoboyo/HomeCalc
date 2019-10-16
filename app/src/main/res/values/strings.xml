@@ -56,7 +56,8 @@
     <string name="show_uid">Show Family UID</string>
     <string name="hint_text1">Clicking on an entry in \"Your Report\", </string>
     <string name="hint_text2">Will open a \"Dialog box\" allowing you to edit the data. </string>
-    <string name="default_loading">Loading. Please Wait...</string>
+    <string name="default_loading">Loading. Please Wait…</string>
+    <string name="title_settings_activity">Settings</string>
 
 
     <string name="pleasewait">Please Wait</string>
