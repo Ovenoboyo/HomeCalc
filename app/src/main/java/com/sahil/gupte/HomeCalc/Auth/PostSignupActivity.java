@@ -17,7 +17,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -68,6 +70,9 @@ public class PostSignupActivity extends AppCompatActivity {
         ThemeUtils.onActivityCreateSetTheme(this, getApplicationContext());
         setContentView(R.layout.activity_postsignup);
 
+        RelativeLayout coverView = findViewById(R.id.cover_view);
+        LinearLayout mainView = findViewById(R.id.content_view);
+
         Bundle b = getIntent().getExtras();
 
         assert b != null;
@@ -91,8 +96,13 @@ public class PostSignupActivity extends AppCompatActivity {
                     if (prevID[0] != null) {
                         startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
                         finish();
+                        return;
                     }
                 }
+
+                mainView.setVisibility(View.VISIBLE);
+                coverView.setVisibility(View.GONE);
+                ShowHintDialogFragment();
             }
 
             @Override
@@ -100,8 +110,6 @@ public class PostSignupActivity extends AppCompatActivity {
 
             }
         });
-
-        ShowHintDialogFragment();
 
         Button btnSignUp = findViewById(R.id.sign_up_button);
         Button btnGenerate = findViewById(R.id.generate_button);
