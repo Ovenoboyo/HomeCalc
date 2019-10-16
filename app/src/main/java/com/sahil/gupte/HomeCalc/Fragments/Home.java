@@ -95,8 +95,6 @@ public class Home extends Fragment {
             ft.remove(prev);
         }
 
-        new CurrencyUtils("INR", "GBP", 5000).execute();
-
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         View view = inflater.inflate(R.layout.fragment_home, container, false);
             listAdapter = new CustomRecyclerViewInput(getActivity());

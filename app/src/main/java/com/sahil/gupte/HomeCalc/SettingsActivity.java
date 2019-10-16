@@ -129,11 +129,9 @@ public class SettingsActivity extends AppCompatActivity {
             ListPreference defaultCurrency = findPreference("currency");
             assert defaultCurrency != null;
             CurrencyUtils.defaultCurrency = defaultCurrency.getValue();
-            Log.d(TAG, "onCreatePreferences: "+CurrencyUtils.defaultCurrency);
 
             defaultCurrency.setOnPreferenceChangeListener((preference, newValue) -> {
                 CurrencyUtils.defaultCurrency = newValue.toString();
-                Log.d(TAG, "onCreatePreferences: "+CurrencyUtils.defaultCurrency);
                 editor.putString("defaultCurrency", CurrencyUtils.defaultCurrency);
                 editor.apply();
                 return true;
