@@ -796,6 +796,8 @@ public class ShowDetailUtils {
         today.set(Calendar.SECOND, 0);
         today.set(Calendar.MILLISECOND, 0);
 
+        ArrayList<String[]> dataList = new ArrayList<>();
+
         for (int i = 0; i<NotesList.size(); i++) {
             cal.setTimeInMillis(Long.parseLong(TimeList.get(i)));
             cal.set(Calendar.DAY_OF_MONTH, 0);
@@ -805,9 +807,12 @@ public class ShowDetailUtils {
             cal.set(Calendar.MILLISECOND, 0);
 
             if (cal.getTimeInMillis() <= today.getTimeInMillis()) {
+                dataList.add(new String[]{DateList.get(i), SpinnerNameList[Integer.parseInt(SpinnerList.get(i))], PriceList.get(i)+" "+CurrencyList.get(i), NotesList.get(i)});
                 RemoveItemDB(i, mContext);
             }
         }
+
+        CsvWriter.writeToCSV(dataList);
     }
 
     private void ShowDialogFragment(int i) {

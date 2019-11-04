@@ -31,7 +31,7 @@ public class UpdateUtils {
 
     private static final String TAG = "UpdateUtils" ;
     private static String URL, fileName;
-    private static final String downloadDirectory = "HomeCalc";
+    private static final String downloadDirectory = "HomeCalc/Downloads";
 
 
     public UpdateUtils() {
