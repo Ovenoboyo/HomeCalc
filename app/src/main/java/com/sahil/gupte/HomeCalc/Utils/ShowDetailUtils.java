@@ -748,8 +748,7 @@ public class ShowDetailUtils {
         String spinnerKey = SpinnerKeyList.get(pos);
         String currencyKey = CurrencyKeyList.get(pos);
 
-        SharedPreferences prefF = mContext.getSharedPreferences("Family", 0);
-        String family = prefF.getString("familyID", "LostData");
+        String family = ShowDetailUtils.FID;
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -772,8 +771,7 @@ public class ShowDetailUtils {
         String spinnerKey = SpinnerKeyList.get(pos);
         String currencyKey = CurrencyKeyList.get(pos);
 
-        SharedPreferences prefF = mContext.getSharedPreferences("Family", 0);
-        String family = prefF.getString("familyID", "LostData");
+        String family = ShowDetailUtils.FID;
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();

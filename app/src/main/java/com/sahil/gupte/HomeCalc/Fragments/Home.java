@@ -1,7 +1,6 @@
 package com.sahil.gupte.HomeCalc.Fragments;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,6 +31,7 @@ import com.sahil.gupte.HomeCalc.CustomViews.CustomRecyclerViewInput;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SwitchDialogFragment;
 import com.sahil.gupte.HomeCalc.R;
 import com.sahil.gupte.HomeCalc.Utils.CurrencyUtils;
+import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -110,12 +110,11 @@ public class Home extends Fragment {
 
         FirebaseMessaging.getInstance().subscribeToTopic("user_"+ Objects.requireNonNull(Objects.requireNonNull(user).getDisplayName()).replaceAll("\\s", "_"));
 
-        final SharedPreferences pref = Objects.requireNonNull(getContext()).getSharedPreferences("Family", 0);
-        String family = pref.getString("familyID", "LostData");
+        String family = ShowDetailUtils.FID;
 
         rootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference firstNode = rootRef.child(Objects.requireNonNull(family));
-        userNode = firstNode.child(user.getDisplayName());
+        userNode = firstNode.child(Objects.requireNonNull(user.getDisplayName()));
 
         addNew.setOnClickListener(v -> {
             listAdapter.notifyItemInserted(listAdapter.getItemCount()+1);
