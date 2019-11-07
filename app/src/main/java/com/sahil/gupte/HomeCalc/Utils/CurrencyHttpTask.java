@@ -3,20 +3,17 @@ package com.sahil.gupte.HomeCalc.Utils;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.apache.hc.client5.http.ClientProtocolException;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 
-public class CurrencyHttpTask extends AsyncTask<Void, Void, Float> {
+class CurrencyHttpTask extends AsyncTask<Void, Void, Float> {
 
     private final String from;
     private final String to;
@@ -57,17 +54,6 @@ public class CurrencyHttpTask extends AsyncTask<Void, Void, Float> {
                 throw new Exception();
             }
 
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (org.apache.hc.core5.http.ParseException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }

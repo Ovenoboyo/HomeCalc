@@ -18,7 +18,7 @@ public class CurrencyUtils {
 
     public static String defaultCurrency;
 
-    private Context context;
+    private final Context context;
 
     public CurrencyUtils(Context context) {
         this.context = context;

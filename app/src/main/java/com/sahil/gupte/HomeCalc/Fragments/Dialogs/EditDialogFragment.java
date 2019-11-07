@@ -173,7 +173,7 @@ public class EditDialogFragment extends DialogFragment {
                 today.set(Calendar.MILLISECOND, 0);
 
                 Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis(date1.getTime());
+                cal.setTimeInMillis(Objects.requireNonNull(date1).getTime());
                 cal.set(Calendar.DAY_OF_MONTH, 0);
                 cal.set(Calendar.HOUR_OF_DAY, 0);
                 cal.set(Calendar.MINUTE, 0);
@@ -200,7 +200,7 @@ public class EditDialogFragment extends DialogFragment {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         try {
             Date date = formatter.parse(value);
-            String newDate = String.valueOf(date.getTime());
+            String newDate = String.valueOf(Objects.requireNonNull(date).getTime());
             Log.d("test", "dateToTimestamp: "+newDate);
             return newDate;
         } catch (ParseException e) {

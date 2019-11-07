@@ -28,7 +28,8 @@
                 android:hint="@string/hint_email"
                 android:inputType="textEmailAddress"
                 android:textColor="?attr/PrimaryText"
-                android:textColorHint="?attr/PrimaryTextDark" />
+                android:textColorHint="?attr/PrimaryTextDark"
+                android:autofillHints="" />
 
             <EditText
                 android:id="@+id/password"
@@ -38,7 +39,8 @@
                 android:hint="@string/hint_password"
                 android:inputType="textPassword"
                 android:textColor="?attr/PrimaryText"
-                android:textColorHint="?attr/PrimaryTextDark" />
+                android:textColorHint="?attr/PrimaryTextDark"
+                android:autofillHints="" />
 
         <!-- Login Button -->
 

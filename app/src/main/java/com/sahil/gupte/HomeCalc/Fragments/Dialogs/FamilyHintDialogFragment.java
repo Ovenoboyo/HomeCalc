@@ -3,7 +3,6 @@ package com.sahil.gupte.HomeCalc.Fragments.Dialogs;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +25,7 @@ public class FamilyHintDialogFragment extends DialogFragment
         mContext = getActivity();
         setCancelable(true);
     }
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)

@@ -48,6 +48,7 @@ import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class PostSignupActivity extends AppCompatActivity {
@@ -143,7 +144,7 @@ public class PostSignupActivity extends AppCompatActivity {
 
         btnSignUp.setOnClickListener(v -> {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            Objects.requireNonNull(inputMethodManager).hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
             String familyID = inputID.getText().toString().trim();
 
@@ -173,7 +174,7 @@ public class PostSignupActivity extends AppCompatActivity {
 
         btnGenerate.setOnClickListener(v -> {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            Objects.requireNonNull(inputMethodManager).hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             inputID.setText(UUID.randomUUID().toString());
         });
     }
@@ -197,13 +198,12 @@ public class PostSignupActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_WRITE_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    takePicture();
-                } else {
-                    Toast.makeText(PostSignupActivity.this, "Permission Denied!", Toast.LENGTH_SHORT).show();
-                }
+        if (requestCode == REQUEST_WRITE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                takePicture();
+            } else {
+                Toast.makeText(PostSignupActivity.this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

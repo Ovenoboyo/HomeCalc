@@ -66,7 +66,7 @@ public class FamilyUID extends Fragment {
         }
 
         WindowManager manager = (WindowManager) Objects.requireNonNull(getContext()).getSystemService(WINDOW_SERVICE);
-        Display display = manager.getDefaultDisplay();
+        Display display = Objects.requireNonNull(manager).getDefaultDisplay();
         Point point = new Point();
         display.getSize(point);
         int width = point.x;
@@ -90,14 +90,14 @@ public class FamilyUID extends Fragment {
         clipboard.setOnClickListener(v -> {
             ClipboardManager clipboardManager = (ClipboardManager) Objects.requireNonNull(getContext()).getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText("FamilyUID", family);
-            clipboardManager.setPrimaryClip(clip);
+            Objects.requireNonNull(clipboardManager).setPrimaryClip(clip);
             Toast.makeText(getContext(), "Copied ID to clipboard", Toast.LENGTH_SHORT).show();
         });
         return view;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu( Menu menu,  MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.main, menu);

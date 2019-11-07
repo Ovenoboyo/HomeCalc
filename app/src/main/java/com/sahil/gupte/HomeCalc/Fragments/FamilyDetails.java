@@ -64,7 +64,7 @@ public class FamilyDetails extends Fragment {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference familyNode = database.getReference(Objects.requireNonNull(family));
 
-        SharedPreferences pref = getContext().getSharedPreferences("SpinnerSort", 0);
+        SharedPreferences pref = Objects.requireNonNull(getContext()).getSharedPreferences("SpinnerSort", 0);
         final boolean collective = pref.getBoolean("collective", false);
         final int row1 = pref.getInt("row1", 0);
         final int column2 = pref.getInt("column2", 0);
@@ -125,7 +125,7 @@ public class FamilyDetails extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu( Menu menu,  MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         SharedPreferences pref = Objects.requireNonNull(getContext()).getSharedPreferences("SpinnerSort", 0);
         boolean collective = pref.getBoolean("collective", false);

@@ -5,7 +5,6 @@
     android:background="?attr/Primary">
 
     <ImageView
-        android:id="@+id/imageView2"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_above="@id/account_email"

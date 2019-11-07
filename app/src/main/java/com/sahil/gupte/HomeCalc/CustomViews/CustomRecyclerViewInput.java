@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,7 +40,6 @@ public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecycler
         super.onViewAttachedToWindow(holder);
 
     }
-
     @Override
     public CustomRecyclerViewInput.RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_list, parent, false);

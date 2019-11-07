@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class CsvWriter {
+class CsvWriter {
 
     static void writeToCSV(ArrayList<String[]> dataList) {
         String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -55,7 +55,6 @@ public class CsvWriter {
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
     }
 }

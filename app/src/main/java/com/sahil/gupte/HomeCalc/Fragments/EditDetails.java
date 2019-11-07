@@ -82,7 +82,7 @@ public class EditDetails extends Fragment {
 
         userNode.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange( DataSnapshot dataSnapshot) {
                 showDetailUtils.getData(dataSnapshot);
                 if (getActivity() != null) {
                     Fragment f = getActivity().getSupportFragmentManager().findFragmentById(R.id.content_frame);
@@ -99,7 +99,7 @@ public class EditDetails extends Fragment {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled( DatabaseError databaseError) {
 
             }
         });
@@ -108,7 +108,7 @@ public class EditDetails extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu( Menu menu,  MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         // Inflate the menu; this adds items to the action bar if it is present.
          inflater.inflate(R.menu.main, menu);

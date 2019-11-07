@@ -34,7 +34,8 @@
             android:textColor="?attr/PrimaryText"
             android:maxLength="10"
             android:focusable="false"
-            android:text="Date" />
+            android:text="Date"
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/edit_price"
@@ -44,7 +45,8 @@
             android:ems="10"
             android:inputType="number"
             android:textColor="?attr/PrimaryText"
-            android:text="Price" />
+            android:text="Price"
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/edit_notes"
@@ -54,7 +56,8 @@
             android:ems="10"
             android:inputType="text"
             android:textColor="?attr/PrimaryText"
-            android:text="Notes" />
+            android:text="Notes"
+            android:autofillHints="" />
     </LinearLayout>
 
     <LinearLayout

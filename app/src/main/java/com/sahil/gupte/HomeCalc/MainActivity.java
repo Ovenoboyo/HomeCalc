@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity
 
             userNode.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange( DataSnapshot dataSnapshot) {
                     showDetailUtils.ClearDB(dataSnapshot);
                     alertDialog.dismiss();
 
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled( DatabaseError databaseError) {
 
                 }
             });
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] grantResults) {
+                                            String[] permissions, int[] grantResults) {
 
 
         // If request is cancelled, the result arrays are empty.
@@ -198,7 +198,8 @@ public class MainActivity extends AppCompatActivity
 
                     break;
                 } else if (f instanceof Home) {
-                    handled = ((Home)f).onBackPressed();
+                    handled = true;
+                    ((Home)f).onBackPressed();
                 }
 
                 if(handled) {
@@ -309,7 +310,7 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    protected void onSaveInstanceState(Bundle b) {
+    protected void onSaveInstanceState( Bundle b) {
         super.onSaveInstanceState(b);
     }
 

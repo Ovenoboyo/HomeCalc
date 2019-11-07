@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude the shared preferences file that contains the GCM registrationId -->
+    <exclude
+        domain="sharedpref"
+        path="family_hint_dialog.xml" />
+    <exclude
+        domain="sharedpref"
+        path="SpinnerSort.xml" />
+    <exclude
+        domain="sharedpref"
+        path="currency.xml" />
+    <exclude
+        domain="sharedpref"
+        path="Theme.xml" />
+    <exclude
+        domain="sharedpref"
+        path="Currency.xml" />
+    <exclude
+        domain="sharedpref"
+        path="hint_dialog.xml" />
+</full-backup-content>

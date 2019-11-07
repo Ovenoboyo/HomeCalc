@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,11 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.sahil.gupte.HomeCalc.CustomViews.CustomRecyclerViewInput;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SwitchDialogFragment;
@@ -39,9 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,7 +50,6 @@ public class Home extends Fragment {
     private DatabaseReference currencyNode;
     private DatabaseReference userNode;
     private DatabaseReference timeNode;
-    private DatabaseReference rootRef;
     private EditText price, notes, time;
     private Spinner spinner;
     private final ArrayList<Integer> pricelist = new ArrayList<>();
@@ -75,13 +68,12 @@ public class Home extends Fragment {
         setHasOptionsMenu(false);
     }
 
-    public boolean onBackPressed() {
+    public void onBackPressed() {
         new AlertDialog.Builder(Objects.requireNonNull(getContext()))
                 .setTitle("Exit?")
                 .setMessage("Are you sure you want to exit?")
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, (arg0, arg1) -> Objects.requireNonNull(getActivity()).finish()).create().show();
-        return true;
     }
 
     @Override
@@ -112,7 +104,7 @@ public class Home extends Fragment {
 
         String family = ShowDetailUtils.FID;
 
-        rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference firstNode = rootRef.child(Objects.requireNonNull(family));
         userNode = firstNode.child(Objects.requireNonNull(user.getDisplayName()));
 
@@ -179,23 +171,6 @@ public class Home extends Fragment {
                     currencyNode.push().setValue(currencylist.get(i));
 
                 }
-
-                firstNode.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                            String username = childDataSnapshot.getKey();
-                            if (!Objects.requireNonNull(username).equals(user.getDisplayName())) {
-                                sendNotificationToUser(Objects.requireNonNull(username).replaceAll("\\s", "_"), user.getDisplayName()+" added new items to his list!");
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
             }
             showProgressDialog(ft, sdf);
         });
@@ -225,23 +200,13 @@ public class Home extends Fragment {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         try {
             Date date = formatter.parse(value);
-            String newDate = String.valueOf(date.getTime());
+            String newDate = String.valueOf(Objects.requireNonNull(date).getTime());
             Log.d("test", "dateToTimestamp: "+newDate);
             return newDate;
         } catch (ParseException e) {
             Toast.makeText(getContext(), "Invalid Date format. Try DD/MM/YYYY", Toast.LENGTH_LONG).show();
         }
         return String.valueOf(getTimeStartOfDay());
-    }
-
-    private void sendNotificationToUser(String user, final String message) {
-        final DatabaseReference notifications = rootRef.child("notificationRequests");
-
-        Map notification = new HashMap<>();
-        notification.put("username", user);
-        notification.put("message", message);
-
-        notifications.push().setValue(notification);
     }
 
     private boolean DateCheck(String date) {

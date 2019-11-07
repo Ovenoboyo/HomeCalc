@@ -42,6 +42,7 @@ public class SortDialogFragment extends DialogFragment
         }
     }
 
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.sort_dialog, null);

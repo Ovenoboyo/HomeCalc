@@ -58,7 +58,8 @@
                 android:hint="@string/hint_family"
                 android:inputType="textEmailAddress"
                 android:textColor="?attr/PrimaryText"
-                android:textColorHint="?attr/PrimaryTextDark" />
+                android:textColorHint="?attr/PrimaryTextDark"
+                android:autofillHints="" />
 
         <Button
             android:id="@+id/sign_up_button"

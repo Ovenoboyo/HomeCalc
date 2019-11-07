@@ -55,12 +55,10 @@ public class SettingsActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
+    static class SettingsFragment extends PreferenceFragmentCompat {
 
         final Boolean[] dark = new Boolean[1];
         Object accent;
-
-        private final String TAG = "SettingsFragment";
 
         private void setTheme() {
             if (accent.equals("Blue")) {
@@ -123,6 +121,7 @@ public class SettingsActivity extends AppCompatActivity {
             ThemeUtils.PutDark(dark[0], Objects.requireNonNull(getContext()));
             assert red != null;
             accent = red.getValue();
+            String TAG = "SettingsFragment";
             Log.d(TAG, "onCreatePreferences: "+dark[0]);
             dark_mode.setOnPreferenceChangeListener((preference, newValue) -> {
                 dark[0] = Boolean.parseBoolean(newValue.toString());
