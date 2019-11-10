@@ -27,6 +27,7 @@ import com.sahil.gupte.HomeCalc.CustomViews.CustomRecyclerViewInput;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SwitchDialogFragment;
 import com.sahil.gupte.HomeCalc.R;
 import com.sahil.gupte.HomeCalc.Utils.CurrencyUtils;
+import com.sahil.gupte.HomeCalc.Utils.FamilyUtils;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 
 import java.text.DateFormat;
@@ -89,7 +90,7 @@ public class Home extends Fragment {
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-            listAdapter = new CustomRecyclerViewInput(getActivity());
+            listAdapter = new CustomRecyclerViewInput(getActivity(), ShowDetailUtils.getSpinnerNameList());
             list = view.findViewById(R.id.custom_list);
             list.setAdapter(listAdapter);
         Button addNew = view.findViewById(R.id.button);
@@ -102,7 +103,7 @@ public class Home extends Fragment {
 
         FirebaseMessaging.getInstance().subscribeToTopic("user_"+ Objects.requireNonNull(Objects.requireNonNull(user).getDisplayName()).replaceAll("\\s", "_"));
 
-        String family = ShowDetailUtils.FID;
+        String family = FamilyUtils.FID;
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference firstNode = rootRef.child(Objects.requireNonNull(family));

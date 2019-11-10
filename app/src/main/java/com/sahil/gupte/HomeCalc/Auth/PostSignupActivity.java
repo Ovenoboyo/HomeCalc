@@ -42,6 +42,7 @@ import com.sahil.gupte.HomeCalc.BuildConfig;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.FamilyHintDialogFragment;
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
+import com.sahil.gupte.HomeCalc.Utils.FamilyUtils;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
 
@@ -86,23 +87,24 @@ public class PostSignupActivity extends AppCompatActivity {
         }
 
 
-        final String[] prevID = new String[1];
+        String[] prevID = new String[1];
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference usersNode = rootRef.child("Users");
         final DatabaseReference familyAdminNode = rootRef.child("FamilyAdmin");
 
-        usersNode.addListenerForSingleValueEvent(new ValueEventListener() {
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                prevID[0] = ShowDetailUtils.getFamilyID(dataSnapshot, uid);
-                if (b.getBoolean("login", false)) {
+                        prevID[0] = FamilyUtils.getFamilyID(dataSnapshot.child("Users"), uid);
+                        if (prevID[0] != null) {
+                            ShowDetailUtils.setSpinnerNameList(FamilyUtils.getSpinnerList(dataSnapshot.child("SpinnerLists").child(prevID[0]), getApplicationContext()));
+                        }
+
                     if (prevID[0] != null) {
                         startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
                         finish();
                         return;
                     }
-                }
-
                 mainView.setVisibility(View.VISIBLE);
                 coverView.setVisibility(View.GONE);
                 ShowHintDialogFragment();

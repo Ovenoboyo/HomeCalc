@@ -3,28 +3,36 @@ package com.sahil.gupte.HomeCalc.CustomViews;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sahil.gupte.HomeCalc.R;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecyclerViewInput.RecyclerViewHolder> {
     private int count = 1;
     private final Activity context1;
     public final HashMap<Integer, RecyclerView.ViewHolder> holderHashMap = new HashMap<>();
+    private final List<String> spinnerNameList;
 
-    public CustomRecyclerViewInput(Activity context) {
+    public CustomRecyclerViewInput(Activity context, ArrayList<String> spinnerNameList) {
         context1 = context;
+        Log.d("test", "CustomRecyclerViewInput: "+spinnerNameList);
+        this.spinnerNameList = spinnerNameList;
 
     }
 
@@ -49,6 +57,13 @@ public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecycler
 
     @Override
     public void onBindViewHolder(final CustomRecyclerViewInput.RecyclerViewHolder holder, int position) {
+        if (spinnerNameList != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    context1, android.R.layout.simple_spinner_item, spinnerNameList);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            holder.spinner.setAdapter(adapter);
+        }
+
         String date;
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         date = formatter.format(new Date().getTime());
@@ -107,10 +122,12 @@ public class CustomRecyclerViewInput extends RecyclerView.Adapter<CustomRecycler
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         final EditText time;
+        final Spinner spinner;
 
         RecyclerViewHolder(View view) {
             super(view);
             time = view.findViewById(R.id.editText3);
+            spinner = view.findViewById(R.id.spinner);
 
         }
     }

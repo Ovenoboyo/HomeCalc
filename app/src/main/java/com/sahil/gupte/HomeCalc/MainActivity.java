@@ -41,6 +41,7 @@ import com.sahil.gupte.HomeCalc.Fragments.FamilyDetails;
 import com.sahil.gupte.HomeCalc.Fragments.FamilyUID;
 import com.sahil.gupte.HomeCalc.Fragments.Home;
 import com.sahil.gupte.HomeCalc.Utils.CurrencyUtils;
+import com.sahil.gupte.HomeCalc.Utils.FamilyUtils;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
 import com.sahil.gupte.HomeCalc.Utils.UpdateUtils;
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     assert user != null;
-                    ShowDetailUtils.getFamilyID(dataSnapshot, user.getUid());
+                    FamilyUtils.getFamilyID(dataSnapshot, user.getUid());
                 }
 
                 @Override
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity
                 }
             });
 
-            final String family = ShowDetailUtils.FID;
+            final String family = FamilyUtils.FID;
             if (family == null) {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
@@ -155,6 +156,7 @@ public class MainActivity extends AppCompatActivity
 
                 }
             });
+
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             DrawerLayout drawer = findViewById(R.id.drawer_layout);

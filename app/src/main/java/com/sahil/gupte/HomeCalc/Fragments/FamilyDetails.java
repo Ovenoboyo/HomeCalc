@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SortDialogFragment;
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
+import com.sahil.gupte.HomeCalc.Utils.FamilyUtils;
 import com.sahil.gupte.HomeCalc.Utils.ShowDetailUtils;
 
 import java.util.Objects;
@@ -59,7 +60,7 @@ public class FamilyDetails extends Fragment {
         final RelativeLayout progress = view.findViewById(R.id.progressLayout);
         progress.setVisibility(View.VISIBLE);
 
-        String family = ShowDetailUtils.FID;
+        String family = FamilyUtils.FID;
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference familyNode = database.getReference(Objects.requireNonNull(family));

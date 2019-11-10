@@ -36,7 +36,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 @SuppressWarnings("ALL")
 public class ShowDetailUtils {
@@ -50,7 +49,7 @@ public class ShowDetailUtils {
     public static final ArrayList<String> DateList = new ArrayList<>();
     public static final ArrayList<String> CurrencyList = new ArrayList<>();
 
-    private static String[] SpinnerNameList;
+    private static ArrayList<String> SpinnerNameList;
 
     private static final ArrayList<String> SpinnerKeyList = new ArrayList<>();
     private static final ArrayList<String> NotesKeyList = new ArrayList<>();
@@ -76,8 +75,6 @@ public class ShowDetailUtils {
     private float totalamt = 0;
     private float grandTotal = 0;
 
-    public static String FID;
-
     //Passed by ShowDetails Fragment
     public ShowDetailUtils(Context context) {
         mContext = context;
@@ -88,16 +85,6 @@ public class ShowDetailUtils {
         mContext = context;
         fm = fragmentManager;
         mainActivity = activity;
-    }
-
-
-    public static String getFamilyID(DataSnapshot dataSnapshot, String UID) {
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            if (Objects.equals(ds.getKey(), UID)) {
-                FID = ds.getValue().toString();
-            }
-        }
-        return FID;
     }
 
     public void getData(DataSnapshot dataSnapshot) {
@@ -133,8 +120,6 @@ public class ShowDetailUtils {
         }
         setDateList(DateList, TimeList);
         sortCurrencies(CurrencyList);
-
-        SpinnerNameList = mContext.getResources().getStringArray(R.array.category);
 
         SharedPreferences pref = mContext.getSharedPreferences("SpinnerSort", 0);
         row1 = pref.getInt("row1", 0);
@@ -187,9 +172,6 @@ public class ShowDetailUtils {
 
         setDateList(DateList, TimeList);
         sortCurrencies(CurrencyList);
-
-
-        SpinnerNameList = mContext.getResources().getStringArray(R.array.category);
 
         SharedPreferences pref = mContext.getSharedPreferences("SpinnerSort", 0);
         row1 = pref.getInt("row1", 0);
@@ -331,7 +313,12 @@ public class ShowDetailUtils {
             linearLayoutOuter1.addView(linearLayoutWButton);
 
         } else {
-            textViewOuter.setText(SpinnerNameList[Integer.valueOf(newList.get(i))]);
+            int index = Integer.valueOf(newList.get(i));
+            if (index < SpinnerNameList.size()) {
+                textViewOuter.setText(SpinnerNameList.get(index));
+            } else {
+                textViewOuter.setText("Unknown");
+            }
             linearLayoutWButton.addView(textViewOuter);
             linearLayoutOuter1.addView(linearLayoutWButton);
         }
@@ -720,7 +707,13 @@ public class ShowDetailUtils {
                 break;
 
             case "spinner":
-                data.setText(SpinnerNameList[Integer.valueOf(SpinnerList.get(j))]);
+                int index = Integer.valueOf(SpinnerList.get(j));
+                if (index < SpinnerNameList.size()) {
+                    data.setText(SpinnerNameList.get(index));
+                } else {
+                    data.setText("Unknown");
+                }
+
         }
         data.setTextSize(16);
         data.setTextColor(colorFromTheme);
@@ -748,7 +741,7 @@ public class ShowDetailUtils {
         String spinnerKey = SpinnerKeyList.get(pos);
         String currencyKey = CurrencyKeyList.get(pos);
 
-        String family = ShowDetailUtils.FID;
+        String family = FamilyUtils.FID;
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -771,7 +764,7 @@ public class ShowDetailUtils {
         String spinnerKey = SpinnerKeyList.get(pos);
         String currencyKey = CurrencyKeyList.get(pos);
 
-        String family = ShowDetailUtils.FID;
+        String family = FamilyUtils.FID;
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -807,7 +800,8 @@ public class ShowDetailUtils {
             cal.set(Calendar.MILLISECOND, 0);
 
             if (cal.getTimeInMillis() <= today.getTimeInMillis()) {
-                dataList.add(new String[]{DateList.get(i), SpinnerNameList[Integer.parseInt(SpinnerList.get(i))], PriceList.get(i)+" "+CurrencyList.get(i), NotesList.get(i)});
+                int index = Integer.valueOf(SpinnerList.get(i));
+                dataList.add(new String[]{DateList.get(i), ((index < SpinnerNameList.size()) ? SpinnerNameList.get(Integer.parseInt(SpinnerList.get(i))) : "Unknown"), PriceList.get(i)+" "+CurrencyList.get(i), NotesList.get(i)});
                 RemoveItemDB(i, mContext);
             }
         }
@@ -851,6 +845,14 @@ public class ShowDetailUtils {
             Log.d(TAG, "setTime: Parse Exception");
             Toast.makeText(mContext, "Invalid Date format. Try DD/MM/YYYY", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public static void setSpinnerNameList(ArrayList<String> spinnerNameList) {
+        SpinnerNameList = spinnerNameList;
+    }
+
+    public static ArrayList<String> getSpinnerNameList() {
+        return SpinnerNameList;
     }
 
     public static void clearLists() {
