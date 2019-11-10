@@ -64,6 +64,7 @@ public class PostSignupActivity extends AppCompatActivity {
     private static final String SAVED_INSTANCE_URI = "uri";
     private static final String SAVED_INSTANCE_RESULT = "result";
     private static final int PHOTO_REQUEST = 10;
+    private boolean familyAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +88,10 @@ public class PostSignupActivity extends AppCompatActivity {
 
         final String[] prevID = new String[1];
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference firstNode = rootRef.child("Users");
+        final DatabaseReference usersNode = rootRef.child("Users");
+        final DatabaseReference familyAdminNode = rootRef.child("FamilyAdmin");
 
-        firstNode.addListenerForSingleValueEvent(new ValueEventListener() {
+        usersNode.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 prevID[0] = ShowDetailUtils.getFamilyID(dataSnapshot, uid);
@@ -163,8 +165,9 @@ public class PostSignupActivity extends AppCompatActivity {
 
             HashMap<String, Object> taskMap = new HashMap<>();
             taskMap.put(uid, familyID);
+            usersNode.updateChildren(taskMap);
 
-            firstNode.updateChildren(taskMap);
+            familyAdminNode.child(familyID).child(uid).setValue(familyAdmin);
 
             progressBar.setVisibility(View.VISIBLE);
             startActivity(new Intent(PostSignupActivity.this, MainActivity.class));
@@ -176,6 +179,8 @@ public class PostSignupActivity extends AppCompatActivity {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             Objects.requireNonNull(inputMethodManager).hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             inputID.setText(UUID.randomUUID().toString());
+            familyAdmin = true;
+            btnSignUp.callOnClick();
         });
     }
 
