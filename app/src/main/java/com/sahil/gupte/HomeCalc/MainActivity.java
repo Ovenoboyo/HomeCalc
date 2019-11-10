@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -110,6 +111,22 @@ public class MainActivity extends AppCompatActivity
                 CurrencyUtils.defaultCurrency = defaultCurrency;
             }
 
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference usersNode = database.getReference().child("Users");
+
+            usersNode.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    assert user != null;
+                    ShowDetailUtils.getFamilyID(dataSnapshot, user.getUid());
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
             final String family = ShowDetailUtils.FID;
             if (family == null) {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -123,9 +140,7 @@ public class MainActivity extends AppCompatActivity
             alertDialog.setContentView(inflater.inflate(R.layout.progress_dialog, null));
             alertDialog.show();
 
-            final FirebaseDatabase database = FirebaseDatabase.getInstance();
             final DatabaseReference userNode = database.getReference(Objects.requireNonNull(family)).child(Objects.requireNonNull(Objects.requireNonNull(user).getDisplayName()));
-
             userNode.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange( DataSnapshot dataSnapshot) {
