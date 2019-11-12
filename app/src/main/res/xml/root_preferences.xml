@@ -42,6 +42,10 @@
             android:title="@string/currency_title"
             />
 
+        <Preference android:title="Categories"
+            android:key="spinnerSort"
+            android:summary="Customise categories"/>
+
 
     </PreferenceCategory>
 

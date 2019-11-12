@@ -3,10 +3,13 @@ package com.sahil.gupte.HomeCalc.Utils;
 import android.content.Context;
 
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.sahil.gupte.HomeCalc.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class FamilyUtils {
@@ -48,5 +51,15 @@ public class FamilyUtils {
             Collections.addAll(spinnerNameList, mContext.getResources().getStringArray(R.array.category));
         }
         return spinnerNameList;
+    }
+
+    public static void updateSpinners(ArrayList<String> spinnerNameFinal) {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference spinnerNode = database.getReference().child("SpinnerLists").child(FID);
+        HashMap<String, String> taskMap = new HashMap<>();
+        for (int i = 0; i < spinnerNameFinal.size(); i++) {
+            taskMap.put(""+(i+1), spinnerNameFinal.get(i));
+        }
+        spinnerNode.setValue(taskMap);
     }
 }

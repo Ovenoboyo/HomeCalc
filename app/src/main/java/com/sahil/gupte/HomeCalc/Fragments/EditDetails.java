@@ -24,7 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sahil.gupte.HomeCalc.Fragments.Dialogs.HintDialogFragment;
-import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SortDialogFragment;
+import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SpinnerSortDialogFragment;
 import com.sahil.gupte.HomeCalc.MainActivity;
 import com.sahil.gupte.HomeCalc.R;
 import com.sahil.gupte.HomeCalc.Utils.FamilyUtils;
@@ -141,9 +141,10 @@ public class EditDetails extends Fragment {
         bundle.putInt("fragment", 0);
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        SortDialogFragment sortDialogFragment = new SortDialogFragment();
+        SpinnerSortDialogFragment sortDialogFragment = new SpinnerSortDialogFragment();
         sortDialogFragment.setArguments(bundle);
-        sortDialogFragment.show(ft, "dialog");
+        sortDialogFragment.show(ft, "SpinnerSortDialogFragment");
+        ft.addToBackStack("SpinnerSortDialogFragment");
     }
 
     private void ShowHintDialogFragment() {

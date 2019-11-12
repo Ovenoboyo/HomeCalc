@@ -9,10 +9,14 @@ import android.view.MenuItem;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
+import com.sahil.gupte.HomeCalc.Fragments.Dialogs.SpinnerSortDialogFragment;
 import com.sahil.gupte.HomeCalc.Utils.CurrencyUtils;
 import com.sahil.gupte.HomeCalc.Utils.ThemeUtils;
 
@@ -55,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    static class SettingsFragment extends PreferenceFragmentCompat {
+    public static class SettingsFragment extends PreferenceFragmentCompat {
 
         final Boolean[] dark = new Boolean[1];
         Object accent;
@@ -150,6 +154,14 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             });
 
+            Preference button = findPreference("spinnerSort");
+            button.setOnPreferenceClickListener(preference -> {
+                FragmentManager fm = getChildFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                SpinnerSortDialogFragment sortDialogFragment = new SpinnerSortDialogFragment();
+                sortDialogFragment.show(ft, "dialog");
+                return true;
+            });
 
         }
     }
